@@ -1,0 +1,245 @@
+import {
+  PageContainer,
+  FooterToolbar,
+  ProCard,
+  ProForm,
+  ProFormCheckbox,
+  ProFormDatePicker,
+  ProFormDateRangePicker,
+  ProFormDigit,
+  ProFormSelect,
+  ProFormText,
+  StepsForm,
+} from '@ant-design/pro-components';
+import { Row, Col, Space, message, Button } from 'antd';
+
+const waitTime = (time = 100) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
+};
+
+const Create = () => {
+  return (
+    <PageContainer>
+      <StepsForm
+        onFinish={async (values) => {
+          console.log(values);
+          await waitTime(1000);
+          message.success('Submitted successfully');
+        }}
+        formProps={{
+          validateMessages: {
+            required: 'This is required',
+          },
+        }}
+        submitter={{
+          render: (_, dom) => <FooterToolbar>{dom}</FooterToolbar>,
+        }}
+      >
+        <StepsForm.StepForm
+          name="business_details"
+          title="Business Details"
+          onFinish={async () => {
+            await waitTime(2000);
+            return true;
+          }}
+          layout='vertical'
+          grid={true}
+          rowProps={{
+            gutter: [16],
+          }}
+          // rowProps={{
+          //   gutter: [16, 0],
+          // }}
+        >
+          <ProCard
+            title="Organization Details"
+            bordered
+            headerBordered
+            collapsible
+            style={{
+              marginBlockEnd: 16,
+              // minWidth: '100vw',
+              maxWidth: '100%',
+            }}
+            size={"default"}
+          >
+            <ProForm.Group size={24}>
+            <ProFormText
+              name="name"
+              label="Migration task name"
+              tooltip="The longest is 24 bits, the unique id used for calibration"
+              placeholder="please enter a name"
+              rules={[{ required: true }]}
+              fieldProps={{
+                value: 'testing default title',
+                onChange: (e) => {
+                  console.log('e.target.value');
+                  console.log(e.target.value);
+                }
+              }}
+              colProps={{ span: 24 }}
+            />
+            </ProForm.Group>
+            <ProForm.Group size={24}>
+              <ProFormSelect
+                name="source"
+                placeholder="select source node"
+                colProps={{ xs: 24, sm:24, md: 12, lg: 12, xl: 12 }}
+                options={['Structure Migration', 'Full Migration', 'Incremental Migration', 'Full Verification']}
+              />
+              <ProFormSelect
+                name="target"
+                placeholder="Select target node"
+                colProps={{ xs: 24, sm:24, md: 12, lg: 12, xl: 12 }}
+                fieldProps={{
+                  mode: 'tags',
+                }}
+                initialValue={['Wu Jiahao', 'Zhou Xingxing']}
+                options={['Wu Jiahao', 'Zhou Xingxing', 'Chen Lafeng'].map((item) => ({
+                  label: item,
+                  value: item,
+                }))}
+              />
+            </ProForm.Group>
+          </ProCard>
+
+          <ProCard
+            title="align top"
+            bordered
+            headerBordered
+            collapsible
+            style={{
+              // minWidth: 800,
+              marginBlockEnd: 16,
+            }}
+            // loading={true}
+          >
+            <ProFormDigit
+              name="xs"
+              label="Form XS"
+              initialValue={9999}
+              tooltip="Air bubbles appear in suspension."
+              placeholder="please enter a name"
+              width="xs"
+            />
+            <ProFormText
+              name="s"
+              label="Form S"
+              placeholder="please enter a name"
+              width="sm"
+            />
+            <ProFormDateRangePicker name="m" label="Form M" />
+            <ProFormSelect
+              name="l"
+              label="Form L"
+              fieldProps={{
+                mode: 'tags',
+              }}
+              width="lg"
+              initialValue={['Wu Jiahao', 'Zhou Xingxing']}
+              options={['Wu Jiahao', 'Zhou Xingxing', 'Chen Lafeng'].map((item) => ({
+                label: item,
+                value: item,
+              }))}
+            />
+          </ProCard>
+        </StepsForm.StepForm>
+        <StepsForm.StepForm name="policies" title="Policies">
+          <ProCard
+            style={{
+              minWidth: 800,
+              marginBlockEnd: 16,
+              maxWidth: '100%',
+            }}
+          >
+            <ProFormCheckbox.Group
+              name="checkbox"
+              label="migration type"
+              width="lg"
+              options={['Structure Migration', 'Full Migration', 'Incremental Migration', 'Full Verification']}
+            />
+            <ProForm.Group>
+              <ProFormText name="dbname" label="Business DB username" />
+              <ProFormDatePicker
+                name="datetime"
+                label="record keeping time"
+                width="sm"
+              />
+            </ProForm.Group>
+            <ProFormCheckbox.Group
+              name="checkbox"
+              label="migration type"
+              options={['Full LOB', 'Not synchronized LOB', 'Restricted LOB']}
+            />
+          </ProCard>
+        </StepsForm.StepForm>
+        <StepsForm.StepForm name="super_users" title="Super Users">
+          <ProCard
+            style={{
+              marginBlockEnd: 16,
+              minWidth: 800,
+              maxWidth: '100%',
+            }}
+          >
+            <ProFormCheckbox.Group
+              name="checkbox"
+              label="deployment unit"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+              options={['Deployment Unit 1', 'Deployment Unit 2', 'Deployment Unit 3']}
+            />
+            <ProFormSelect
+              label="Deploy Grouping Policies"
+              name="remark"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+              width="md"
+              initialValue="1"
+              options={[
+                {
+                  value: '1',
+                  label: 'strategy one',
+                },
+                { value: '2', label: 'Strategy two' },
+              ]}
+            />
+            <ProFormSelect
+              label="Pod Scheduling Policy"
+              name="remark2"
+              width="md"
+              initialValue="2"
+              options={[
+                {
+                  value: '1',
+                  label: 'strategy one',
+                },
+                { value: '2', label: 'Strategy two' },
+              ]}
+            />
+          </ProCard>
+        </StepsForm.StepForm>
+        <StepsForm.StepForm name="staff_members" title="Staff members">
+          <ProCard
+            style={{
+              marginBlockEnd: 16,
+              minWidth: 800,
+              maxWidth: '100%',
+            }}
+          ></ProCard>
+        </StepsForm.StepForm>
+      </StepsForm>
+    </PageContainer>
+  );
+};
+
+export default Create;

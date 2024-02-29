@@ -1,0 +1,72 @@
+import React, {useEffect, useRef, useState} from 'react';
+import {request, history, Link} from '@umijs/max';
+import {message} from "antd";
+
+import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
+
+export const waitTimePromise = async (time = 100) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(true);
+        }, time);
+    });
+};
+
+export const waitTime = async (time = 100) => {
+    await waitTimePromise(time);
+};
+
+
+const TableList = () => {
+
+    waitTime(5000);
+
+    /**
+     * https://www.techomoro.com/how-to-connect-woocommerce-with-a-react-frontend-using-the-woocommerce-api/
+     */
+    const [orders, setOrders] = useState([]);
+
+    useEffect(() => {
+        fetchOrders();
+    }, []);
+
+    let fetchOrders = () => {
+
+        const api = new WooCommerceRestApi({
+            url: "http://wi.ecarehub.localhost.com",
+            consumerKey: "ck_5966ecf27b374883371f1eea9d087f64a9eb1a99",
+            consumerSecret: "cs_ff1a4e12d02c197df86a768c3e410810d9e1cd9b",
+            version: "wc/v3"
+        });
+
+
+        api
+            .get("orders", {
+                per_page: 20,
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    setOrders(response.data);
+                }
+            })
+            .catch((error) => {
+            });
+    };
+
+    console.log('fetchOrders');
+    console.log(fetchOrders);
+
+    request('/wc/v3/products', {
+        method: 'GET',
+        consumer_key: 'ck_5966ecf27b374883371f1eea9d087f64a9eb1a99',
+        consumer_secret: 'cs_ff1a4e12d02c197df86a768c3e410810d9e1cd9b',
+    }).then(async (api_response) => {
+        console.log('setup-wizard = api_response');
+        console.log(api_response);
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+
+};
+export default TableList;
