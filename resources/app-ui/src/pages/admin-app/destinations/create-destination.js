@@ -40,9 +40,16 @@ const onFinishHandlerForm = async (values) => {
    */
   try {
 
+      const request_data = {
+          title: values?.title,
+          description: values?.description,
+          image: values?.image
+      };
+
     return await request('/api/destinations', {
       method: 'post',
-      data: formData,
+      // data: formData,
+      data: request_data,
     }).then(async (api_response) => {
       console.log('api_response');
       console.log(api_response);
@@ -242,7 +249,8 @@ const CreateDestination = () => {
              * Add Organization ID into the form Values
              */
             await waitTime(1000);
-            values.image = file;
+            // values.image = file;
+              values.image = imageUrl;
             await onFinishHandlerForm(values);
           }}
           submitter={{
