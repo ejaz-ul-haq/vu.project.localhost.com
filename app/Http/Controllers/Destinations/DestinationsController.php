@@ -63,7 +63,13 @@ class DestinationsController extends Controller
         Log::warning($request);
 
         try {
-            $data = $this->destinationRepository->getAll($request);
+
+            $perPage = isset($request['per_page']) ? intval($request['per_page']) : 10;
+            $orderBy = isset($request['order_by']) ? $request['order_by'] : 'id';
+            $order   = isset($request['order']) ? $request['order'] : 'desc';
+
+            $data = Destination::orderBy($orderBy, $order)
+                              ->paginate($perPage);
 
             Log::warning('$data');
             Log::warning($data);
@@ -90,7 +96,13 @@ class DestinationsController extends Controller
     public function indexAll(Request $request): JsonResponse
     {
         try {
-            $data = $this->destinationRepository->getPaginatedData($request);
+
+            $perPage = isset($request['per_page']) ? intval($request['per_page']) : 10;
+            $orderBy = isset($request['order_by']) ? $request['order_by'] : 'id';
+            $order   = isset($request['order']) ? $request['order'] : 'desc';
+
+            $data = Destination::orderBy($orderBy, $order)
+                              ->paginate($perPage);
 
             return $this->responseSuccess($data, 'Destination List Fetched Successfully !');
         } catch (\Exception $e) {
@@ -115,7 +127,14 @@ class DestinationsController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $data = $this->destinationRepository->searchProduct($request->search, $request->perPage);
+            $perPage = isset($request->perPage) ? intval($request->perPage) : 10;
+
+            $data = Destination::where('title', 'like', '%'.$request->search.'%')
+                              ->orWhere('description', 'like', '%'.$request->search.'%')
+                              ->orWhere('price', 'like', '%'.$request->search.'%')
+                              ->orderBy('id', 'desc')
+                              ->with('user')
+                              ->paginate($perPage);
 
             return $this->responseSuccess($data, 'Destination List Fetched Successfully !');
         } catch (\Exception $e) {
@@ -151,10 +170,7 @@ class DestinationsController extends Controller
         Log::warning($request);
 
         try {
-//            $product = $this->destinationRepository->create($request->all());
-//            return $this->responseSuccess($product, 'New Destination Created Successfully !');
 
-//            $product = $this->productRepository->create($request->all());
             $data = $request->all();
 
             Log::warning('$data');
@@ -164,8 +180,7 @@ class DestinationsController extends Controller
 //            $data['user_id'] = $this->user->id;
 
             if ( ! empty($data['image'])) {
-                $data['image_url'] = url('')."/images/destinations/".UploadHelper::upload('image', $data['image'],
-                        $titleShort, 'images/destinations');
+                $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/destinations' );
             }
 
             $response = Destination::create($data);
@@ -198,11 +213,9 @@ class DestinationsController extends Controller
         Log::warning($id);
 
         try {
-            $data = $this->destinationRepository->getByID($id);
-//            $data = Destination::where('id', '=', $id);
-//            $data =  Destination::where('id',$id);
-//            $data =  Destination::find( (int) $id );
-//            $data = Destination::where('id', '=', (int)$id);
+
+            $data = Destination::find($id);
+
             Log::warning('$data');
             Log::warning($data);
 
@@ -240,16 +253,37 @@ class DestinationsController extends Controller
      */
     public function update(DestinationRequest $request, $id): JsonResponse
     {
+        Log::warning('destination - controller : update');
+        Log::warning('$id');
+        Log::warning($id);
+
+        Log::warning('$request');
+        Log::warning($request);
+
         try {
-            $data = $this->destinationRepository->update($id, $request->all());
-            if (is_null($data)) {
-                return $this->responseError(null, 'Destination Not Found', Response::HTTP_NOT_FOUND);
+
+            $destination = Destination::find($id);
+            $data = $request->all();
+            if ( ! empty($data['image'])) {
+                $titleShort    = Str::slug(substr($data['title'], 0, 20));
+                $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/destinations' );
+            } else {
+                $data['image_url'] = $destination->image;
             }
 
-            return $this->responseSuccess($data, 'Destination Updated Successfully !');
+            Log::warning('$data - before update');
+            Log::warning($data);
+
+            // If everything is OK, then update.
+            $destination->update($data);
+
+            // Finally return the updated Destination.
+            return $this->responseSuccess(Destination::find($id), 'Destination Updated Successfully !');
+
         } catch (\Exception $e) {
             return $this->responseError(null, $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
     }
 
     /**
@@ -269,18 +303,20 @@ class DestinationsController extends Controller
     public function destroy($id): JsonResponse
     {
         try {
-            $product = $this->destinationRepository->getByID($id);
-            if (empty($product)) {
+            $destination = Destination::find($id);
+            if (empty($destination)) {
                 return $this->responseError(null, 'Destination Not Found', Response::HTTP_NOT_FOUND);
             }
 
-            $deleted = $this->destinationRepository->delete($id);
+            UploadHelper::deleteFile('images/destinations/'.$destination->image_url);
+            $deleted = $destination->delete($destination);
+
             if ( ! $deleted) {
                 return $this->responseError(null, 'Failed to delete the destination.',
                     Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            return $this->responseSuccess($product, 'Destination Deleted Successfully !');
+            return $this->responseSuccess($destination, 'Destination Deleted Successfully !');
         } catch (\Exception $e) {
             return $this->responseError(null, $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

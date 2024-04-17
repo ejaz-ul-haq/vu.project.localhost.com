@@ -54,11 +54,14 @@ const onFinishHandlerForm = async (values) => {
         id: values?.destination_id,
         title: values?.title,
         description: values?.description,
+        image: values?.image
       };
 
         return await request('/api/destinations/' + values?.destination_id, {
             method: 'PUT',
             data: request_data,
+          // data: formData,
+          // requestType: 'form'
         }).then(async (api_response) => {
             console.log('api_response');
             console.log(api_response);
@@ -256,6 +259,11 @@ const UpdateDestination = () => {
                                 console.log('api_response');
                                 console.log(api_response);
 
+                              /**
+                               * Set Image State on Page Load
+                               */
+                              setImageUrl(api_response?.data?.image_url);
+
                                 return {
                                     ...initialValues,
                                     title: api_response?.data?.title,
@@ -276,7 +284,8 @@ const UpdateDestination = () => {
                          */
 
                         await waitTime(1000);
-                        values.image = file;
+                        // values.image = file;
+                        values.image = imageUrl;
                         values.destination_id = destinationId;
                         await onFinishHandlerForm(values);
                     }}
