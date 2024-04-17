@@ -4,9 +4,18 @@ import {
   ProFormSwitch,
   ProList,
 } from '@ant-design/pro-components';
-import {Avatar, Card, message, Progress, Tag} from 'antd';
-import { SettingOutlined, EditOutlined, EllipsisOutlined, LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
-import { useState, useEffect } from 'react';
+import {Avatar, Button, Card, message, Progress, Tag} from 'antd';
+import {
+  SettingOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+  LikeOutlined,
+  MessageOutlined,
+  StarOutlined,
+  EyeOutlined,
+  ShoppingCartOutlined
+} from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
 import { waitTime } from '../../components/Helpers/TableHelpers';
 import {request } from '@umijs/max';
 import {history} from "@@/core/history";
@@ -235,9 +244,35 @@ const HomePage = () => {
               console.log(item);
               return (
                 <Card
+                  // style={{
+                  //   width: '100%',
+                  //   // height: '50%',
+                  // }}
+
                   style={{
                     width: '100%',
+                    height: '950px', // Set a fixed height for all cards
                   }}
+                  actions={[
+                    <Button
+                      type="primary"
+                      icon={<ShoppingCartOutlined />}
+                      key="preview"
+                      size={"large"}
+                      // loading={loadings[1]}
+                      // style={{'margin': '10px 0px 0px 0px'}}
+                      onClick={ () => {
+                        // console.log('record');
+                        // console.log(record.id);
+                        // setSelectedVersionId(record.id);
+                        // setSelectedVersionPreview(record);
+                        // setPolicyVersionPreviewModelOpen(true);
+                      }}
+
+                    >
+                      Book Now
+                    </Button>
+                  ]}
                   cover={
                     <img
                       alt="example"
