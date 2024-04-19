@@ -43,7 +43,7 @@ const SiteFooter = () => {
         //
         // />
 
-      <footer id="footer" className="dark">
+      <footer id="site-footer" className="dark">
         <div className="footer-wrap">
           <Row>
             <Col md={6} sm={24} xs={24}>

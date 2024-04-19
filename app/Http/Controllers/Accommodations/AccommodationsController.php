@@ -164,8 +164,19 @@ class AccommodationsController extends Controller
 //            $data['user_id'] = $this->user->id;
 
             if ( ! empty($data['image'])) {
-                $data['image_url'] = url('')."/images/accommodations/".UploadHelper::upload('image', $data['image'],
-                        $titleShort, 'images/accommodations');
+
+                /* Start Comment By M */
+
+                // $data['image_url'] = url('')."/images/accommodations/".UploadHelper::upload('image', $data['image'],
+                //         $titleShort, 'images/accommodations');
+
+                /* End Comment By M */
+
+                /* Start Code By M */
+
+                $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/accommodations' );
+
+                /* End Code By M */
             }
 
             $response = Accommodation::create($data);
@@ -198,7 +209,9 @@ class AccommodationsController extends Controller
         Log::warning($id);
 
         try {
+
             $data = $this->AccommodationRepository->getByID($id);
+
 //            $data = Accommodation::where('id', '=', $id);
 //            $data =  Accommodation::where('id',$id);
 //            $data =  Accommodation::find( (int) $id );
@@ -241,12 +254,44 @@ class AccommodationsController extends Controller
     public function update(AccommodationRequest $request, $id): JsonResponse
     {
         try {
-            $data = $this->AccommodationRepository->update($id, $request->all());
-            if (is_null($data)) {
-                return $this->responseError(null, 'Accommodation Not Found', Response::HTTP_NOT_FOUND);
+            
+            /* Start Comment By M */
+
+            // $data = $this->AccommodationRepository->update($id, $request->all());
+            // if (is_null($data)) {
+            //     return $this->responseError(null, 'Accommodation Not Found', Response::HTTP_NOT_FOUND);
+            // }
+
+            /* End Comment By M */
+
+            /* Start Code By M */
+
+            $accommodation = Accommodation::find($id);
+            $data = $request->all();
+            if ( ! empty($data['image'])) {
+                $titleShort    = Str::slug(substr($data['title'], 0, 20));
+                $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/accommodations' );
+            } else {
+                $data['image_url'] = $accommodation->image;
             }
 
-            return $this->responseSuccess($data, 'Accommodation Updated Successfully !');
+            Log::warning('$data - before update');
+            Log::warning($data);
+
+            // If everything is OK, then update.
+            $accommodation->update($data);
+
+            // Finally return the updated Destination.
+            return $this->responseSuccess(Accommodation::find($id), 'Accommodation Updated Successfully !');
+
+            /* End Code By M */
+
+            /* Start Comment By M */
+
+            // return $this->responseSuccess($data, 'Accommodation Updated Successfully !');
+
+            /* End Comment By M */
+
         } catch (\Exception $e) {
             return $this->responseError(null, $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

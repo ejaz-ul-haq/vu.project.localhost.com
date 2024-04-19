@@ -11,6 +11,14 @@ use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
+/* Start Code By M */
+
+use Illuminate\Support\Str;
+use App\Helpers\UploadHelper;
+use App\Models\User;
+
+/* End Code By M */
+
 class UsersController extends Controller
 {
     /**
@@ -129,9 +137,37 @@ class UsersController extends Controller
     public function store(UserRequest $request): JsonResponse
     {
         try {
-            $user = $this->userRepository->create($request->all());
 
-            return $this->responseSuccess($user, 'New User Created Successfully !');
+            /* Start Comment By M */
+
+            // $user = $this->userRepository->create($request->all());
+
+            /* End Comment By M */
+
+            /* Start Code By M */
+
+            $data = $request->all();
+
+            $titleShort = Str::slug(substr($data['name'], 0, 20));
+
+            if ( ! empty($data['image'])) {
+
+                $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/users' );
+
+            }
+
+            $response = User::create($data);
+
+            return $this->responseSuccess($response, 'New User Created Successfully !');
+
+            /* End Code By M */
+
+            /* Start Comment By M */
+
+            // return $this->responseSuccess($user, 'New User Created Successfully !');
+
+            /* End Comment By M */
+
         } catch (\Exception $exception) {
             return $this->responseError(null, $exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

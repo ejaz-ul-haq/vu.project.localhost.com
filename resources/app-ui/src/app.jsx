@@ -110,7 +110,7 @@ export const layout = ({initialState, setInitialState}) => {
   console.log('history - layout_type');
   console.log(layout_type);
 
-    let site_layout = {
+    const site_layout = {
         // actionsRender:  () => {
         //   const social_icons = [
         //     <FacebookOutlined
@@ -152,13 +152,11 @@ export const layout = ({initialState, setInitialState}) => {
           console.log('MenuDataItems');
           console.log(MenuDataItems);
 
-          return MenuDataItems.map((MenuDataItem) => {
-            console.log('MenuDataItem');
-            console.log(MenuDataItem);
-            if( MenuDataItem.layout == 'top' ){
-              return MenuDataItem;
-            }
-          });
+            return MenuDataItems.map((MenuDataItem) => {
+                console.log('MenuDataItem');
+                console.log(MenuDataItem);
+                return ( (MenuDataItem.layout === 'top') ? MenuDataItem : false);
+            });
         },
         footerRender: () => <SiteFooter/>,
         childrenRender: (children) => {
@@ -174,7 +172,8 @@ export const layout = ({initialState, setInitialState}) => {
         layout: 'top',
       };
 
-     let app_layout = {
+     const app_layout = {
+         actionsRender:  () => {[]},
         // actionsRender:  () => {
         //     const social_icons = [
         //         <FacebookOutlined
@@ -213,18 +212,18 @@ export const layout = ({initialState, setInitialState}) => {
             content: 'bc170404562 (Ejaz Ul Haq)',
         },
         footerRender: () => <Footer/>,
+         // menuHeaderRender: undefined,
        menuDataRender: ( MenuDataItems ) => {
           console.log('menuDataRender');
           console.log('MenuDataItems');
           console.log(MenuDataItems);
 
-          return MenuDataItems.map((MenuDataItem) => {
-            console.log('MenuDataItem');
-            console.log(MenuDataItem);
-            if( MenuDataItem.layout == 'side' ){
-              return MenuDataItem;
-            }
-          });
+           return MenuDataItems.map((MenuDataItem) => {
+                 console.log('MenuDataItem');
+                 console.log(MenuDataItem);
+               return ( (MenuDataItem.layout === 'side') ? MenuDataItem : false);
+           });
+
        },
         onPageChange: () => {
             console.log('onPageChange - triggered');
@@ -254,9 +253,16 @@ export const layout = ({initialState, setInitialState}) => {
                 </>
             );
         },
+
+         fixSiderbar: true,
+         // layout: 'mix',
+         // splitMenus: true,
+
         ...initialState?.settings,
-       layout: 'mix',
-    };
+       // layout: 'mix',
+
+
+     };
 
 
   console.log('layout - app_layout');
@@ -265,9 +271,13 @@ export const layout = ({initialState, setInitialState}) => {
   console.log('layout - site_layout');
   console.log(site_layout);
 
+    console.log('layout_type');
+    console.log(layout_type);
+
      return ( layout_type === 'app' ) ? app_layout : site_layout ;
 
   // return app_layout ;
+
 };
 
 /**

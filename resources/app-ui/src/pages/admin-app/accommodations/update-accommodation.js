@@ -54,6 +54,15 @@ const onFinishHandlerForm = async (values) => {
             id: values?.accommodation_id,
             title: values?.title,
             description: values?.description,
+            /**
+             * Start Code By M
+             */
+
+            image: values?.image
+
+            /**
+             * End Code By M
+             */
         };
 
         return await request('/api/accommodations/' + values?.accommodation_id, {
@@ -256,6 +265,19 @@ const UpdateAccommodation = () => {
                             console.log('api_response');
                             console.log(api_response);
 
+                            /**
+                             * Start Code By M
+                             */
+
+                            /**
+                             * Set Image State on Page Load
+                             */
+                            setImageUrl(api_response?.data?.image_url);
+
+                            /**
+                             * End Code By M
+                             */
+
                             return {
                                 ...initialValues,
                                 title: api_response?.data?.title,
@@ -276,7 +298,26 @@ const UpdateAccommodation = () => {
                      */
 
                     await waitTime(1000);
-                    values.image = file;
+
+                    /**
+                     * Start Comment By M
+                     */
+
+                    // values.image = file;
+
+                    /**
+                     * End Comment By M
+                     */
+
+                    /**
+                     * Start Code By M
+                     */
+
+                    values.image = imageUrl;
+
+                    /**
+                     * End Code By M
+                     */
                     values.accommodation_id = accommodationId;
                     await onFinishHandlerForm(values);
                 }}

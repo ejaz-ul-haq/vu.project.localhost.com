@@ -253,7 +253,7 @@ const UpdateDestination = () => {
 
                             await waitTime(2000);
 
-                            return await request('/api/destinations/'+params?.destination_id, {
+                            return await request('/api/destinations/' + params?.destination_id, {
                                 method: 'GET',
                             }).then(async (api_response) => {
                                 console.log('api_response');

@@ -40,9 +40,32 @@ const onFinishHandlerForm = async (values) => {
      */
     try {
 
+        /**
+         * Start Code By M
+         */
+
+        const request_data = {
+            title: values?.title,
+            description: values?.description,
+            image: values?.image
+        };
+
+        /**
+         * End Code By M
+         */
+
         return await request('/api/accommodations', {
             method: 'POST',
-            data: formData,
+            /**
+             * Start Comment By M
+             */
+
+            // data: formData,
+
+            /**
+             * End Comment By M
+             */
+            data: request_data,
         }).then(async (api_response) => {
             console.log('api_response');
             console.log(api_response);
@@ -242,7 +265,8 @@ const CreateAccommodation = () => {
                          * Add Organization ID into the form Values
                          */
                         await waitTime(1000);
-                        values.image = file;
+                        // values.image = file;
+                        values.image = imageUrl;
                         await onFinishHandlerForm(values);
                     }}
                     submitter={{
