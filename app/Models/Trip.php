@@ -33,6 +33,12 @@ class Trip extends Model
         return $this->belongsTo(Accommodation::class)->select('*');
     }
 
+    // public function travelMates()
+    // {
+    //     // Assuming you have a 'User' model
+    //     return $this->belongsToMany(User::class, 'trip_user', 'trip_id', 'user_id');
+    // }
+    
     // Add New Attribute to get image address
 //    protected $appends = ['image_url'];
 

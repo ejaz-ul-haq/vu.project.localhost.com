@@ -15,7 +15,7 @@ import {
 } from '@ant-design/pro-components';
 import { history, SelectLang, useIntl, useModel, Helmet } from '@umijs/max';
 import { Row, Col, Alert, message, Tabs } from 'antd';
-import Settings from '../../../config/defaultSettings';
+import Settings from '../../../config/defaultSettings'; 
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
 import { createStyles } from 'antd-style';
@@ -72,15 +72,22 @@ const Login = () => {
     const fetchUserInfo = async () => {
       console.log('auth - fetchUserInfo');
         const userInfo = await initialState?.fetchUserInfo?.();
-      console.log('auth - userInfo');
+        console.log('auth - userInfo');
+        console.log(userInfo);
         if (userInfo) {
+            console.log('auth - userInfo - case - 01');
             flushSync(() => {
+                console.log('auth - userInfo - case - 02');
                 setInitialState((s) => ({
                     ...s,
                     currentUser: userInfo,
                 }));
             });
+        }else{
+            console.log('auth - userInfo - case - 03');
         }
+        console.log('auth - initialState');
+        console.log(initialState);
     };
 
     const handleSubmit = async (values) => {
@@ -120,26 +127,44 @@ const Login = () => {
           // Assuming you have obtained the token from your backend API response
           localStorage.setItem('laravel_api_bearer_token', logged_user_api_response?.data?.access_token);
 
-          flushSync(() => {
-            setInitialState((s) => ({
-              ...s,
-              currentUser: logged_user_api_response,
-            }));
-          });
+        //   flushSync(() => {
+            // setInitialState((s) => ({
+            // setInitialState((s) => ({
+            //   ...s,
+            //   ejaz_test: logged_user_api_response?.data?.user,
+            //   currentUser: logged_user_api_response?.data?.user,
+            // }));
+        //   });
+
+        console.log('after - redirect - logged_user_api_response?.data?.user');
+        console.log(logged_user_api_response?.data?.user);
+
+        // Set refresh flag in the global state
+      setInitialState({ ...initialState, currentUser: logged_user_api_response?.data?.user, refresh: () => {return true;} });
 
           // Set user error message if failed
           //   setUserLoginState(logged_user_api_response);
 
+          console.log('before - redirect - initialState');
+            console.log(initialState);
 
           if (logged_user_api_response.status === true) {
             const defaultLoginSuccessMessage = 'login successful!';
             message.success(defaultLoginSuccessMessage);
-            await fetchUserInfo();
+            // await fetchUserInfo();
             const urlParams = new URL(window.location.href).searchParams;
-            history.push(urlParams.get('redirect') || '/'+logged_user_api_response?.data?.user?.role+'-app/');
+            history.push(urlParams.get('redirect') || '/'+logged_user_api_response?.data?.user?.role+'-app/', { initialState: initialState} );
+            history.replace(urlParams.get('redirect') || '/'+logged_user_api_response?.data?.user?.role+'-app/', { initialState: initialState});
+            
+            // history.location.href =  '/'+logged_user_api_response?.data?.user?.role+'-app/';
+
+            console.log('after - redirect - initialState');
+            console.log(initialState);
+
             return;
           }else{
             history.push('/authentication');
+            history.replace('/authentication');
             return;
           }
 

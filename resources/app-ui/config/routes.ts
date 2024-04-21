@@ -118,6 +118,14 @@ export default [
     component: './admin-app/trips/create-trip',
   },
   {
+    path: '/admin-app/trips/edit/:id',
+    hideInMenu: true,
+    name: 'Edit Trip',
+    access: 'isAdministrator',
+    layout: 'side',
+    component: './admin-app/trips/update-trip',
+  },
+  {
     path: '/admin-app/accommodations',
     name: 'Accommodations',
     icon: 'HomeOutlined',

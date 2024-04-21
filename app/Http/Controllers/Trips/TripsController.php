@@ -18,6 +18,8 @@ use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Trip;
+use App\Models\Accommodation;
+use App\Models\Destination;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Log;
@@ -180,8 +182,18 @@ class TripsController extends Controller
         Log::warning($id);
 
         try {
-            $data = $this->tripRepository->getByID($id);
-            Log::warning('$data');
+//            $data = $this->tripRepository->getByID($id);
+            // $data = Trip::find($id)
+            // // $data = Trip::where('id', '==', $id);
+            // // ->with('destination')
+            // ->with('accommodation');
+
+            $data = Trip::with('destination', 'accommodation')->find($id);
+
+            // $data['accommodation'] = Accommodation::find($data['accommodation_id']);
+            // $data['destination'] = Destination::find($data['destination_id']);
+
+            Log::warning('trip - controller : show - $data');
             Log::warning($data);
 
             if (is_null($data)) {
