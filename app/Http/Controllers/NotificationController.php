@@ -1,29 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Notifications;
+namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
 use App\Http\Requests\NotificationRequest;
-
 use App\Repositories\NotificationRepository;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
-use Illuminate\Support\Str;
-use App\Helpers\UploadHelper;
-use App\Interfaces\CrudInterface;
-use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Support\Facades\Auth;
-
-use App\Models\Notification;
-use App\Models\User;
-
 use Illuminate\Support\Facades\Log;
 
-class NotificationsController extends Controller
+class NotificationController extends Controller
 {
     /**
      * Response trait to handle return responses.

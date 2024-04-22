@@ -1,30 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Trips;
+namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\TripRequest;
-
+use App\Models\Trip;
 use App\Repositories\TripRepository;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
-use Illuminate\Support\Str;
-use App\Helpers\UploadHelper;
-use App\Interfaces\CrudInterface;
-use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Support\Facades\Auth;
-
-use App\Models\Trip;
-use App\Models\Accommodation;
-use App\Models\Destination;
-use App\Models\User;
-
 use Illuminate\Support\Facades\Log;
 
-class TripsController extends Controller
+class TripController extends Controller
 {
     /**
      * Response trait to handle return responses.

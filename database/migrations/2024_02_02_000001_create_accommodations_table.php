@@ -18,6 +18,10 @@ class CreateAccommodationsTable extends Migration
             $table->string('title', 255);
             $table->text('description')->nullable();
             $table->string('image_url')->nullable();
+            $table->unsignedBigInteger('destination_id')->comment('Destination ID');
+
+            $table->foreign('destination_id')->references('id')->on('destinations');
+
             $table->timestamps();
         });
     }

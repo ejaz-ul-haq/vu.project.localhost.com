@@ -1,29 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Destinations;
+namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
+use App\Helpers\UploadHelper;
 use App\Http\Requests\DestinationRequest;
-
+use App\Models\Destination;
 use App\Repositories\DestinationRepository;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
-use Illuminate\Support\Str;
-use App\Helpers\UploadHelper;
-use App\Interfaces\CrudInterface;
-use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Support\Facades\Auth;
-
-use App\Models\Destination;
-use App\Models\User;
-
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
-class DestinationsController extends Controller
+class DestinationController extends Controller
 {
     /**
      * Response trait to handle return responses.

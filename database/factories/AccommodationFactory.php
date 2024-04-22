@@ -24,7 +24,8 @@ class AccommodationFactory extends Factory
         return [
             'title'       => $this->faker->word,
             'description' => $this->faker->text,
-            'image_url'   => $this->faker->imageUrl
+            'image_url'   => $this->faker->imageUrl,
+            'destination_id' => rand(1,10),
         ];
     }
 }

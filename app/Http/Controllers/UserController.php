@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Users;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+
 use App\Http\Requests\UserRequest;
 
 use App\Repositories\UserRepository;
@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Log;
 
 /* End Code By M */
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     /**
      * Response trait to handle return responses.
@@ -234,25 +234,25 @@ class UsersController extends Controller
             $user = User::find($id);
             $data = $request->all();
 
-        if ( ! empty($data['image'])) {
-
-            $titleShort = Str::slug(substr($data['name'], 0, 20));
             if ( ! empty($data['image'])) {
-                $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/users' );
+
+                $titleShort = Str::slug(substr($data['name'], 0, 20));
+                if ( ! empty($data['image'])) {
+                    $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/users' );
+                }
+            } else {
+                $data['image_url'] = $user->image_url;
             }
-        } else {
-            $data['image_url'] = $user->image_url;
-        }
 
-        if (is_null($user)) {
-            return null;
-        }
+            if (is_null($user)) {
+                return null;
+            }
 
-        // If everything is OK, then update.
-        $user->update($data);
+            // If everything is OK, then update.
+            $user->update($data);
 
-        // Finally return the updated User.
-        $data = User::find($id);
+            // Finally return the updated User.
+            $data = User::find($id);
 
             if (is_null($data)) {
                 return $this->responseError(null, 'User Not Found', Response::HTTP_NOT_FOUND);

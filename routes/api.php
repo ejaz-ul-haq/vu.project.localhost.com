@@ -1,13 +1,12 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Products\ProductsController;
-use App\Http\Controllers\Destinations\DestinationsController;
-use App\Http\Controllers\Trips\TripsController;
-use App\Http\Controllers\Users\UsersController;
-use App\Http\Controllers\Accommodations\AccommodationsController;
-use App\Http\Controllers\Notifications\NotificationsController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\AccommodationController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\TripController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,27 +62,27 @@ Route::group([
     /**
      * Destinations Module
      */
-    Route::resource('destinations', DestinationsController::class);
+    Route::resource('destinations', DestinationController::class);
 
     /**
      * Users Module
      */
-    Route::resource('users', UsersController::class);
+    Route::resource('users', UserController::class);
 
     /**
      * Trips Module
      */
-    Route::resource('trips', TripsController::class);
+    Route::resource('trips', TripController::class);
 
     /**
      * Accommodations Module
      */
-    Route::resource('accommodations', AccommodationsController::class);
+    Route::resource('accommodations', AccommodationController::class);
 
     /**
      * Notifications Module
      */
-    Route::resource('notifications', NotificationsController::class);
+    Route::resource('notifications', NotificationController::class);
 
 });
 
@@ -95,7 +94,7 @@ Route::group([
 /**
  * Destinations Module
  */
-Route::get('destinations/view/all', [DestinationsController::class, 'indexAll']);
+Route::get('destinations/view/all', [DestinationController::class, 'indexAll']);
 
 /**
  * End - Public APIs

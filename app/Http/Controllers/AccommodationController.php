@@ -1,29 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Accommodations;
+namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
+use App\Helpers\UploadHelper;
 use App\Http\Requests\AccommodationRequest;
-
+use App\Models\Accommodation;
 use App\Repositories\AccommodationRepository;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
-use Illuminate\Support\Str;
-use App\Helpers\UploadHelper;
-use App\Interfaces\CrudInterface;
-use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Support\Facades\Auth;
-
-use App\Models\Accommodation;
-use App\Models\User;
-
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
-class AccommodationsController extends Controller
+class AccommodationController extends Controller
 {
     /**
      * Response trait to handle return responses.
@@ -254,7 +244,7 @@ class AccommodationsController extends Controller
     public function update(AccommodationRequest $request, $id): JsonResponse
     {
         try {
-            
+
             /* Start Comment By M */
 
             // $data = $this->AccommodationRepository->update($id, $request->all());
