@@ -3,10 +3,11 @@ import {
     PageContainer,
     ProTable
 } from '@ant-design/pro-components';
-import {Button, Avatar} from 'antd';
+import {Button, Avatar, message} from 'antd';
 import {request,history, FormattedMessage} from '@umijs/max';
 import moment from 'moment';
 import {useModel} from 'umi';
+import {useRef} from "react";
 
 
 export const waitTimePromise = async (time = 100) => {
@@ -30,6 +31,8 @@ const ListUsers = () => {
 
     console.log('loading');
     console.log(loading);
+
+    const usersTableRef = useRef();
 
     const columns = [
 
@@ -115,7 +118,32 @@ const ListUsers = () => {
                 <Button
                     key="deletable"
                     onClick={() => {
-                        history.push('/administrator/users/edit/' + record.id);
+
+                        return request('/api/users/' + record?.id, {
+
+                            method: 'DELETE',
+
+                        }).then(async (api_response) => {
+                            console.log('api_response');
+                            console.log(api_response);
+
+                            if (api_response.status === true) {
+
+                                await waitTime(3000);
+
+                                console.log('api_response.status');
+
+                                await message.success('Deleted successfully');
+
+                                if (usersTableRef.current) {
+                                    usersTableRef.current?.reloadAndRest?.();
+                                }
+                            }
+
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+
                     }}
                     danger={true}
                 >
@@ -129,6 +157,7 @@ const ListUsers = () => {
     return (
         <PageContainer>
             <ProTable
+                actionRef={usersTableRef}
                 rowKey="id"
                 search={false}
                 pagination={{

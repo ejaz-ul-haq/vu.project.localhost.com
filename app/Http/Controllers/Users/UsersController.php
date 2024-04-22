@@ -17,6 +17,8 @@ use Illuminate\Support\Str;
 use App\Helpers\UploadHelper;
 use App\Models\User;
 
+use Illuminate\Support\Facades\Log;
+
 /* End Code By M */
 
 class UsersController extends Controller
@@ -227,7 +229,31 @@ class UsersController extends Controller
     public function update(UserRequest $request, $id): JsonResponse
     {
         try {
-            $data = $this->userRepository->update($id, $request->all());
+            // $data = $this->userRepository->update($id, $request->all());
+
+            $user = User::find($id);
+            $data = $request->all();
+
+        if ( ! empty($data['image'])) {
+
+            $titleShort = Str::slug(substr($data['name'], 0, 20));
+            if ( ! empty($data['image'])) {
+                $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/users' );
+            }
+        } else {
+            $data['image_url'] = $user->image_url;
+        }
+
+        if (is_null($user)) {
+            return null;
+        }
+
+        // If everything is OK, then update.
+        $user->update($data);
+
+        // Finally return the updated User.
+        $data = User::find($id);
+
             if (is_null($data)) {
                 return $this->responseError(null, 'User Not Found', Response::HTTP_NOT_FOUND);
             }

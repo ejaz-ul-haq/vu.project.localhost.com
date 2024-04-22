@@ -9,7 +9,7 @@ import {
 } from '@ant-design/pro-components';
 import {FormattedMessage, useIntl, request, history} from '@umijs/max';
 import {
-    Button
+    Button, message
 } from 'antd';
 import React, {useRef, useState} from 'react';
 import moment from 'moment';
@@ -120,7 +120,32 @@ const ListNotifications = () => {
                 <Button
                     key="deletable"
                     onClick={() => {
-                        history.push('/administrator/notifications/edit/' + record.id);
+
+                        return request('/api/notifications/' + record?.id, {
+
+                            method: 'DELETE',
+
+                        }).then(async (api_response) => {
+                            console.log('api_response');
+                            console.log(api_response);
+
+                            if (api_response.status === true) {
+
+                                await waitTime(3000);
+
+                                console.log('api_response.status');
+
+                                await message.success('Deleted successfully');
+
+                                if (notificationsTableRef.current) {
+                                    notificationsTableRef.current?.reloadAndRest?.();
+                                }
+                            }
+
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+
                     }}
                     danger={true}
                 >
