@@ -24,7 +24,7 @@ class TripSeeder extends Seeder
                 'accommodation_id' => 1,
                 'start_date_time'  => Carbon::now()->addHours(1),
                 'end_date_time'    => Carbon::now()->addHours(2),
-                'travel_mates'     => serialize([2, 3, 4, 5, 6]),
+//                'travel_mates'     => serialize([2, 3, 4, 5, 6]),
                 'created_at'       => Carbon::now(),
                 'updated_at'       => Carbon::now()
             ],
@@ -33,7 +33,7 @@ class TripSeeder extends Seeder
                 'accommodation_id' => 3,
                 'start_date_time'  => Carbon::now()->addHours(1),
                 'end_date_time'    => Carbon::now()->addHours(2),
-                'travel_mates'     => serialize([2, 3, 5, 7, 1]),
+//                'travel_mates'     => serialize([2, 3, 5, 7, 1]),
                 'created_at'       => Carbon::now(),
                 'updated_at'       => Carbon::now()
             ],
@@ -42,7 +42,7 @@ class TripSeeder extends Seeder
                 'accommodation_id' => 2,
                 'start_date_time'  => Carbon::now()->addHours(1),
                 'end_date_time'    => Carbon::now()->addHours(2),
-                'travel_mates'     => serialize([2, 8, 4, 10, 6]),
+//                'travel_mates'     => serialize([2, 8, 4, 10, 6]),
                 'created_at'       => Carbon::now(),
                 'updated_at'       => Carbon::now()
             ],
@@ -51,7 +51,7 @@ class TripSeeder extends Seeder
                 'accommodation_id' => 4,
                 'start_date_time'  => Carbon::now()->addHours(1),
                 'end_date_time'    => Carbon::now()->addHours(2),
-                'travel_mates'     => serialize([2, 9, 4, 1, 6]),
+//                'travel_mates'     => serialize([2, 9, 4, 1, 6]),
                 'created_at'       => Carbon::now(),
                 'updated_at'       => Carbon::now()
             ],
@@ -60,7 +60,7 @@ class TripSeeder extends Seeder
                 'accommodation_id' => 1,
                 'start_date_time'  => Carbon::now()->addHours(1),
                 'end_date_time'    => Carbon::now()->addHours(2),
-                'travel_mates'     => serialize([2, 3, 7, 6]),
+//                'travel_mates'     => serialize([2, 3, 7, 6]),
                 'created_at'       => Carbon::now(),
                 'updated_at'       => Carbon::now()
             ],
@@ -69,7 +69,7 @@ class TripSeeder extends Seeder
                 'accommodation_id' => 5,
                 'start_date_time'  => Carbon::now()->addHours(1),
                 'end_date_time'    => Carbon::now()->addHours(2),
-                'travel_mates'     => serialize([9, 10, 4, 5, 6]),
+//                'travel_mates'     => serialize([9, 10, 4, 5, 6]),
                 'created_at'       => Carbon::now(),
                 'updated_at'       => Carbon::now()
             ],

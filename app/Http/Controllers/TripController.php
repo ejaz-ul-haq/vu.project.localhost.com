@@ -139,22 +139,28 @@ class TripController extends Controller
         Log::warning($request);
 
         try {
-//            $trip = $this->tripRepository->create($request->all());
-//            $data['travel_mates'] = (isset($data['travel_mates']) && is_array($data['travel_mates'])) ? serialize($data['travel_mates']) : '';
 
             $data = $request->all();
+
+            Log::warning('$trip - $data');
+            Log::warning($data);
+
             $trip = Trip::create($data);
+
+            Log::warning('$trip - insert - level - 01');
+            Log::warning($trip);
 
             /**
              * Set Trip Users
              */
-//            $users_data = [];
-//            foreach ($data['travel_mates'] as $user ){
-//                $users_data[] = [
-//                    'trip_id' => $trip
-//                ];
-//            }
-//            $trip->users()->createMany();
+            // Retrieve the user IDs from the request (assuming they're in an array)
+            $userIds = $request->input('travel_mates');
+
+            // Associate users with the trip by inserting records into the pivot table
+            $trip->users()->attach($userIds);
+
+            Log::warning('$trip - insert - level - 02');
+            Log::warning($trip);
 
             return $this->responseSuccess($trip, 'New Trip Created Successfully !');
 

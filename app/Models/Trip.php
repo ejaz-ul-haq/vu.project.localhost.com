@@ -21,8 +21,8 @@ class Trip extends Model
         'destination_id',
         'accommodation_id',
         'start_date_time',
-        'end_date_time',
-        'travel_mates'
+        'end_date_time'
+//        'travel_mates'
     ];
 
     /**
