@@ -3,18 +3,19 @@
 namespace Database\Factories;
 
 use App\Models\Accommodation;
+use App\Models\Attraction;
 use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AccommodationFactory extends Factory
+class AttractionFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Accommodation::class;
+    protected $model = Attraction::class;
 
     /**
      * Define the model's default state.
@@ -38,12 +39,12 @@ class AccommodationFactory extends Factory
      */
     public function configure()
     {
-        return $this->afterCreating(function (Accommodation $accommodation) {
+        return $this->afterCreating(function (Attraction $attraction) {
             /**
-             * Accommodation Destinations
+             * Attraction Destinations
              */
             // Attach three random users to the trip
-            $accommodation->destinations()->attach([
+            $attraction->destinations()->attach([
                 rand(1, 10), // Assuming you have 10 users in your database
                 rand(1, 10),
                 rand(1, 10),

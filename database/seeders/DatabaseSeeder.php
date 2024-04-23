@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Attraction;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call(ProductSeeder::class);
         $this->call(DestinationSeeder::class);
         $this->call(AccommodationSeeder::class);
+        $this->call(AttractionSeeder::class);
         $this->call(NotificationSeeder::class);
         $this->call(TripSeeder::class);
 

@@ -3,11 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\Accommodation;
+use App\Models\Attraction;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class AccommodationSeeder extends Seeder
+class AttractionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,7 +17,7 @@ class AccommodationSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('accommodations')->delete();
+        DB::table('attractions')->delete();
         $data = [
             [
                 'title'       => 'Ambiance Boutique Art Hotel Karachi',
@@ -101,17 +102,17 @@ class AccommodationSeeder extends Seeder
         ];
 //        Accommodation::insert($data);
 
-        foreach ($data as $accommodation_data ){
-            $accommodation = Accommodation::create($accommodation_data);
-            // Attach three random users to the trip
-            $accommodation->destinations()->attach([
-                rand(1, 10), // Assuming you have 10 users in your database
-                rand(1, 10),
-                rand(1, 10),
-            ], ['created_at' => now(), 'updated_at' => now()]);
-        }
+//        foreach ($data as $accommodation_data ){
+//            $accommodation = Accommodation::create($accommodation_data);
+//            // Attach three random users to the trip
+//            $accommodation->destinations()->attach([
+//                rand(1, 10), // Assuming you have 10 users in your database
+//                rand(1, 10),
+//                rand(1, 10),
+//            ], ['created_at' => now(), 'updated_at' => now()]);
+//        }
 
         // Testing Dummy Products
-//        Accommodation::factory(10)->create();
+        Attraction::factory(10)->create();
     }
 }

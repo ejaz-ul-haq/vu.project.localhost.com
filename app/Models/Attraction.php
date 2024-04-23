@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Attraction extends Model
 {
@@ -20,6 +21,14 @@ class Attraction extends Model
         'image_url',
         'destination_id'
     ];
+
+    /**
+     * The Destinations that belong to the Accommodation.
+     */
+    public function destinations(): BelongsToMany
+    {
+        return $this->belongsToMany(Destination::class, 'destination_attraction', 'attraction_id', 'destination_id');
+    }
 
 
     // Add New Attribute to get image address
