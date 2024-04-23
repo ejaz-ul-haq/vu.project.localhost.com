@@ -154,15 +154,17 @@ class TripController extends Controller
              * Set Trip Users
              */
             // Retrieve the user IDs from the request (assuming they're in an array)
-            $userIds = $request->input('travel_mates');
+            $userIds = $request->input('users');
 
             // Associate users with the trip by inserting records into the pivot table
             $trip->users()->attach($userIds);
 
-            Log::warning('$trip - insert - level - 02');
-            Log::warning($trip);
+            $response_data = Trip::with('destination', 'accommodation', 'users')->find($trip->id);
 
-            return $this->responseSuccess($trip, 'New Trip Created Successfully !');
+            Log::warning('$response_data');
+            Log::warning($response_data);
+
+            return $this->responseSuccess($response_data, 'New Trip Created Successfully !');
 
         } catch (\Exception $exception) {
             return $this->responseError(null, $exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -232,12 +234,40 @@ class TripController extends Controller
     public function update(TripRequest $request, $id): JsonResponse
     {
         try {
-            $data = $this->tripRepository->update($id, $request->all());
-            if (is_null($data)) {
+
+            $data = $request->all();
+
+            Log::warning('$trip - $data');
+            Log::warning($data);
+
+            $trip = Trip::find($id);
+
+            if (is_null($trip)) {
+                return null;
+            }
+
+            // If everything is OK, then update.
+            $trip->update($data);
+
+            /**
+             * Set Trip Users
+             */
+            // Retrieve the user IDs from the request (assuming they're in an array)
+            $userIds = $request->input('users');
+
+            // Associate users with the trip by inserting records into the pivot table
+            $trip->users()->sync($userIds, true);
+
+            $response_data = Trip::with('destination', 'accommodation', 'users')->find($id);
+
+            Log::warning('$response_data');
+            Log::warning($response_data);
+
+            if (is_null($response_data)) {
                 return $this->responseError(null, 'Trip Not Found', Response::HTTP_NOT_FOUND);
             }
 
-            return $this->responseSuccess($data, 'Trip Updated Successfully !');
+            return $this->responseSuccess($response_data, 'Trip Updated Successfully !');
         } catch (\Exception $e) {
             return $this->responseError(null, $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

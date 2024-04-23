@@ -25,7 +25,7 @@ const initialValues = {
     accommodation_id: '',
     start_date_time: '',
     end_date_time: '',
-    travel_mates: '',
+    users: '',
 };
 
 
@@ -44,7 +44,8 @@ const onFinishHandlerForm = async (values) => {
         accommodation_id: values?.accommodation_id,
         start_date_time: moment(new Date(values?.start_date_time)).format('YYYY-MM-DD HH:mm:ss'),
         end_date_time: moment(new Date(values?.end_date_time)).format('YYYY-MM-DD HH:mm:ss'),
-        travel_mates: values?.travel_mates.map((travel_mate) => travel_mate?.user_id),
+        // users: values?.users.map((user) => user?.user_id),
+        users: values?.users.map((item) => item?.user),
     };
 
     console.log('request_data - after');
@@ -55,11 +56,11 @@ const onFinishHandlerForm = async (values) => {
      */
     try {
 
-        return await request('/api/trips', {
+        return await request('/api/trips/' + values?.trip_id, {
             method: 'PUT',
             data: request_data,
         }).then(async (api_response) => {
-            console.log('api_response');
+            console.log('api_response - Trip Put');
             console.log(api_response);
 
             /**
@@ -258,7 +259,7 @@ const UpdateTrip = () => {
             console.log(api_response.data.data);
 
             const table_data = api_response.data.data.map((item, i) => ({
-                value: item.id.toString(),
+                value: item.id,
                 label: item.name,
             }));
 
@@ -436,12 +437,22 @@ const UpdateTrip = () => {
                                     accommodation_id: api_response?.data?.accommodation_id,
                                     start_date_time: api_response?.data?.start_date_time,
                                     end_date_time: api_response?.data?.end_date_time,
-                                    travel_mates: api_response?.data?.travel_mates,
-                                    // travel_mates: JSON.parse(JSON.stringify(api_response?.data?.travel_mates)),
-                                    // travel_mates: api_response?.data?.travel_mates.map( item => ( {
+                                    // users: api_response?.data?.users,
+                                    users: api_response?.data?.users.map( item => ( {
+                                    //         // user_id: item.name,
+                                    //     // value: item.id,
+                                    //     // label: item.name,
+                                    //     user: {
+                                    //         value: item.id,
+                                    //         label: item.name,
+                                    //     },
+                                        user: item.id,
+                                        })),
+                                    // users: JSON.parse(JSON.stringify(api_response?.data?.users)),
+                                    // users: api_response?.data?.users.map( item => ( {
                                     //     user_id: item.user_id,
                                     // })),
-                                    // values?.travel_mates.map((travel_mate) => travel_mate?.user_id),
+                                    // values?.users.map((user) => user?.user_id),
 
                                 };
 
@@ -458,6 +469,7 @@ const UpdateTrip = () => {
                          */
                         await waitTime(1000);
                         values.image = file;
+                        values.trip_id = tripId;
                         await onFinishHandlerForm(values);
                     }}
                     submitter={{
@@ -547,7 +559,23 @@ const UpdateTrip = () => {
 
                     <ProForm.Group title="Travel Mates" size={24}>
                       <ProFormList
-                        name={"travel_mates"}
+                        name={"users"}
+                        // initialValue={[
+                        //     8,
+                        //     4
+                        //     // {
+                        //     //     user: {
+                        //     //         value: 8,
+                        //     //         label: 'testing'
+                        //     //     },
+                        //     // },
+                        //     // {
+                        //     //     user: {
+                        //     //         value: 13,
+                        //     //         label: 'testing13'
+                        //     //     },
+                        //     // },
+                        // ]}
                         min={1}
                         copyIconProps={{ tooltipText: 'Copy this travel mate' }}
                         deleteIconProps={{ tooltipText: 'Delete this travel mate' }}
@@ -557,7 +585,7 @@ const UpdateTrip = () => {
                       >
                         <ProForm.Group size={24}>
                             <ProFormSelect
-                                name={"user_id"}
+                                name={"user"}
                                 label="Name"
                                 showSearch
                                 options={allUsers}

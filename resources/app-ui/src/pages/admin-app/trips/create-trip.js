@@ -31,7 +31,7 @@ const onFinishHandlerForm = async (values) => {
         accommodation_id: values?.list_accommodations,
         start_date_time: moment(new Date(values?.trip_start_date_time)).format('YYYY-MM-DD HH:mm:ss'),
         end_date_time: moment(new Date(values?.trip_end_date_time)).format('YYYY-MM-DD HH:mm:ss'),
-        travel_mates: values?.travel_mates.map((travel_mate) => travel_mate?.user_id),
+        users: values?.users.map((item) => item?.user),
     };
 
     console.log('request_data - after');
@@ -154,7 +154,7 @@ const CreateTrip = () => {
             console.log(api_response.data.data);
 
             const table_data = api_response.data.data.map((item, i) => ({
-                value: item.id.toString(),
+                value: item.id,
                 label: item.title,
             }));
 
@@ -462,7 +462,7 @@ const CreateTrip = () => {
 
                     <ProForm.Group title="Travel Mates" size={24}>
                       <ProFormList
-                        name={"travel_mates"}
+                        name={"users"}
                         min={1}
                         copyIconProps={{ tooltipText: 'Copy this travel mate' }}
                         deleteIconProps={{ tooltipText: 'Delete this travel mate' }}
@@ -472,7 +472,7 @@ const CreateTrip = () => {
                       >
                         <ProForm.Group size={24}>
                             <ProFormSelect
-                                name={"user_id"}
+                                name={"user"}
                                 label="Name"
                                 showSearch
                                 options={allUsers}
