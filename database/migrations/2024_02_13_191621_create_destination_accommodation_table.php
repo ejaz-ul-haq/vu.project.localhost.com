@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTripsTable extends Migration
+class CreateDestinationAccommodationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class CreateTripsTable extends Migration
      */
     public function up()
     {
-        Schema::create('trips', function (Blueprint $table) {
+        Schema::create('destination_accommodation', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('destination_id')->comment('Destination ID');
             $table->unsignedBigInteger('accommodation_id')->comment('Accommodation ID');
-            $table->timestamp('start_date_time')->nullable()->comment('Trip Start Date & Time');
-            $table->timestamp('end_date_time')->nullable()->comment('Trip End Date & Time');
-//            $table->longText('travel_mates')->nullable()->comment('Travel Mates IDs');
+            $table->timestamps();
 
             $table->foreign('destination_id')->references('id')->on('destinations');
             $table->foreign('accommodation_id')->references('id')->on('accommodations');
-            $table->timestamps();
+
         });
     }
 
@@ -34,12 +32,6 @@ class CreateTripsTable extends Migration
      */
     public function down()
     {
-        Schema::table('trips', function (Blueprint $table) {
-            // Drop foreign key constraints
-            $table->dropForeign(['destination_id']);
-            $table->dropForeign(['accommodation_id']);
-        });
-
-        Schema::dropIfExists('trips');
+        Schema::dropIfExists('destination_accommodation');
     }
 }

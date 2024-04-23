@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAttractionsTable extends Migration
+class CreateDestinationAttractionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateAttractionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('attractions', function (Blueprint $table) {
+        Schema::create('destination_attraction', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 255);
-            $table->text('description')->nullable();
-            $table->string('image_url')->nullable();
             $table->unsignedBigInteger('destination_id')->comment('Destination ID');
+            $table->unsignedBigInteger('attraction_id')->comment('Attraction ID');
+            $table->timestamps();
 
             $table->foreign('destination_id')->references('id')->on('destinations');
+            $table->foreign('attraction_id')->references('id')->on('attractions');
 
-            $table->timestamps();
         });
     }
 
@@ -33,13 +32,6 @@ class CreateAttractionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('attractions', function (Blueprint $table) {
-            // Drop foreign key constraints
-            $table->dropForeign(['destination_id']);
-        });
-
-        Schema::dropIfExists('attractions');
+        Schema::dropIfExists('destination_attraction');
     }
 }
-
-;

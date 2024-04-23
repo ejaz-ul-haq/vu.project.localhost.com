@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
 use App\Models\User;
 
-class Trip extends Model
+class Review extends Model
 {
     use HasFactory;
 
@@ -18,12 +20,20 @@ class Trip extends Model
      * @var array
      */
     protected $fillable = [
-        'destination_id',
-        'accommodation_id',
-        'start_date_time',
-        'end_date_time'
-//        'travel_mates'
+        'rating',
+        'status',
+        'comment',
+        'reviewable_id',
+        'reviewable_type'
     ];
+
+    /**
+     * Get the parent reviewable model (trip, destination, accommodation, attraction).
+     */
+    public function reviewable(): MorphTo
+    {
+        return $this->morphTo();
+    }
 
     /**
      * The users that belong to the trip.

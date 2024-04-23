@@ -2,13 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Product;
-use App\Models\Trip;
-use Carbon\Carbon;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-
-class TripSeeder extends Seeder
+class EnableForeignKeyConstraintsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,7 +14,7 @@ class TripSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('trips')->delete();
-        Trip::factory(10)->create();
+        // Re-enable foreign key constraints
+//        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

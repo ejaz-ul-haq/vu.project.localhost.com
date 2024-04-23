@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Accommodation;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AccommodationFactory extends Factory
@@ -28,4 +29,5 @@ class AccommodationFactory extends Factory
             'destination_id' => rand(1,10),
         ];
     }
+
 }

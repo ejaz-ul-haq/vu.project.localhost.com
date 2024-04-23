@@ -33,6 +33,11 @@ class CreateAccommodationsTable extends Migration
      */
     public function down()
     {
+        Schema::table('accommodations', function (Blueprint $table) {
+            // Drop foreign key constraints
+            $table->dropForeign(['destination_id']);
+        });
+
         Schema::dropIfExists('accommodations');
     }
 }
