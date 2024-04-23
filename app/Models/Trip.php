@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+use App\Models\User;
 
 class Trip extends Model
 {
@@ -22,6 +25,14 @@ class Trip extends Model
         'travel_mates'
     ];
 
+    /**
+     * The roles that belong to the user.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_trip', 'trip_id', 'user_id');
+    }
+
 
     public function destination(): object
     {
@@ -38,7 +49,7 @@ class Trip extends Model
     //     // Assuming you have a 'User' model
     //     return $this->belongsToMany(User::class, 'trip_user', 'trip_id', 'user_id');
     // }
-    
+
     // Add New Attribute to get image address
 //    protected $appends = ['image_url'];
 

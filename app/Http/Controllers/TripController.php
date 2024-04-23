@@ -139,7 +139,22 @@ class TripController extends Controller
         Log::warning($request);
 
         try {
-            $trip = $this->tripRepository->create($request->all());
+//            $trip = $this->tripRepository->create($request->all());
+//            $data['travel_mates'] = (isset($data['travel_mates']) && is_array($data['travel_mates'])) ? serialize($data['travel_mates']) : '';
+
+            $data = $request->all();
+            $trip = Trip::create($data);
+
+            /**
+             * Set Trip Users
+             */
+//            $users_data = [];
+//            foreach ($data['travel_mates'] as $user ){
+//                $users_data[] = [
+//                    'trip_id' => $trip
+//                ];
+//            }
+//            $trip->users()->createMany();
 
             return $this->responseSuccess($trip, 'New Trip Created Successfully !');
 
@@ -169,25 +184,18 @@ class TripController extends Controller
         Log::warning($id);
 
         try {
-//            $data = $this->tripRepository->getByID($id);
-            // $data = Trip::find($id)
-            // // $data = Trip::where('id', '==', $id);
-            // // ->with('destination')
-            // ->with('accommodation');
 
-            $data = Trip::with('destination', 'accommodation')->find($id);
+//            $trip = Trip::find($id);
+            $trip = Trip::with('destination', 'accommodation', 'users')->find($id);
 
-            // $data['accommodation'] = Accommodation::find($data['accommodation_id']);
-            // $data['destination'] = Destination::find($data['destination_id']);
+            Log::warning('trip - controller : show - $trip');
+            Log::warning($trip);
 
-            Log::warning('trip - controller : show - $data');
-            Log::warning($data);
-
-            if (is_null($data)) {
+            if (is_null($trip)) {
                 return $this->responseError(null, 'Trip Not Found', Response::HTTP_NOT_FOUND);
             }
 
-            return $this->responseSuccess($data, 'Trip Details Fetch Successfully !');
+            return $this->responseSuccess($trip, 'Trip Details Fetch Successfully !');
         } catch (\Exception $e) {
             return $this->responseError(null, $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
