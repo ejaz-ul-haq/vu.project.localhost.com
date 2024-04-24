@@ -150,7 +150,7 @@ class AccommodationController extends Controller
             Log::warning('$data');
             Log::warning($data);
 
-            $titleShort = Str::slug(substr($data['title'], 0, 20));
+            $titleShort = Str::slug(substr($data['title'], 0, 100));
 //            $data['user_id'] = $this->user->id;
 
             if ( ! empty($data['image'])) {
@@ -259,7 +259,7 @@ class AccommodationController extends Controller
             $accommodation = Accommodation::find($id);
             $data = $request->all();
             if ( ! empty($data['image'])) {
-                $titleShort    = Str::slug(substr($data['title'], 0, 20));
+                $titleShort    = Str::slug(substr($data['title'], 0, 100));
                 $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/accommodations' );
             } else {
                 $data['image_url'] = $accommodation->image;

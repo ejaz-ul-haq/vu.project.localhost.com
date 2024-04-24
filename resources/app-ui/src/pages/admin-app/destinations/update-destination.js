@@ -4,7 +4,7 @@ import {
     ProCard,
     ProForm,
     ProFormText,
-    ProFormTextArea
+    ProFormTextArea, ProFormList, ProFormSelect
 } from '@ant-design/pro-components';
 import {Row, Col, message, Button, Form, Image, Upload} from 'antd';
 import {UploadOutlined, UserOutlined, PlusOutlined} from '@ant-design/icons';
@@ -14,6 +14,8 @@ import DestinationFormSkeleton from "@/components/Skeleton/DestinationFormSkelet
 import {useParams} from "@@/exports";
 import { waitTime } from '@/components/Helpers/RequestHelpers';
 
+import { getFile, getBase64 } from '@/components/Helpers/ImageConversion';
+
 
 /**
  * The Form Initial values
@@ -22,6 +24,7 @@ const initialValues = {
     title: '',
     description: '',
     image_url: '',
+    accommodations: '',
 };
 
 /**
@@ -54,7 +57,8 @@ const onFinishHandlerForm = async (values) => {
         id: values?.destination_id,
         title: values?.title,
         description: values?.description,
-        image: values?.image
+        image: values?.image,
+        accommodations: values?.accommodations.map((item) => item?.accommodation),
       };
 
         return await request('/api/destinations/' + values?.destination_id, {
@@ -86,45 +90,6 @@ const onFinishHandlerForm = async (values) => {
     return true;
 };
 
-const getFile = (e) => {
-    console.log('Upload event:', e);
-
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e && e.fileList;
-};
-
-
-const getBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-        let url = '';
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onload =  function(e){
-            console.log('DataURL:', e.target.result);
-            // setImageUrl(e.target.result);
-            url = e.target.result;
-        };
-        reader.onerror = (error) => reject(error);
-
-        return url;
-
-    });
-};
-
-const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-};
 
 const UpdateDestination = () => {
 
@@ -136,75 +101,77 @@ const UpdateDestination = () => {
 
     const [form] = Form.useForm();
     // const [skeletonStatus, setSkeletonStatus] = useState(true);
-
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
     const [imageUrl, setImageUrl] = useState(DEFAULT_PLACEHOLDER_IMAGE_URL);
-    const [file, setFile] = useState();
     const [destinationId, setDestinationId] = useState(0);
+
+    const [allAccommodations, setAllAccommodations] = useState([]);
 
     useEffect(() => {
         setDestinationId(params.id);
     }, []); //empty dependency array so it only runs once at render
 
 
-    const handleCancel = () => setPreviewOpen(false);
-    const handlePreview = async (file) => {
-        console.log('handlePreview');
-        console.log('file');
-        console.log(file);
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
-        }
-        setPreviewImage(file.url || file.preview);
-        setPreviewOpen(true);
-        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-    };
+    /**
+     * Start - Accommodations Data
+     */
+    useEffect(() => {
+
+        return request('/api/accommodations', {
+
+            params: {
+                page: 1,
+                per_page: 1000,
+                order_by: 'id',
+                order: 'asc',
+            },
+
+        }).then(async (api_response) => {
+            console.log('api_response');
+            console.log(api_response);
+
+            console.log('api_response.data');
+            console.log(api_response.data);
+
+            console.log('api_response.data.data');
+            console.log(api_response.data.data);
+
+            const table_data = api_response.data.data.map((item, i) => ({
+                // value: item.id.toString(),
+                value: item.id,
+                label: item.title,
+            }));
+
+            console.log('table_data');
+            console.log(table_data);
+
+            setAllAccommodations(table_data);
+
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+    }, []);
+
 
     const handleChange = (info) => {
-        console.log('handleChange..');
-        console.log('info');
-        console.log(info);
-
-
-
+        if (info.file.status === 'uploading') {
+            return;
+        }
         if( info.file.status == "removed" ){
             setImageUrl('');
         }
 
-        if (info.file.status === 'uploading') {
-
-            console.log('handleChange - status - uploading');
-
-            return;
-        }
         if (info.file.status === 'done') {
-
-            console.log('handleChange - status - done');
-            console.log('info.file');
-            console.log(info.file);
-
-            setFile(info.file);
-
-            return new Promise((resolve, reject) => {
-                let url = '';
-                const reader = new FileReader();
-                reader.readAsDataURL(info.file.originFileObj);
-                reader.onload = () => resolve(reader.result);
-                reader.onload =  function(e){
-                    console.log('DataURL:', e.target.result);
-
-                    setImageUrl(e.target.result);
-                };
-                reader.onerror = (error) => reject(error);
-
+            getBase64(info).then((base64String) => {
+                console.log('base64String');
+                console.log(base64String);
+                setImageUrl(base64String);
             });
 
         }
 
         if (info.file.status === 'error') {
-            // message.error(`${info.file.name} file upload failed.`);
+            message.error(`${info.file.name} file upload failed.`);
         }
 
     };
@@ -269,6 +236,9 @@ const UpdateDestination = () => {
                                     title: api_response?.data?.title,
                                     description: api_response?.data?.description,
                                     image_url: api_response?.data?.image_url,
+                                    accommodations: api_response?.data?.accommodations.map( item => ( {
+                                        accommodation: item.id,
+                                    })),
                                 };
 
                             }).catch(function (error) {
@@ -373,6 +343,48 @@ const UpdateDestination = () => {
                                 </ProForm.Group>
                             </Col>
                         </Row>
+                    </ProCard>
+
+                    <ProCard
+                        title="Accommodations Details"
+                        bordered
+                        headerBordered
+                        collapsible
+                        size="default"
+                        type="default"
+                        style={{
+                            marginBlockEnd: 15,
+                            minWidth: 800,
+                            maxWidth: '100%',
+                        }}
+                        onCollapse={(collapse) => console.log(collapse)}
+                    >
+
+                        <ProForm.Group title="Accommodations" size={24}>
+                            <ProFormList
+                                name={"accommodations"}
+                                min={1}
+                                copyIconProps={{ tooltipText: 'Copy this accommodation' }}
+                                deleteIconProps={{ tooltipText: 'Delete this accommodation' }}
+                                creatorButtonProps={{
+                                    creatorButtonText: 'Add New Accommodation',
+                                }}
+                            >
+                                <ProForm.Group size={24}>
+                                    <ProFormSelect
+                                        name={"accommodation"}
+                                        label="Name"
+                                        showSearch
+                                        options={allAccommodations}
+                                        debounceTime={300}
+                                        placeholder="Please Select Accommodation"
+                                        rules={[{required: true}]}
+                                        colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}
+                                    />
+                                </ProForm.Group>
+                            </ProFormList>
+                        </ProForm.Group>
+
                     </ProCard>
 
                 </ProForm>

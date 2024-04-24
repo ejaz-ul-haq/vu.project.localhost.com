@@ -150,6 +150,14 @@ export default [
     component: './admin-app/accommodations/update-accommodation',
   },
   {
+    path: '/admin-app/attractions',
+    name: 'Attractions',
+    icon: 'PictureOutlined',
+    access: 'isAdministrator',
+    layout: 'side',
+    // component: './admin-app/attractions/list-attractions',
+  },
+  {
     path: '/admin-app/notifications',
     name: 'Notifications',
     icon: 'NotificationOutlined',

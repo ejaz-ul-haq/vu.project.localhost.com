@@ -166,16 +166,30 @@ class DestinationController extends Controller
             Log::warning('$data');
             Log::warning($data);
 
-            $titleShort = Str::slug(substr($data['title'], 0, 20));
+            $titleShort = Str::slug(substr($data['title'], 0, 100));
 //            $data['user_id'] = $this->user->id;
 
             if ( ! empty($data['image'])) {
                 $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/destinations' );
             }
 
-            $response = Destination::create($data);
+            $destination = Destination::create($data);
 
-            return $this->responseSuccess($response, 'New Destination Created Successfully !');
+             /**
+             * Set Trip Users
+             */
+            // Retrieve the user IDs from the request (assuming they're in an array)
+            $accommodationsIds = $request->input('accommodations');
+
+            // Associate users with the trip by inserting records into the pivot table
+            $destination->accommodations()->attach($accommodationsIds);
+
+            $response_data = Destination::with('accommodations', 'attractions')->find($destination->id);
+
+            Log::warning('$response_data');
+            Log::warning($response_data);
+
+            return $this->responseSuccess($response_data, 'New Destination Created Successfully !');
 
         } catch (\Exception $exception) {
             return $this->responseError(null, $exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -204,7 +218,9 @@ class DestinationController extends Controller
 
         try {
 
-            $data = Destination::find($id);
+            // $data = Destination::find($id);
+
+            $data = Destination::with('accommodations', 'attractions')->find($id);
 
             Log::warning('$data');
             Log::warning($data);
@@ -252,10 +268,15 @@ class DestinationController extends Controller
 
         try {
 
-            $destination = Destination::find($id);
             $data = $request->all();
+            $destination = Destination::find($id);
+
+            if (is_null($destination)) {
+                return null;
+            }
+
             if ( ! empty($data['image'])) {
-                $titleShort    = Str::slug(substr($data['title'], 0, 20));
+                $titleShort    = Str::slug(substr($data['title'], 0, 100));
                 $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/destinations' );
             } else {
                 $data['image_url'] = $destination->image;
@@ -267,8 +288,26 @@ class DestinationController extends Controller
             // If everything is OK, then update.
             $destination->update($data);
 
+            /**
+             * Set Destination Accommodations
+             */
+            // Retrieve the accommodation IDs from the request (assuming they're in an array)
+            $accommodationIds = $request->input('accommodations');
+
+            // Associate accommodations with the destination by inserting records into the pivot table
+            $destination->accommodations()->sync($accommodationIds, true);
+
+            $response_data = Destination::with('accommodations')->find($id);
+
+            Log::warning('$response_data');
+            Log::warning($response_data);
+
+            if (is_null($response_data)) {
+                return $this->responseError(null, 'Destination Not Found', Response::HTTP_NOT_FOUND);
+            }
+
             // Finally return the updated Destination.
-            return $this->responseSuccess(Destination::find($id), 'Destination Updated Successfully !');
+            return $this->responseSuccess($response_data, 'Destination Updated Successfully !');
 
         } catch (\Exception $e) {
             return $this->responseError(null, $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

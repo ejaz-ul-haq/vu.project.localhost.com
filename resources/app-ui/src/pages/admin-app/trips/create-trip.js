@@ -196,7 +196,8 @@ const CreateTrip = () => {
             console.log(api_response.data.data);
 
             const table_data = api_response.data.data.map((item, i) => ({
-                value: item.id.toString(),
+                // value: item.id.toString(),
+                value: item.id,
                 label: item.title,
             }));
 
@@ -237,7 +238,8 @@ const CreateTrip = () => {
             console.log(api_response.data.data);
 
             const table_data = api_response.data.data.map((item, i) => ({
-                value: item.id.toString(),
+                // value: item.id.toString(),
+                value: item.id,
                 label: item.name,
             }));
 
@@ -479,7 +481,7 @@ const CreateTrip = () => {
                                 debounceTime={300}
                                 placeholder="Please Select Travel Mate"
                                 rules={[{required: true}]}
-                                colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}
+                                colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}
                             />
                         </ProForm.Group>
                       </ProFormList>

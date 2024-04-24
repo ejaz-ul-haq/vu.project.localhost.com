@@ -4,7 +4,7 @@ import {
     ProCard,
     ProForm,
     ProFormText,
-    ProFormTextArea
+    ProFormTextArea, ProFormSelect
 } from '@ant-design/pro-components';
 import {Row, Col, message, Button, Form, Image, Upload} from 'antd';
 import {UploadOutlined, UserOutlined, PlusOutlined} from '@ant-design/icons';
@@ -22,6 +22,7 @@ const initialValues = {
     title: '',
     description: '',
     image_url: '',
+    destination_id: '',
 };
 
 /**
@@ -54,11 +55,12 @@ const onFinishHandlerForm = async (values) => {
             id: values?.accommodation_id,
             title: values?.title,
             description: values?.description,
+            destination_id: values?.destination_id,
             /**
              * Start Code By M
              */
 
-            image: values?.image
+            image: values?.image,
 
             /**
              * End Code By M
@@ -69,7 +71,7 @@ const onFinishHandlerForm = async (values) => {
             method: 'PUT',
             data: request_data,
         }).then(async (api_response) => {
-            console.log('api_response');
+            console.log('api_response - PUT accommodation');
             console.log(api_response);
 
             /**
@@ -149,10 +151,53 @@ const UpdateAccommodation = () => {
     const [imageUrl, setImageUrl] = useState(DEFAULT_PLACEHOLDER_IMAGE_URL);
     const [file, setFile] = useState();
     const [accommodationId, setAccommodationId] = useState(0);
+    const [allDestinations, setAllDestinations] = useState([]);
 
     useEffect(() => {
         setAccommodationId(params.id);
     }, []); //empty dependency array so it only runs once at render
+
+
+    /**
+     * Start - Destinations Data
+     */
+    useEffect(() => {
+
+      return request('/api/destinations', {
+
+        params: {
+          page: 1,
+          per_page: 1000,
+          order_by: 'id',
+          order: 'asc',
+        },
+
+      }).then(async (api_response) => {
+        console.log('api_response');
+        console.log(api_response);
+
+        console.log('api_response.data');
+        console.log(api_response.data);
+
+        console.log('api_response.data.data');
+        console.log(api_response.data.data);
+
+        const table_data = api_response.data.data.map((item, i) => ({
+          value: item.id,
+          label: item.title,
+        }));
+
+        console.log('table_data');
+        console.log(table_data);
+
+        setAllDestinations(table_data);
+
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    }, []);
+
 
 
     const handleCancel = () => setPreviewOpen(false);
@@ -283,6 +328,7 @@ const UpdateAccommodation = () => {
                                 title: api_response?.data?.title,
                                 description: api_response?.data?.description,
                                 image_url: api_response?.data?.image_url,
+                                destination_id: api_response?.data?.destination_id,
                             };
 
                         }).catch(function (error) {
@@ -401,6 +447,16 @@ const UpdateAccommodation = () => {
                                     fieldProps={{
                                         size: 'middle'
                                     }}
+                                />
+                                <ProFormSelect
+                                    name={"destination_id"}
+                                    label="Destinations"
+                                    showSearch
+                                    options={allDestinations}
+                                    debounceTime={300}
+                                    placeholder="Please Select Your Destination"
+                                    rules={[{required: true}]}
+                                    colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}
                                 />
                             </ProForm.Group>
                         </Col>
