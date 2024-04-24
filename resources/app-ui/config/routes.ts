@@ -155,7 +155,7 @@ export default [
     icon: 'PictureOutlined',
     access: 'isAdministrator',
     layout: 'side',
-    // component: './admin-app/attractions/list-attractions',
+    component: './admin-app/attractions/list-attractions',
   },
   {
     path: '/admin-app/notifications',

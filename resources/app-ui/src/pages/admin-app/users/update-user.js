@@ -7,10 +7,12 @@ import {
     ProFormText
 } from '@ant-design/pro-components';
 import {Row, Col, message, Button, Form, Image, Upload} from 'antd';
-import {UploadOutlined, UserOutlined} from '@ant-design/icons';
+import {PlusOutlined, UploadOutlined, UserOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from "react";
 import {request, history} from '@umijs/max';
 import {useParams} from "@@/exports";
+
+import { getFile, getBase64 } from '@/components/Helpers/ImageConversion';
 
 
 const waitTime = (time = 100) => {
@@ -102,16 +104,6 @@ const onFinishHandlerForm = async (values) => {
 };
 
 
-const getFile = (e) => {
-    console.log('Upload event:', e);
-
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e && e.fileList;
-};
-
-
 const UpdateUser = () => {
 
     const params = useParams();
@@ -126,7 +118,6 @@ const UpdateUser = () => {
 
     const [userProfileImageUrl, setUserProfileImageUrl] = useState('');
     const [imageUrl, setImageUrl] = useState(userProfileImageUrl);
-    const [file, setFile] = useState();
 
 
     useEffect(() => {
@@ -136,47 +127,24 @@ const UpdateUser = () => {
 
 
     const handleChange = (info) => {
-        console.log('handleChange..');
-        console.log('info');
-        console.log(info);
-
-
+        if (info.file.status === 'uploading') {
+            return;
+        }
         if( info.file.status == "removed" ){
             setImageUrl('');
         }
 
-        if (info.file.status === 'uploading') {
-
-            console.log('handleChange - status - uploading');
-
-            return;
-        }
         if (info.file.status === 'done') {
-
-            console.log('handleChange - status - done');
-            console.log('info.file');
-            console.log(info.file);
-
-            setFile(info.file);
-
-            return new Promise((resolve, reject) => {
-                let url = '';
-                const reader = new FileReader();
-                reader.readAsDataURL(info.file.originFileObj);
-                reader.onload = () => resolve(reader.result);
-                reader.onload =  function(e){
-                    console.log('DataURL:', e.target.result);
-
-                    setImageUrl(e.target.result);
-                };
-                reader.onerror = (error) => reject(error);
-
+            getBase64(info).then((base64String) => {
+                console.log('base64String');
+                console.log(base64String);
+                setImageUrl(base64String);
             });
 
         }
 
         if (info.file.status === 'error') {
-            // message.error(`${info.file.name} file upload failed.`);
+            message.error(`${info.file.name} file upload failed.`);
         }
 
     };
@@ -188,6 +156,27 @@ const UpdateUser = () => {
 
     return (
         <PageContainer>
+
+            <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+              <Col flex="auto">
+
+              </Col>
+
+              <Col flex="100px">
+                <Button
+                  type="primary"
+                  key="primary"
+                  onClick={() => {
+                    // handleModalOpen(true);
+                    history.push('/admin-app/users/new');
+                  }}
+                  style={{marginBlockEnd: 15}}
+                >
+                  <PlusOutlined/> New
+                </Button>
+              </Col>
+            </Row>
+
             <ProForm
                 layout='vertical'
                 grid={true}

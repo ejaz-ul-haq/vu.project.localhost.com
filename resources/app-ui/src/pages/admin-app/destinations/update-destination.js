@@ -201,6 +201,27 @@ const UpdateDestination = () => {
 
         return (
             <PageContainer>
+
+                <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+                  <Col flex="auto">
+
+                  </Col>
+
+                  <Col flex="100px">
+                    <Button
+                      type="primary"
+                      key="primary"
+                      onClick={() => {
+                        // handleModalOpen(true);
+                        history.push('/admin-app/destinations/new');
+                      }}
+                      style={{marginBlockEnd: 15}}
+                    >
+                      <PlusOutlined/> New
+                    </Button>
+                  </Col>
+                </Row>
+
                 <ProForm
                     layout='vertical'
                     grid={true}

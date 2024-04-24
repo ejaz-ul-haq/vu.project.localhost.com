@@ -5,7 +5,7 @@ import {
     ProForm,
     ProFormText, ProFormTextArea
 } from '@ant-design/pro-components';
-import {Row, message, Form} from 'antd';
+import {Row, message, Form, Col, Button} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from "react";
 import {request, history} from '@umijs/max';
@@ -247,6 +247,27 @@ const UpdateNotification = () => {
 
         return (
             <PageContainer>
+
+                <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+                  <Col flex="auto">
+
+                  </Col>
+
+                  <Col flex="100px">
+                    <Button
+                      type="primary"
+                      key="primary"
+                      onClick={() => {
+                        // handleModalOpen(true);
+                        history.push('/admin-app/notifications/new');
+                      }}
+                      style={{marginBlockEnd: 15}}
+                    >
+                      <PlusOutlined/> New
+                    </Button>
+                  </Col>
+                </Row>
+
                 <ProForm
                     layout='horizontal'
                     grid={true}

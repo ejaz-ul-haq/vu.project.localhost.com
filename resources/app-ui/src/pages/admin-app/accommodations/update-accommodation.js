@@ -14,6 +14,8 @@ import DestinationFormSkeleton from "@/components/Skeleton/DestinationFormSkelet
 import {useParams} from "@@/exports";
 import { waitTime } from '@/components/Helpers/RequestHelpers';
 
+import { getFile, getBase64 } from '@/components/Helpers/ImageConversion';
+
 
 /**
  * The Form Initial values
@@ -94,45 +96,6 @@ const onFinishHandlerForm = async (values) => {
     return true;
 };
 
-const getFile = (e) => {
-    console.log('Upload event:', e);
-
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e && e.fileList;
-};
-
-
-const getBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-        let url = '';
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onload =  function(e){
-            console.log('DataURL:', e.target.result);
-            // setImageUrl(e.target.result);
-            url = e.target.result;
-        };
-        reader.onerror = (error) => reject(error);
-
-        return url;
-
-    });
-};
-
-const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-};
 
 const UpdateAccommodation = () => {
 
@@ -144,12 +107,8 @@ const UpdateAccommodation = () => {
 
     const [form] = Form.useForm();
     // const [skeletonStatus, setSkeletonStatus] = useState(true);
-
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
     const [imageUrl, setImageUrl] = useState(DEFAULT_PLACEHOLDER_IMAGE_URL);
-    const [file, setFile] = useState();
+
     const [accommodationId, setAccommodationId] = useState(0);
     const [allDestinations, setAllDestinations] = useState([]);
 
@@ -199,64 +158,26 @@ const UpdateAccommodation = () => {
     }, []);
 
 
-
-    const handleCancel = () => setPreviewOpen(false);
-    const handlePreview = async (file) => {
-        console.log('handlePreview');
-        console.log('file');
-        console.log(file);
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
-        }
-        setPreviewImage(file.url || file.preview);
-        setPreviewOpen(true);
-        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-    };
-
     const handleChange = (info) => {
-        console.log('handleChange..');
-        console.log('info');
-        console.log(info);
+      if (info.file.status === 'uploading') {
+        return;
+      }
+      if( info.file.status == "removed" ){
+        setImageUrl('');
+      }
 
+      if (info.file.status === 'done') {
+        getBase64(info).then((base64String) => {
+          console.log('base64String');
+          console.log(base64String);
+          setImageUrl(base64String);
+        });
 
+      }
 
-        if( info.file.status == "removed" ){
-            setImageUrl('');
-        }
-
-        if (info.file.status === 'uploading') {
-
-            console.log('handleChange - status - uploading');
-
-            return;
-        }
-        if (info.file.status === 'done') {
-
-            console.log('handleChange - status - done');
-            console.log('info.file');
-            console.log(info.file);
-
-            setFile(info.file);
-
-            return new Promise((resolve, reject) => {
-                let url = '';
-                const reader = new FileReader();
-                reader.readAsDataURL(info.file.originFileObj);
-                reader.onload = () => resolve(reader.result);
-                reader.onload =  function(e){
-                    console.log('DataURL:', e.target.result);
-
-                    setImageUrl(e.target.result);
-                };
-                reader.onerror = (error) => reject(error);
-
-            });
-
-        }
-
-        if (info.file.status === 'error') {
-            // message.error(`${info.file.name} file upload failed.`);
-        }
+      if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
 
     };
 
@@ -285,6 +206,27 @@ const UpdateAccommodation = () => {
 
     return (
         <PageContainer>
+
+            <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+              <Col flex="auto">
+
+              </Col>
+
+              <Col flex="100px">
+                <Button
+                  type="primary"
+                  key="primary"
+                  onClick={() => {
+                    // handleModalOpen(true);
+                    history.push('/admin-app/accommodations/new');
+                  }}
+                  style={{marginBlockEnd: 15}}
+                >
+                  <PlusOutlined/> New
+                </Button>
+              </Col>
+            </Row>
+
             <ProForm
                 layout='vertical'
                 grid={true}

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccommodationController;
+use App\Http\Controllers\AttractionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\NotificationController;
@@ -78,6 +79,11 @@ Route::group([
      * Accommodations Module
      */
     Route::resource('accommodations', AccommodationController::class);
+
+    /**
+     * Attractions Module
+     */
+    Route::resource('attractions', AttractionController::class);
 
     /**
      * Notifications Module

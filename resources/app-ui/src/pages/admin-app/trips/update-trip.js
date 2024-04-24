@@ -510,18 +510,6 @@ const UpdateTrip = () => {
                             minWidth: 800,
                             maxWidth: '100%',
                         }}
-                        extra={
-                            <Button
-                                type="primary"
-                                key="primary"
-                                onClick={() => {
-                                    // handleModalOpen(true);
-                                    history.push('/admin-app/trips/new');
-                                }}
-                            >
-                                <PlusOutlined/> New
-                            </Button>
-                        }
                         onCollapse={(collapse) => console.log(collapse)}
                     >
                         <Row
