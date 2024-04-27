@@ -100,9 +100,24 @@ const ListTrips = () => {
       defaultSortOrder: 'descend',
     },
     {
-      title: "Destination",
-      dataIndex: ['destination', 'title'],
-      key: 'table-column-destination',
+      title: "Image",
+      dataIndex: "image_url",
+      key: 'table-column-image',
+      hideInSearch: true,
+      render: (dom, entity) => {
+        return (
+          <img
+            alt="example"
+            src={dom}
+            style={{ height: '80px', width: '150px' }}
+          />
+        );
+      },
+    },
+    {
+      title: "Title",
+      dataIndex: "title",
+      key: 'table-column-title',
       copyable: true,
       hideInSearch: true,
       render: (dom, entity) => {
@@ -119,24 +134,54 @@ const ListTrips = () => {
       },
     },
     {
-      title: "Accommodation",
-      dataIndex: ['accommodation', 'title'],
-      key: 'table-column-accommodation',
-      copyable: true,
+      title: "Price",
+      dataIndex: 'price',
+      key: 'table-column-price',
+      sorter: true,
+      hideInForm: true,
       hideInSearch: true,
-      render: (dom, entity) => {
-        return (
-          <a
-            onClick={() => {
-              setCurrentRow(entity);
-              setShowDetail(true);
-            }}
-          >
-            {dom}
-          </a>
-        );
+      render: (price) => {
+        return (<p>$ {price}</p>)
       },
     },
+    // {
+    //   title: "Destination",
+    //   dataIndex: ['destination', 'title'],
+    //   key: 'table-column-destination',
+    //   copyable: true,
+    //   hideInSearch: true,
+    //   render: (dom, entity) => {
+    //     return (
+    //       <a
+    //         onClick={() => {
+    //           setCurrentRow(entity);
+    //           setShowDetail(true);
+    //         }}
+    //       >
+    //         {dom}
+    //       </a>
+    //     );
+    //   },
+    // },
+    // {
+    //   title: "Accommodation",
+    //   dataIndex: ['accommodation', 'title'],
+    //   key: 'table-column-accommodation',
+    //   copyable: true,
+    //   hideInSearch: true,
+    //   render: (dom, entity) => {
+    //     return (
+    //       <a
+    //         onClick={() => {
+    //           setCurrentRow(entity);
+    //           setShowDetail(true);
+    //         }}
+    //       >
+    //         {dom}
+    //       </a>
+    //     );
+    //   },
+    // },
     {
       title: "Trip Start Date",
       dataIndex: 'start_date_time',

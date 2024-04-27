@@ -5,10 +5,10 @@ import {
     ProForm,
     ProFormSelect,
     ProFormList,
-    ProFormDateTimePicker
+    ProFormDateTimePicker, ProFormText, ProFormTextArea
 } from '@ant-design/pro-components';
-import {Row, message, Form, Col, Button} from 'antd';
-import {PlusOutlined} from '@ant-design/icons';
+import {Row, message, Form, Col, Button, Image, Upload} from 'antd';
+import {PlusOutlined, UploadOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from "react";
 import {request, history} from '@umijs/max';
 import DestinationFormSkeleton from "@/components/Skeleton/DestinationFormSkeleton";
@@ -16,11 +16,17 @@ import {useParams} from "@@/exports";
 import { waitTime } from '@/components/Helpers/RequestHelpers';
 import moment from 'moment';
 
+import { getFile, getBase64 } from '@/components/Helpers/ImageConversion';
+
 
 /**
  * The Form Initial values
  */
 const initialValues = {
+    title: '',
+    description: '',
+    image_url: '',
+    price: '',
     destination_id: '',
     accommodation_id: '',
     start_date_time: '',
@@ -40,6 +46,10 @@ const onFinishHandlerForm = async (values) => {
     console.log(values);
 
     const request_data = {
+        title: values?.title,
+        description: values?.description,
+        image: values?.image,
+        price: values?.price,
         destination_id: values?.destination_id,
         accommodation_id: values?.accommodation_id,
         start_date_time: moment(new Date(values?.start_date_time)).format('YYYY-MM-DD HH:mm:ss'),
@@ -83,44 +93,6 @@ const onFinishHandlerForm = async (values) => {
     return true;
 };
 
-const getFile = (e) => {
-    console.log('Upload event:', e);
-
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e && e.fileList;
-};
-
-
-const getBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-        let url = '';
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onload =  function(e){
-            console.log('DataURL:', e.target.result);
-            url = e.target.result;
-        };
-        reader.onerror = (error) => reject(error);
-
-        return url;
-
-    });
-};
-
-const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-};
 
 const UpdateTrip = () => {
 
@@ -134,11 +106,7 @@ const UpdateTrip = () => {
     const [staffMemberProfileImageUrl, setStaffMemberProfileImageUrl] = useState('');
     const [skeletonStatus, setSkeletonStatus] = useState(true);
 
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
     const [imageUrl, setImageUrl] = useState(DEFAULT_PLACEHOLDER_IMAGE_URL);
-    const [file, setFile] = useState();
 
     const [tripId, setTripId] = useState(0);
     const [allDestinations, setAllDestinations] = useState([]);
@@ -284,61 +252,25 @@ const UpdateTrip = () => {
     }, [staffMemberProfileImageUrl, form]);
 
 
-    const handleCancel = () => setPreviewOpen(false);
-    const handlePreview = async (file) => {
-        console.log('handlePreview');
-        console.log('file');
-        console.log(file);
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
-        }
-        setPreviewImage(file.url || file.preview);
-        setPreviewOpen(true);
-        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-    };
-
     const handleChange = (info) => {
-        console.log('handleChange..');
-        console.log('info');
-        console.log(info);
-
-
+        if (info.file.status === 'uploading') {
+            return;
+        }
         if( info.file.status == "removed" ){
             setImageUrl('');
         }
 
-        if (info.file.status === 'uploading') {
-
-            console.log('handleChange - status - uploading');
-
-            return;
-        }
         if (info.file.status === 'done') {
-
-            console.log('handleChange - status - done');
-            console.log('info.file');
-            console.log(info.file);
-
-            setFile(info.file);
-
-            return new Promise((resolve, reject) => {
-                let url = '';
-                const reader = new FileReader();
-                reader.readAsDataURL(info.file.originFileObj);
-                reader.onload = () => resolve(reader.result);
-                reader.onload =  function(e){
-                    console.log('DataURL:', e.target.result);
-
-                    setImageUrl(e.target.result);
-                };
-                reader.onerror = (error) => reject(error);
-
+            getBase64(info).then((base64String) => {
+                console.log('base64String');
+                console.log(base64String);
+                setImageUrl(base64String);
             });
 
         }
 
         if (info.file.status === 'error') {
-            // message.error(`${info.file.name} file upload failed.`);
+            message.error(`${info.file.name} file upload failed.`);
         }
 
     };
@@ -446,19 +378,14 @@ const UpdateTrip = () => {
 
                                 return {
                                     ...initialValues,
-                                    // destination_id: test_map,
-                                    // destination_id: api_response?.data?.destination_id.map(staff_members => ({
-                                    //
-                                    //     id: staff_members.id,
-                                    //     title: staff_members.title
-                                    //     // console.log('element.id');
-                                    //     //   console.log(element.id);
-                                    // })),
+                                    title: api_response?.data?.title,
+                                    description: api_response?.data?.description,
+                                    image_url: api_response?.data?.image_url,
+                                    price: api_response?.data?.price,
                                     destination_id: api_response?.data?.destination_id,
                                     accommodation_id: api_response?.data?.accommodation_id,
                                     start_date_time: api_response?.data?.start_date_time,
                                     end_date_time: api_response?.data?.end_date_time,
-                                    // users: api_response?.data?.users,
                                     users: api_response?.data?.users.map( item => ( {
                                     //         // user_id: item.name,
                                     //     // value: item.id,
@@ -469,12 +396,6 @@ const UpdateTrip = () => {
                                     //     },
                                         user: item.id,
                                         })),
-                                    // users: JSON.parse(JSON.stringify(api_response?.data?.users)),
-                                    // users: api_response?.data?.users.map( item => ( {
-                                    //     user_id: item.user_id,
-                                    // })),
-                                    // values?.users.map((user) => user?.user_id),
-
                                 };
 
                             }).catch(function (error) {
@@ -489,7 +410,8 @@ const UpdateTrip = () => {
                          * Add Organization ID into the form Values
                          */
                         await waitTime(1000);
-                        values.image = file;
+                        // values.image = file;
+                        values.image = imageUrl;
                         values.trip_id = tripId;
                         await onFinishHandlerForm(values);
                     }}
@@ -521,6 +443,75 @@ const UpdateTrip = () => {
                             }}
                         >
 
+                            <Col span={10}>
+
+                                <ProForm.Group size={24}>
+                                    <Col span={24}>
+                                        <Image
+                                            width='100%'
+                                            height={200}
+                                            src={imageUrl}
+                                        />
+                                    </Col>
+                                    <Col span={24} style={{ textAlign: 'center'}}>
+                                        <ProForm.Item name='image' getValueFromEvent={getFile}>
+                                            <Upload
+                                                name={'image'}
+                                                onChange={handleChange}
+                                                maxCount={1}
+                                            >
+                                                <Button
+                                                    type="primary"
+                                                    icon={<UploadOutlined/>}
+                                                    style={{'margin': '10px 0px 0px 0px'}}
+                                                    onClick={(event) => {}}
+                                                >
+                                                    Change Image
+                                                </Button>
+                                            </Upload>
+                                        </ProForm.Item>
+
+                                    </Col>
+                                </ProForm.Group>
+                            </Col>
+                            <Col span={14}>
+                                <ProForm.Group size={24}>
+                                    <ProFormText
+                                        name={'title'}
+                                        label="Title"
+                                        placeholder="Type trip title"
+                                        fieldProps={{
+                                            onChange: (e) => {
+                                                console.log('e.target.value');
+                                                console.log(e.target.value);
+                                            }
+                                        }}
+                                        colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}
+                                    />
+                                    <ProFormText
+                                        name={'price'}
+                                        label="Price"
+                                        placeholder="Type trip price Example (15000)"
+                                        fieldProps={{
+                                            onChange: (e) => {
+                                                console.log('e.target.value');
+                                                console.log(e.target.value);
+                                            }
+                                        }}
+                                        colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}
+                                    />
+                                    <ProFormTextArea
+                                        name={'description'}
+                                        label="Description"
+                                        placeholder="Share a little details regarding the trip. "
+                                        colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}
+                                        fieldProps={{
+                                            size: 'middle'
+                                        }}
+                                    />
+                                </ProForm.Group>
+                            </Col>
+
                             <ProForm.Group size={24}>
                                 <ProFormSelect
                                     name={"destination_id"}
@@ -533,7 +524,6 @@ const UpdateTrip = () => {
                                     colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}
                                 />
                                 <ProFormSelect
-                                    // name={"list_accommodations"}
                                     name={"accommodation_id"}
                                     label="Accommodations"
                                     showSearch
@@ -581,22 +571,6 @@ const UpdateTrip = () => {
                     <ProForm.Group title="Travel Mates" size={24}>
                       <ProFormList
                         name={"users"}
-                        // initialValue={[
-                        //     8,
-                        //     4
-                        //     // {
-                        //     //     user: {
-                        //     //         value: 8,
-                        //     //         label: 'testing'
-                        //     //     },
-                        //     // },
-                        //     // {
-                        //     //     user: {
-                        //     //         value: 13,
-                        //     //         label: 'testing13'
-                        //     //     },
-                        //     // },
-                        // ]}
                         min={1}
                         copyIconProps={{ tooltipText: 'Copy this travel mate' }}
                         deleteIconProps={{ tooltipText: 'Delete this travel mate' }}

@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use App\Helpers\UploadHelper;
 
 class TripController extends Controller
 {
@@ -145,6 +147,12 @@ class TripController extends Controller
             Log::warning('$trip - $data');
             Log::warning($data);
 
+            $titleShort = Str::slug(substr($data['title'], 0, 100));
+
+            if ( ! empty($data['image'])) {
+                $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/trips' );
+            }
+
             $trip = Trip::create($data);
 
             Log::warning('$trip - insert - level - 01');
@@ -244,6 +252,13 @@ class TripController extends Controller
 
             if (is_null($trip)) {
                 return null;
+            }
+
+            if ( ! empty($data['image'])) {
+                $titleShort    = Str::slug(substr($data['title'], 0, 100));
+                $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/trips' );
+            } else {
+                $data['image_url'] = $trip->image;
             }
 
             // If everything is OK, then update.

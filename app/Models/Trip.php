@@ -18,6 +18,8 @@ class Trip extends Model
      * @var array
      */
     protected $fillable = [
+        'title',
+        'description',
         'destination_id',
         'accommodation_id',
         'start_date_time',

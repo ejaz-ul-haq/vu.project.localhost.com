@@ -15,6 +15,8 @@ class CreateTripsTable extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
+            $table->string('title', 255);
+            $table->text('description')->nullable();
             $table->unsignedBigInteger('destination_id')->comment('Destination ID');
             $table->unsignedBigInteger('accommodation_id')->comment('Accommodation ID');
             $table->timestamp('start_date_time')->nullable()->comment('Trip Start Date & Time');

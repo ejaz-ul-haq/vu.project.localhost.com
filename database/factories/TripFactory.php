@@ -24,6 +24,8 @@ class TripFactory extends Factory
     public function definition()
     {
         return [
+            'title'       => $this->faker->word,
+            'description' => $this->faker->text,
             'destination_id' => rand(1, 10),
             'accommodation_id' => rand(1, 10),
             'start_date_time'  => Carbon::now()->addHours(1),

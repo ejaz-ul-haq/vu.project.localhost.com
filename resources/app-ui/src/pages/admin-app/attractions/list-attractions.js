@@ -1,15 +1,16 @@
 import {
-    EditOutlined,
-    PlusOutlined,
-    DeleteOutlined
+  EditOutlined,
+  PlusOutlined,
+  DeleteOutlined, ExclamationCircleFilled
 } from '@ant-design/icons';
 import {
-    PageContainer,
-    ProTable
+  ModalForm,
+  PageContainer,
+  ProTable
 } from '@ant-design/pro-components';
 import {FormattedMessage, useIntl, request, history} from '@umijs/max';
 import {
-    Button, message
+  Button, Divider, message
 } from 'antd';
 import React, {useRef, useState} from 'react';
 import moment from 'moment';
@@ -44,6 +45,44 @@ const ListAttractions = () => {
 
     const attractionsTableRef = useRef();
     const [currentRow, setCurrentRow] = useState();
+
+    const [attractionDeleteConfirmationData, setAttractionDeleteConfirmationData] = useState({});
+    const [attractionDeleteConfirmationModelOpen, setAttractionDeleteConfirmationModelOpen] = useState(false);
+
+
+    const deleteAttraction = async (attractionId) => {
+      console.log('deleteAttraction');
+
+      request('/api/attractions/' + attractionId, {
+
+          method: 'DELETE',
+
+      }).then(async (api_response) => {
+          console.log('api_response');
+          console.log(api_response);
+
+          if (api_response.status === true) {
+
+              // await waitTime(3000);
+
+              console.log('api_response.status');
+
+              await message.success('Deleted successfully');
+
+              if (attractionsTableRef.current) {
+                  attractionsTableRef.current?.reloadAndRest?.();
+              }
+          }
+
+      }).catch(function (error) {
+          console.log(error);
+      });
+
+
+      return true;
+    };
+
+
 
     /**
      * @en-US International configuration
@@ -136,30 +175,9 @@ const ListAttractions = () => {
                     key="deletable"
                     onClick={() => {
 
-                        return request('/api/attractions/' + record?.id, {
+                        setAttractionDeleteConfirmationData(record);
 
-                            method: 'DELETE',
-
-                        }).then(async (api_response) => {
-                            console.log('api_response');
-                            console.log(api_response);
-
-                            if (api_response.status === true) {
-
-                                await waitTime(3000);
-
-                                console.log('api_response.status');
-
-                                await message.success('Deleted successfully');
-
-                                if (attractionsTableRef.current) {
-                                    attractionsTableRef.current?.reloadAndRest?.();
-                                }
-                            }
-
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
+                        setAttractionDeleteConfirmationModelOpen(true);
 
                     }}
                     danger={true}
@@ -244,6 +262,83 @@ const ListAttractions = () => {
                 columns={columns}
 
             />
+
+
+            <ModalForm
+              // title={'Are you sure you want to delete this user?'}
+              open={attractionDeleteConfirmationModelOpen}
+              onOpenChange={setAttractionDeleteConfirmationModelOpen}
+              modalProps={{
+                destroyOnClose: true,
+                onCancel: () => console.log('run'),
+                afterClose: () => {
+                  /**
+                   * Reset the Policy Selected Users when the modal is close to make sure the modal new open will be fresh
+                   */
+                  // setTargetKeys([]);
+                },
+                getContainer: () => {
+                  document.body
+                },
+                width: 716,
+                okText: 'Confirm',
+              }}
+              submitter={{
+                // Configure the properties of the button
+                resetButtonProps: {
+                  style: {
+                    // Hide the reset button
+                    // display: 'none',
+                  },
+                },
+                submitButtonProps: {
+                  style: {
+                    // Hide the submit button
+                    // display: 'none',
+                  },
+                },
+              }}
+              preserve={false}
+              submitTimeout={2000}
+              onFinish={async (values) => {
+                await waitTime(2000);
+
+
+
+                /**
+                 * Call the APIs to update the selected policy's users association
+                 */
+
+
+                await deleteAttraction(attractionDeleteConfirmationData?.id);
+
+                /**
+                 * The following return is necessary to auto close the modal
+                 */
+                return true;
+              }}
+            >
+
+              <h6 style={{fontSize: '16px'}}>
+                <span> <ExclamationCircleFilled style={{color: '#ff4d4f', fontSize: '20px', paddingRight: '5px'}} /> </span>
+                Are you sure you want to delete this attraction?
+              </h6>
+
+              <span style={{fontSize: '16px', paddingLeft: '30px'}}>
+                  <strong> Name: </strong> {attractionDeleteConfirmationData?.title}
+              </span>
+
+              <Divider style={{margin: '10px 0px'}}/>
+
+              <p style={{fontSize: '16px', paddingLeft: '30px'}}>
+                Please confirm if you would like to proceed with deleting this attraction.
+              </p>
+
+              <span style={{fontSize: '16px', paddingLeft: '30px', color: 'red'}} >
+                  Note: This action cannot be undone.
+              </span>
+
+            </ModalForm>
 
         </PageContainer>
     );
