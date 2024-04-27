@@ -57,6 +57,7 @@ composer install
 Now migrate and seed database to complete whole project setup by running the following command.
 ``` bash
 php artisan migrate:refresh --seed
+php artisan cashier:webhook
 ```
 It will create the app-required tables in the database and will also insert the following dummy data to set up the demonstration.
 1. Users ( 21 )

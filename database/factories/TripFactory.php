@@ -28,6 +28,8 @@ class TripFactory extends Factory
             'accommodation_id' => rand(1, 10),
             'start_date_time'  => Carbon::now()->addHours(1),
             'end_date_time'    => Carbon::now()->addHours(2),
+            'price' => rand(1, 1000),
+            'image_url'   => $this->faker->imageUrl,
         ];
     }
 

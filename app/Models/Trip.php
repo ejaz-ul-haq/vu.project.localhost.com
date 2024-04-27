@@ -21,7 +21,9 @@ class Trip extends Model
         'destination_id',
         'accommodation_id',
         'start_date_time',
-        'end_date_time'
+        'end_date_time',
+        'price',
+        'image_url',
 //        'travel_mates'
     ];
 

@@ -19,6 +19,8 @@ class CreateTripsTable extends Migration
             $table->unsignedBigInteger('accommodation_id')->comment('Accommodation ID');
             $table->timestamp('start_date_time')->nullable()->comment('Trip Start Date & Time');
             $table->timestamp('end_date_time')->nullable()->comment('Trip End Date & Time');
+            $table->unsignedBigInteger('price')->comment('Trip Price');
+            $table->string('image_url')->nullable()->comment('Trip Image URL');
 //            $table->longText('travel_mates')->nullable()->comment('Travel Mates IDs');
 
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
