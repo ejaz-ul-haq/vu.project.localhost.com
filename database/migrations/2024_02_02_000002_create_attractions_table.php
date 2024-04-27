@@ -20,7 +20,7 @@ class CreateAttractionsTable extends Migration
             $table->string('image_url')->nullable();
             $table->unsignedBigInteger('destination_id')->comment('Destination ID');
 
-            $table->foreign('destination_id')->references('id')->on('destinations');
+            $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
 
             $table->timestamps();
         });

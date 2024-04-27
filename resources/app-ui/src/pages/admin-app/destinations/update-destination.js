@@ -25,6 +25,7 @@ const initialValues = {
     description: '',
     image_url: '',
     accommodations: '',
+    attractions: '',
 };
 
 /**
@@ -59,6 +60,7 @@ const onFinishHandlerForm = async (values) => {
         description: values?.description,
         image: values?.image,
         accommodations: values?.accommodations.map((item) => item?.accommodation),
+        attractions: values?.attractions.map((item) => item?.attraction),
       };
 
         return await request('/api/destinations/' + values?.destination_id, {
@@ -106,6 +108,8 @@ const UpdateDestination = () => {
 
     const [allAccommodations, setAllAccommodations] = useState([]);
 
+    const [allAttractions, setAllAttractions] = useState([]);
+
     useEffect(() => {
         setDestinationId(params.id);
     }, []); //empty dependency array so it only runs once at render
@@ -151,6 +155,50 @@ const UpdateDestination = () => {
         });
 
     }, []);
+
+
+
+    /**
+     * Start - Attractions Data
+     */
+    useEffect(() => {
+
+        return request('/api/attractions', {
+
+            params: {
+                page: 1,
+                per_page: 1000,
+                order_by: 'id',
+                order: 'asc',
+            },
+
+        }).then(async (api_response) => {
+            console.log('api_response');
+            console.log(api_response);
+
+            console.log('api_response.data');
+            console.log(api_response.data);
+
+            console.log('api_response.data.data');
+            console.log(api_response.data.data);
+
+            const table_data = api_response.data.data.map((item, i) => ({
+                // value: item.id.toString(),
+                value: item.id,
+                label: item.title,
+            }));
+
+            console.log('table_data');
+            console.log(table_data);
+
+            setAllAttractions(table_data);
+
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+    }, []);
+
 
 
     const handleChange = (info) => {
@@ -259,6 +307,9 @@ const UpdateDestination = () => {
                                     image_url: api_response?.data?.image_url,
                                     accommodations: api_response?.data?.accommodations.map( item => ( {
                                         accommodation: item.id,
+                                    })),
+                                    attractions: api_response?.data?.attractions.map( item => ( {
+                                        attraction: item.id,
                                     })),
                                 };
 
@@ -399,6 +450,48 @@ const UpdateDestination = () => {
                                         options={allAccommodations}
                                         debounceTime={300}
                                         placeholder="Please Select Accommodation"
+                                        rules={[{required: true}]}
+                                        colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}
+                                    />
+                                </ProForm.Group>
+                            </ProFormList>
+                        </ProForm.Group>
+
+                    </ProCard>
+
+                    <ProCard
+                        title="Attractions Details"
+                        bordered
+                        headerBordered
+                        collapsible
+                        size="default"
+                        type="default"
+                        style={{
+                            marginBlockEnd: 15,
+                            minWidth: 800,
+                            maxWidth: '100%',
+                        }}
+                        onCollapse={(collapse) => console.log(collapse)}
+                    >
+
+                        <ProForm.Group title="Attractions" size={24}>
+                            <ProFormList
+                                name={"attractions"}
+                                min={1}
+                                copyIconProps={{ tooltipText: 'Copy this attraction' }}
+                                deleteIconProps={{ tooltipText: 'Delete this attraction' }}
+                                creatorButtonProps={{
+                                    creatorButtonText: 'Add New Attraction',
+                                }}
+                            >
+                                <ProForm.Group size={24}>
+                                    <ProFormSelect
+                                        name={"attraction"}
+                                        label="Name"
+                                        showSearch
+                                        options={allAttractions}
+                                        debounceTime={300}
+                                        placeholder="Please Select Attraction"
                                         rules={[{required: true}]}
                                         colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}
                                     />

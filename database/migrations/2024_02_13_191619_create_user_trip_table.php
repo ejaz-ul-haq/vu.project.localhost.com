@@ -19,8 +19,8 @@ class CreateUserTripTable extends Migration
             $table->unsignedBigInteger('user_id')->comment('User ID');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('trip_id')->references('id')->on('trips');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('trip_id')->references('id')->on('trips')->onDelete('cascade');
 
         });
     }

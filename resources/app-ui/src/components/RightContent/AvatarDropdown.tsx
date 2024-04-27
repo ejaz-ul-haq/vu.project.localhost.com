@@ -108,7 +108,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu, children
             }
 
             if (key === 'profile') {
-                history.push('/profile');
+                history.push('/admin-app/profile');
             }
             // history.push(`/account/${key}`);
         },
@@ -155,12 +155,11 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu, children
                 },
             ]
             : []),
-        // {
-        //     key: 'profile',
-        //     icon: <UserOutlined/>,
-        //     label: 'Profile',
-        //
-        // },
+        {
+            key: 'profile',
+            icon: <UserOutlined/>,
+            label: 'Profile',
+        },
         {
             key: 'logout',
             icon: <LogoutOutlined/>,

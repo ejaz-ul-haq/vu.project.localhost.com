@@ -29,6 +29,12 @@ export default [
   //   // component: './admin-app/dashboard',
   // },
   {
+     path: '/admin-app/profile',
+     name: 'Profile',
+     hideInMenu: true,
+     component: './admin-app/current-user/profile',
+  },
+  {
     path: '/admin-app/',
     redirect: '/admin-app/users',
   },
@@ -156,6 +162,22 @@ export default [
     access: 'isAdministrator',
     layout: 'side',
     component: './admin-app/attractions/list-attractions',
+  },
+  {
+    path: '/admin-app/attractions/new',
+    name: 'Add New Attraction',
+    hideInMenu: true,
+    access: 'isAdministrator',
+    layout: 'side',
+    component: './admin-app/attractions/create-attraction',
+  },
+  {
+    path: '/admin-app/attractions/edit/:id',
+    hideInMenu: true,
+    name: 'Edit Attraction',
+    access: 'isAdministrator',
+    layout: 'side',
+    component: './admin-app/attractions/update-attraction',
   },
   {
     path: '/admin-app/notifications',

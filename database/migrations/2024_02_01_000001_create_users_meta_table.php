@@ -16,7 +16,7 @@ class CreateUsersMetaTable extends Migration
         Schema::create('users_meta', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->comment('Created By User');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('meta_key');
             $table->text('meta_value');
             $table->timestamps();

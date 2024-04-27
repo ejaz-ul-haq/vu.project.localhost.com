@@ -84,7 +84,7 @@ const onFinishHandlerForm = async (values) => {
             console.log(api_response);
 
             /**
-             * User Created then show message and redirect to listing screen
+             * User Updated then show message and redirect to listing screen
              */
             if (api_response?.data?.id > 0) {
                 message.success('Submitted successfully');

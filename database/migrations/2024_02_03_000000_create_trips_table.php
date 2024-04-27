@@ -21,8 +21,8 @@ class CreateTripsTable extends Migration
             $table->timestamp('end_date_time')->nullable()->comment('Trip End Date & Time');
 //            $table->longText('travel_mates')->nullable()->comment('Travel Mates IDs');
 
-            $table->foreign('destination_id')->references('id')->on('destinations');
-            $table->foreign('accommodation_id')->references('id')->on('accommodations');
+            $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
+            $table->foreign('accommodation_id')->references('id')->on('accommodations')->onDelete('cascade');
             $table->timestamps();
         });
     }

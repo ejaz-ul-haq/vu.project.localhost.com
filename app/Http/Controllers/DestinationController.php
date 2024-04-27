@@ -176,13 +176,22 @@ class DestinationController extends Controller
             $destination = Destination::create($data);
 
              /**
-             * Set Trip Users
+             * Set Destination Accommodations
              */
-            // Retrieve the user IDs from the request (assuming they're in an array)
+            // Retrieve the accommodation IDs from the request (assuming they're in an array)
             $accommodationsIds = $request->input('accommodations');
 
-            // Associate users with the trip by inserting records into the pivot table
+            // Associate accommodations with the destination by inserting records into the pivot table
             $destination->accommodations()->attach($accommodationsIds);
+
+            /**
+             * Set Destination Attractions
+             */
+            // Retrieve the attraction IDs from the request (assuming they're in an array)
+            $attractionsIds = $request->input('attractions');
+
+            // Associate attractions with the destination by inserting records into the pivot table
+            $destination->attractions()->attach($attractionsIds);
 
             $response_data = Destination::with('accommodations', 'attractions')->find($destination->id);
 
@@ -297,7 +306,16 @@ class DestinationController extends Controller
             // Associate accommodations with the destination by inserting records into the pivot table
             $destination->accommodations()->sync($accommodationIds, true);
 
-            $response_data = Destination::with('accommodations')->find($id);
+            /**
+             * Set Destination Attractions
+             */
+            // Retrieve the attraction IDs from the request (assuming they're in an array)
+            $attractionsIds = $request->input('attractions');
+
+            // Associate attractions with the destination by inserting records into the pivot table
+            $destination->attractions()->sync($attractionsIds, true);
+
+            $response_data = Destination::with('accommodations', 'attractions')->find($id);
 
             Log::warning('$response_data');
             Log::warning($response_data);

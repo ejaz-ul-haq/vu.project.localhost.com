@@ -19,8 +19,8 @@ class CreateDestinationAccommodationTable extends Migration
             $table->unsignedBigInteger('accommodation_id')->comment('Accommodation ID');
             $table->timestamps();
 
-            $table->foreign('destination_id')->references('id')->on('destinations');
-            $table->foreign('accommodation_id')->references('id')->on('accommodations');
+            $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
+            $table->foreign('accommodation_id')->references('id')->on('accommodations')->onDelete('cascade');
 
         });
     }
