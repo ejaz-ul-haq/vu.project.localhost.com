@@ -1,15 +1,16 @@
 import {
   EditOutlined,
   PlusOutlined,
-  DeleteOutlined
+  DeleteOutlined, ExclamationCircleFilled
 } from '@ant-design/icons';
 import {
+  ModalForm,
   PageContainer,
   ProTable
 } from '@ant-design/pro-components';
 import {FormattedMessage, useIntl, request, history} from '@umijs/max';
 import {
-  Button, message
+  Button, Divider, message
 } from 'antd';
 import React, {useRef, useState} from 'react';
 import moment from 'moment';
@@ -44,6 +45,43 @@ const ListTrips = () => {
 
   const tripsTableRef = useRef();
   const [currentRow, setCurrentRow] = useState();
+
+  const [tripDeleteConfirmationData, setTripDeleteConfirmationData] = useState({});
+  const [tripDeleteConfirmationModelOpen, setTripDeleteConfirmationModelOpen] = useState(false);
+
+
+  const deleteTrip = async (tripId) => {
+    console.log('deleteTrip');
+
+    return request('/api/trips/' + tripId, {
+
+      method: 'DELETE',
+
+    }).then(async (api_response) => {
+      console.log('api_response');
+      console.log(api_response);
+
+      if (api_response.status === true) {
+
+        // await waitTime(3000);
+
+        console.log('api_response.status');
+
+        await message.success('Deleted successfully');
+
+        if (tripsTableRef.current) {
+          tripsTableRef.current?.reloadAndRest?.();
+        }
+      }
+
+    }).catch(function (error) {
+      console.log(error);
+    });
+
+
+    return true;
+  };
+
 
   /**
    * @en-US International configuration
@@ -140,30 +178,9 @@ const ListTrips = () => {
           key="deletable"
           onClick={() => {
 
-            return request('/api/trips/' + record?.id, {
+            setTripDeleteConfirmationData(record);
 
-              method: 'DELETE',
-
-            }).then(async (api_response) => {
-              console.log('api_response');
-              console.log(api_response);
-
-              if (api_response.status === true) {
-
-                await waitTime(3000);
-
-                console.log('api_response.status');
-
-                await message.success('Deleted successfully');
-
-                if (tripsTableRef.current) {
-                  tripsTableRef.current?.reloadAndRest?.();
-                }
-              }
-
-            }).catch(function (error) {
-              console.log(error);
-            });
+            setTripDeleteConfirmationModelOpen(true);
 
           }}
           danger={true}
@@ -248,6 +265,83 @@ const ListTrips = () => {
         columns={columns}
 
       />
+
+
+      <ModalForm
+        // title={'Are you sure you want to delete this user?'}
+        open={tripDeleteConfirmationModelOpen}
+        onOpenChange={setTripDeleteConfirmationModelOpen}
+        modalProps={{
+          destroyOnClose: true,
+          onCancel: () => console.log('run'),
+          afterClose: () => {
+            /**
+             * Reset the Policy Selected Users when the modal is close to make sure the modal new open will be fresh
+             */
+            // setTargetKeys([]);
+          },
+          getContainer: () => {
+            document.body
+          },
+          width: 716,
+          okText: 'Confirm',
+        }}
+        submitter={{
+          // Configure the properties of the button
+          resetButtonProps: {
+            style: {
+              // Hide the reset button
+              // display: 'none',
+            },
+          },
+          submitButtonProps: {
+            style: {
+              // Hide the submit button
+              // display: 'none',
+            },
+          },
+        }}
+        preserve={false}
+        submitTimeout={2000}
+        onFinish={async (values) => {
+          await waitTime(2000);
+
+
+
+          /**
+           * Call the APIs to update the selected policy's users association
+           */
+
+
+          await deleteTrip(tripDeleteConfirmationData?.id);
+
+          /**
+           * The following return is necessary to auto close the modal
+           */
+          return true;
+        }}
+      >
+
+        <h6 style={{fontSize: '16px'}}>
+          <span> <ExclamationCircleFilled style={{color: '#ff4d4f', fontSize: '20px', paddingRight: '5px'}} /> </span>
+          Are you sure you want to delete this trip?
+        </h6>
+
+        <span style={{fontSize: '16px', paddingLeft: '30px'}}>
+                <strong> Name: </strong> {tripDeleteConfirmationData?.title}
+            </span>
+
+        <Divider style={{margin: '10px 0px'}}/>
+
+        <p style={{fontSize: '16px', paddingLeft: '30px'}}>
+          Please confirm if you would like to proceed with deleting this trip.
+        </p>
+
+        <span style={{fontSize: '16px', paddingLeft: '30px', color: 'red'}} >
+                Note: This action cannot be undone.
+            </span>
+
+      </ModalForm>
 
     </PageContainer>
   );
