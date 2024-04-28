@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get( '/{path?}', function($path = null){
+Route::get( '/{path?}', function(Request $request, $path = null){
 //    return view( 'umi' );
+    
+// if ($path === 'charge-checkout') {
+//     return $request->user()->checkoutCharge(1200, 'T-Shirt', 5);
+// }
     if ($path === 'welcome') {
         return view('welcome');
     } else {
@@ -27,3 +32,14 @@ Route::get( '/{path?}', function($path = null){
 
 //Route::get('/welcome', [WelcomeController::class, 'welcome']);
 
+// Route::get('/charge-checkout', function (Request $request) {
+//     return $request->user()->checkoutCharge(1200, 'T-Shirt', 5);
+// });
+
+
+
+
+// Route::post(
+//     'stripe/webhook',
+//     '\App\Http\Controllers\WebhookController@handleWebhook'
+// );

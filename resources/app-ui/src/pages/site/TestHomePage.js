@@ -19,7 +19,7 @@ import {
 } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
 import { waitTime } from '../../components/Helpers/TableHelpers';
-import {request } from '@umijs/max';
+import {request, useModel } from '@umijs/max';
 import {history} from "@@/core/history";
 import {render} from "@testing-library/react";
 
@@ -113,6 +113,11 @@ const onFinishHandlerForm = async (values) => {
             last_name: values?.last_name,
             email: values?.email,
             password: values?.password,
+            user_id: values?.user_id,
+            trip_id: values?.trip_id,
+            payment_id: 0,
+            price: values?.price,
+            trip_title: values?.trip_title
         };
 
         /**
@@ -138,9 +143,10 @@ const onFinishHandlerForm = async (values) => {
             /**
              * User Created then show message and redirect to listing screen
              */
-            if (api_response?.data?.id > 0) {
+            if (api_response?.data?.stripe_checkout_session?.url ) {
                 message.success('Submitted successfully');
-                history.push('/admin-app/accommodations/edit/' + api_response?.data?.id);
+                // history.push('/admin-app/accommodations/edit/' + api_response?.data?.id);
+                window.location.href=api_response?.data?.stripe_checkout_session?.url;
             }
 
         }).catch(function (error) {
@@ -155,7 +161,12 @@ const onFinishHandlerForm = async (values) => {
     return true;
 };
 
-const HomePage = () => {
+const TestHomePage = () => {
+
+    const {initialState, loading, refresh, setInitialState} = useModel('@@initialState');
+
+    console.log('initialState');
+    console.log(initialState);
 
   const [destinationsData, setDestinationsData] = useState([]);
   const { styles } = useStyles();
@@ -164,6 +175,7 @@ const HomePage = () => {
     'extra',
   );
 
+  const [selectedTripData, setSelectedTripData] = useState({});
   const [bookingDetailsDrawer, setBookingDetailsDrawer] = useState(false);
 
 
@@ -296,7 +308,7 @@ const HomePage = () => {
           // console.log('api_response.data');
           // console.log(api_response.data);
 
-          return await request('/api/destinations/view/all', {
+          return await request('/api/trips/view/all', {
             // headers: {
             //   'Content-Type': 'application/json',
             // },
@@ -357,7 +369,9 @@ const HomePage = () => {
                         // console.log('record');
                         // console.log(record.id);
                         // setSelectedVersionId(record.id);
-                        // setSelectedVersionPreview(record);
+
+                        setSelectedTripData(item);
+
                         // setPolicyVersionPreviewModelOpen(true);
                       }}
 
@@ -436,13 +450,25 @@ const HomePage = () => {
             // initialValues={initialValues}
             // form={form}
             onFinish={async (values) => {
-              console.log(values);
+
+                console.log('initialState - before submit');
+                console.log(initialState);
+
               /**
-               * Add Organization ID into the form Values
+               * Add Trip ID into the form Values
                */
-              // values.organization_id = initialState?.currentUser?.meta?.ech_organization_id;
+              values.user_id = initialState?.currentUser?.id;
+              values.trip_id = selectedTripData?.id;
+                values.price = selectedTripData?.price;
+                values.trip_title = selectedTripData?.title;
+
+                console.log('values - before submit');
+                console.log(values);
+
+
               await waitTime(1000);
               await onFinishHandlerForm(values);
+
             }}
             formProps={{
               validateMessages: {
@@ -459,218 +485,189 @@ const HomePage = () => {
                   display: 'none',
                 },
               },
-              submitButtonProps: {
-                style: {
-                  // Hide the submit button
-                  display: 'none',
-                },
-              },
+              // submitButtonProps: {
+              //   style: {
+              //     // Hide the submit button
+              //     display: 'none',
+              //   },
+              // },
             }}
         >
 
+            <ProCard
+                title="Travel Mate - Details"
+                bordered
+                headerBordered
+                collapsible={false}
+                size="default"
+                type="inner"
+                style={{
+                    marginBlockEnd: 15,
+                    // minWidth: 800,
+                    maxWidth: '100%',
+                }}
+                onCollapse={(collapse) => console.log(collapse)}
+                actions={[
+                    <a
+                        key="cart-login-link"
+                        href='/authentication'
+                        target={"_blank"}
+                    >
+                        Login to an exising account
+                    </a>
+                    // <Button
+                    //     type="primary"
+                    //     icon={<ShoppingCartOutlined />}
+                    //     key="preview"
+                    //     size={"large"}
+                    //     // loading={loadings[1]}
+                    //     // style={{'margin': '10px 0px 0px 0px'}}
+                    //     onClick={ () => {
+                    //         // showBookingDetailsDrawer(true);
+                    //         // console.log('record');
+                    //         // console.log(record.id);
+                    //         // setSelectedVersionId(record.id);
+                    //         // setSelectedVersionPreview(record);
+                    //         // setPolicyVersionPreviewModelOpen(true);
+                    //     }}
+                    //
+                    // >
+                    //     Book Now
+                    // </Button>
+                ]}
+            >
+
+                <ProForm.Group size={24}>
+                    <ProFormText
+                        name={'first_name'}
+                        label="First Name"
+                        // tooltip="The legal name"
+                        placeholder="Type First Name"
+                        // rules={[{ required: true }]}
+                        fieldProps={{
+                            prefix: <UserOutlined/>,
+                            // size: 'large',
+
+                            onChange: (e) => {
+                                console.log('e.target.value');
+                                console.log(e.target.value);
+                            }
+                        }}
+                        colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}
+                    />
+                    <ProFormText
+                        name={'last_name'}
+                        label="Last Name"
+                        // tooltip="The legal name"
+                        placeholder="Type Last Name"
+                        // rules={[{ required: true }]}
+                        fieldProps={{
+                            prefix: <UserOutlined/>,
+                            // size: 'large',
+
+                            onChange: (e) => {
+                                console.log('e.target.value');
+                                console.log(e.target.value);
+                            }
+                        }}
+                        colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}
+                    />
+                </ProForm.Group>
+                <ProForm.Group size={24}>
+                    <ProFormText
+                        label="Email"
+                        name={'email'}
+                        // tooltip="The legal name of the organization"
+                        placeholder="info@example.com etc."
+                        // rules={[{ required: true }]}
+                        fieldProps={{
+                            prefix: <MailOutlined />,
+                        }}
+                        colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}
+                    />
+                    <ProFormText.Password
+                        name={'password'}
+                        label="Password"
+                        // tooltip="The legal name"
+                        placeholder="Please type a password"
+                        // rules={[{required: true}]}
+                        fieldProps={{
+                            prefix: <LockOutlined />,
+                        }}
+                        colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}
+                    />
+                </ProForm.Group>
+            </ProCard>
+
           <ProCard
-              title="Booking Details"
+              title={'Trip : '+selectedTripData?.title}
+              // title="Booking Details"
               bordered
               headerBordered
-              collapsible
+              collapsible={false}
               size="default"
               type="inner"
               style={{
-                marginBlockEnd: 15,
+                marginBlockEnd: 10,
                 // minWidth: 800,
                 maxWidth: '100%',
+                  marginBlockStart: 10
               }}
+              // cardProps={{
+              //     cover:  <Image
+              //         width={200}
+              //         src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+              //     />
+              // }}
               onCollapse={(collapse) => console.log(collapse)}
-              actions={[
-                <Button
-                    type="primary"
-                    icon={<ShoppingCartOutlined />}
-                    key="preview"
-                    size={"large"}
-                    // loading={loadings[1]}
-                    // style={{'margin': '10px 0px 0px 0px'}}
-                    onClick={ () => {
-                      // showBookingDetailsDrawer(true);
-                      // console.log('record');
-                      // console.log(record.id);
-                      // setSelectedVersionId(record.id);
-                      // setSelectedVersionPreview(record);
-                      // setPolicyVersionPreviewModelOpen(true);
-                    }}
-
-                >
-                  Book Now
-                </Button>
-              ]}
+              gutter={12}
+              extra={
+                  <Button
+                      size="small"
+                      onClick={(e) => {
+                          e.stopPropagation();
+                      }}
+                  >
+                      View Details
+                  </Button>
+              }
+              // actions={[
+              //   <Button
+              //       type="primary"
+              //       icon={<ShoppingCartOutlined />}
+              //       key="preview"
+              //       size={"large"}
+              //       // loading={loadings[1]}
+              //       // style={{'margin': '10px 0px 0px 0px'}}
+              //       onClick={ () => {
+              //         // showBookingDetailsDrawer(true);
+              //         // console.log('record');
+              //         // console.log(record.id);
+              //         // setSelectedVersionId(record.id);
+              //         // setSelectedVersionPreview(record);
+              //         // setPolicyVersionPreviewModelOpen(true);
+              //       }}
+              //
+              //   >
+              //     Book Now
+              //   </Button>
+              // ]}
           >
 
-                <ProForm.Group size={24}>
-                  <ProFormText
-                      name={'first_name'}
-                      label="First Name"
-                      // tooltip="The legal name"
-                      placeholder="Type First Name"
-                      // rules={[{ required: true }]}
-                      fieldProps={{
-                        prefix: <UserOutlined/>,
-                        // size: 'large',
 
-                        onChange: (e) => {
-                          console.log('e.target.value');
-                          console.log(e.target.value);
-                        }
-                      }}
-                      colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}
-                  />
-                  <ProFormText
-                      name={'last_name'}
-                      label="Last Name"
-                      // tooltip="The legal name"
-                      placeholder="Type Last Name"
-                      // rules={[{ required: true }]}
-                      fieldProps={{
-                        prefix: <UserOutlined/>,
-                        // size: 'large',
-
-                        onChange: (e) => {
-                          console.log('e.target.value');
-                          console.log(e.target.value);
-                        }
-                      }}
-                      colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}
-                  />
-                </ProForm.Group>
-                {/*<ProForm.Group size={24}>*/}
-                {/*  <ProFormText*/}
-                {/*      name={['bio_details', 'first_name']}*/}
-                {/*      label="Street address"*/}
-                {/*      // tooltip="The legal name"*/}
-                {/*      placeholder="Type Street address"*/}
-                {/*      // rules={[{ required: true }]}*/}
-                {/*      fieldProps={{*/}
-                {/*        prefix: <EnvironmentOutlined />,*/}
-                {/*        // size: 'large',*/}
-
-                {/*        onChange: (e) => {*/}
-                {/*          console.log('e.target.value');*/}
-                {/*          console.log(e.target.value);*/}
-                {/*        }*/}
-                {/*      }}*/}
-                {/*      colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}*/}
-                {/*  />*/}
-                {/*</ProForm.Group>*/}
-                {/*<ProForm.Group size={24}>*/}
-                {/*  <ProFormText*/}
-                {/*      name={['bio_details', 'last_name']}*/}
-                {/*      label="Town / City"*/}
-                {/*      // tooltip="The legal name"*/}
-                {/*      placeholder="Type Town / City"*/}
-                {/*      // rules={[{ required: true }]}*/}
-                {/*      fieldProps={{*/}
-                {/*        prefix: <EnvironmentOutlined/>,*/}
-                {/*        // size: 'large',*/}
-
-                {/*        onChange: (e) => {*/}
-                {/*          console.log('e.target.value');*/}
-                {/*          console.log(e.target.value);*/}
-                {/*        }*/}
-                {/*      }}*/}
-                {/*      colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}*/}
-                {/*  />*/}
-                {/*  <ProFormText*/}
-                {/*      name={['bio_details', 'last_name']}*/}
-                {/*      label="County (optional)"*/}
-                {/*      // tooltip="The legal name"*/}
-                {/*      placeholder="Type County"*/}
-                {/*      // rules={[{ required: true }]}*/}
-                {/*      fieldProps={{*/}
-                {/*        prefix: <EnvironmentOutlined/>,*/}
-                {/*        // size: 'large',*/}
-
-                {/*        onChange: (e) => {*/}
-                {/*          console.log('e.target.value');*/}
-                {/*          console.log(e.target.value);*/}
-                {/*        }*/}
-                {/*      }}*/}
-                {/*      colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}*/}
-                {/*  />*/}
-                {/*</ProForm.Group>*/}
-                {/*<ProForm.Group size={24}>*/}
-                {/*  <ProFormText*/}
-                {/*      name={['bio_details', 'first_name']}*/}
-                {/*      label="Post Code / ZIP"*/}
-                {/*      // tooltip="The legal name"*/}
-                {/*      placeholder="Type Post Code / ZIP"*/}
-                {/*      // rules={[{ required: true }]}*/}
-                {/*      fieldProps={{*/}
-                {/*        prefix: <EnvironmentOutlined/>,*/}
-                {/*        // size: 'large',*/}
-
-                {/*        onChange: (e) => {*/}
-                {/*          console.log('e.target.value');*/}
-                {/*          console.log(e.target.value);*/}
-                {/*        }*/}
-                {/*      }}*/}
-                {/*      colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}*/}
-                {/*  />*/}
-                {/*  <ProFormText*/}
-                {/*      label="Phone No."*/}
-                {/*      name={['contact_details', 'phone_number']}*/}
-                {/*      placeholder="+2974837487 etc."*/}
-                {/*      // min={1}*/}
-                {/*      // max={10}*/}
-                {/*      fieldProps={{*/}
-                {/*        precision: 0,*/}
-                {/*        prefix: <PhoneOutlined />,*/}
-                {/*      }}*/}
-                {/*      colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}*/}
-                {/*  />*/}
-                {/*</ProForm.Group>*/}
-                <ProForm.Group size={24}>
-                  <ProFormText
-                      label="Email"
-                      name={'email'}
-                      // tooltip="The legal name of the organization"
-                      placeholder="info@example.com etc."
-                      // rules={[{ required: true }]}
-                      fieldProps={{
-                        prefix: <MailOutlined />,
-                      }}
-                      colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}
-                  />
-                  <ProFormText.Password
-                      name={['account_details', 'password']}
-                      label="Password"
-                      // tooltip="The legal name"
-                      placeholder="Please type a password"
-                      // rules={[{required: true}]}
-                      fieldProps={{
-                        prefix: <LockOutlined />,
-                      }}
-                      colProps={{xs: 24, sm: 24, md: 12, lg: 12, xl: 12}}
-                  />
-                </ProForm.Group>
-                {/*<ProForm.Group size={24}>*/}
-                {/*  <Button*/}
-                {/*      type="primary"*/}
-                {/*      icon={<ShoppingCartOutlined />}*/}
-                {/*      key="preview"*/}
-                {/*      size={"large"}*/}
-                {/*      // loading={loadings[1]}*/}
-                {/*      // style={{'margin': '10px 0px 0px 0px'}}*/}
-                {/*      onClick={ () => {*/}
-                {/*        // showBookingDetailsDrawer(true);*/}
-                {/*        // console.log('record');*/}
-                {/*        // console.log(record.id);*/}
-                {/*        // setSelectedVersionId(record.id);*/}
-                {/*        // setSelectedVersionPreview(record);*/}
-                {/*        // setPolicyVersionPreviewModelOpen(true);*/}
-                {/*      }}*/}
-
-                {/*  >*/}
-                {/*    Book Now*/}
-                {/*  </Button>*/}
-                {/*</ProForm.Group>*/}
+              <Card cover={<Image
+                  // colSpan={12}
+                  height={150}
+                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+              />}>
+                  {selectedTripData?.description}
+              </Card>
+              {/*<ProCard colSpan={6} layout="center" bordered>*/}
+              {/*    colSpan-6*/}
+              {/*</ProCard>*/}
+              {/*<ProCard colSpan={6} layout="center" bordered>*/}
+              {/*    colSpan-6*/}
+              {/*</ProCard>*/}
 
           </ProCard>
 
@@ -685,4 +682,4 @@ const HomePage = () => {
 
 };
 
-export default HomePage;
+export default TestHomePage;

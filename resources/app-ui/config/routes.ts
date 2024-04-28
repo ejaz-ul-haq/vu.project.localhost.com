@@ -281,12 +281,19 @@ export default [
     layout: 'top',
     // component: './site/HomePage',
   },
+  // {
+  //   path: '/',
+  //   name: 'Home',
+  //   icon: 'home',
+  //   layout: 'top',
+  //   component: './site/HomePage',
+  // },
   {
     path: '/',
-    name: 'Home',
+    name: 'Test Home',
     icon: 'home',
     layout: 'top',
-    component: './site/HomePage',
+    component: './site/TestHomePage',
   },
   // {
   //   path: '/contact-us',

@@ -7,6 +7,8 @@ use Illuminate\Queue\InteractsWithQueue;
 
 use Laravel\Cashier\Events\WebhookReceived;
 
+use Illuminate\Support\Facades\Log;
+
 class StripeEventListener
 {
     /**
@@ -27,6 +29,11 @@ class StripeEventListener
      */
     public function handle(WebhookReceived $event)
     {
+        Log::warning('StripeEventListener - handle');
+
+        Log::warning('$event');
+        Log::warning($event);
+
         if ($event->payload['type'] === 'invoice.payment_succeeded') {
             // Handle the incoming event...
         }

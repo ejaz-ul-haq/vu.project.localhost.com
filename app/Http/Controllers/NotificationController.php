@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
+// use Laravel\Cashier\Cashier;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
+
 class NotificationController extends Controller
 {
     /**
@@ -138,9 +142,53 @@ class NotificationController extends Controller
         Log::warning($request);
 
         try {
+
+             // For example, create a new subscription
+        // $user = $request->user();
+        // // $user->newSubscription('default', 'your_plan_id')->create();
+        // // $user->checkoutCharge(1200, 'T-Shirt', 5);
+        // $request->user()->checkoutCharge(1200, 'T-Shirt', 5);
+        
+        // // Redirect the user to the Stripe hosted checkout page
+        // $checkoutUrl = $user->checkoutUrl(['success_url' => route('payment.success'), 'cancel_url' => route('payment.cancel')]);
+        
+        // return response()->json(['checkout_url' => $checkoutUrl]);
+
+        // // Create a single charge using Stripe Checkout
+        // $charge = $request->user()->checkoutCharge(1200, 'T-Shirt', 5);
+        
+        // // Process the charge further if needed
+        
+        // return response()->json(['charge' => $charge]);
+
+               // Set your Stripe API key
+               Stripe::setApiKey('sk_test_51PA6fHDkQjZuj6p2QTwORu2WcgZTStrvVgE8dgIFDiV4XuYGPI8YexmbbLQIgSir2w8x2QzNVYcy0JQk8DYxjOM300HlCmnAJe');
+
+               // Create a new Stripe Checkout session
+               $session = Session::create([
+                   'payment_method_types' => ['card'],
+                   'line_items' => [[
+                       'price_data' => [
+                           'currency' => 'usd',
+                           'product_data' => [
+                               'name' => 'T-Shirt',
+                           ],
+                           'unit_amount' => 1200, // Amount in cents
+                       ],
+                       'quantity' => 5,
+                   ]],
+                   'mode' => 'payment',
+                   'success_url' => 'https://yourdomain.com/success',
+                   'cancel_url' => 'https://yourdomain.com/cancel',
+               ]);
+       
+               // Redirect the user to the Checkout session URL
+            //    return redirect()->to($session->url);
+
             $notification = $this->notificationRepository->create($request->all());
 
-            return $this->responseSuccess($notification, 'New Notification Created Successfully !');
+            // return $this->responseSuccess($notification, 'New Notification Created Successfully !');
+            return $this->responseSuccess($session, 'New Notification Created Successfully !');
 
         } catch (\Exception $exception) {
             return $this->responseError(null, $exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

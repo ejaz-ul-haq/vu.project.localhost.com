@@ -8,6 +8,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BookingController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -86,6 +88,11 @@ Route::group([
     Route::resource('attractions', AttractionController::class);
 
     /**
+     * Bookings Module
+     */
+    Route::resource('bookings', BookingController::class);
+
+    /**
      * Notifications Module
      */
     Route::resource('notifications', NotificationController::class);
@@ -103,5 +110,15 @@ Route::group([
 Route::get('destinations/view/all', [DestinationController::class, 'indexAll']);
 
 /**
+ * Trips Module
+ */
+Route::get('trips/view/all', [TripController::class, 'indexAll']);
+
+/**
  * End - Public APIs
  */
+//  Route::post(
+//     'stripe/webhook',
+//     '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
+// );
+
