@@ -21,6 +21,16 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
             StripeEventListener::class
         ],
+        // Add This listener
+        /**
+         * https://www.youtube.com/watch?v=aq2E1oaksag
+         * https://medium.com/@riskiilyas03/automate-email-sending-with-event-listener-in-laravel-8631f47b982d
+         * 
+         * https://mailtrap.io/blog/send-email-in-laravel/
+         */
+        BookingCreated::class => [
+            SendBookingEmail::class
+        ]
     ];
 
     /**

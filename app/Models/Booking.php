@@ -24,4 +24,8 @@ class Booking extends Model
         'payment_id'
     ];
 
+    protected $dispatchesEvents = [
+        'created' => \App\Events\BookingCreated::class,
+    ];
+
 }

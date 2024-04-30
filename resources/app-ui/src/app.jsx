@@ -162,7 +162,17 @@ export const layout = ({initialState, setInitialState}) => {
         childrenRender: (children) => {
           return (
             <>
-              <ConfigProvider locale={enUS}>
+              <ConfigProvider 
+                locale={enUS}
+                theme={{
+                  components: {
+                    Result: {
+                      titleFontSize: 30,
+                      subtitleFontSize: 26
+                    },
+                  },
+                }}
+              >
                 {children}
               </ConfigProvider>
             </>

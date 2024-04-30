@@ -120,8 +120,8 @@ class BookingController extends Controller
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => url('/booking-success'),
-                'cancel_url' => url('/booking-cancel'),
+                'success_url' => url('/checkout/success'),
+                'cancel_url' => url('/checkout/cancel'),
             ]);
 
 

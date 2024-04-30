@@ -315,6 +315,18 @@ export default [
     // https://pro.ant.design/docs/advanced-menu/#change-the-layout-according-to-the-path
   },
   {
+    path: '/checkout/success/',
+    hideInMenu: true,
+    layout: 'top',
+    component: './site/checkout/success',
+  },
+  {
+    path: '/checkout/cancel/',
+    hideInMenu: true,
+    layout: 'top',
+    component: './site/checkout/cancel',
+  },
+  {
     path: '*',
     layout: false,
     component: './404',
