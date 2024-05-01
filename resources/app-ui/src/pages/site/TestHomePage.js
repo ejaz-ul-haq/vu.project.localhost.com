@@ -143,11 +143,11 @@ const onFinishHandlerForm = async (values) => {
             /**
              * User Created then show message and redirect to listing screen
              */
-            if (api_response?.data?.stripe_checkout_session?.url ) {
-                message.success('Submitted successfully');
-                // history.push('/admin-app/accommodations/edit/' + api_response?.data?.id);
-                window.location.href=api_response?.data?.stripe_checkout_session?.url;
-            }
+            // if (api_response?.data?.stripe_checkout_session?.url ) {
+            //     message.success('Submitted successfully');
+            //     // history.push('/admin-app/accommodations/edit/' + api_response?.data?.id);
+            //     window.location.href=api_response?.data?.stripe_checkout_session?.url;
+            // }
 
         }).catch(function (error) {
             console.log(error);

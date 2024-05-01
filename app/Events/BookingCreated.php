@@ -10,6 +10,8 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+use Illuminate\Support\Facades\Log;
+
 class BookingCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -24,6 +26,12 @@ class BookingCreated
     public function __construct($booking)
     {
         $this->booking = $booking;
+
+        Log::warning('BookingCreated - __construct');
+
+        Log::warning('$booking');
+        Log::warning($booking);
+
     }
 
     /**

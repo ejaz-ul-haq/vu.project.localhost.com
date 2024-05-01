@@ -16,6 +16,8 @@ use Laravel\Cashier\Cashier;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 
+use App\Events\BookingCreated;
+
 class BookingController extends Controller
 {
     /**
@@ -174,8 +176,8 @@ class BookingController extends Controller
             // Redirect the user to the Checkout session URL
          //    return redirect()->to($session->url);
 
-         Log::warning('$session');
-            Log::warning($session);
+        //  Log::warning('$session');
+        //     Log::warning($session);
 
          /**
           * Set Stripe Checkout Session ID
@@ -185,17 +187,29 @@ class BookingController extends Controller
           /**
            * Create Booking DB Record
            */
-         $boking = Booking::create($data);
-            Log::warning('$boking');
-            Log::warning($boking);
+         $booking_created = Booking::create($data);
+            Log::warning('$booking_created');
+            Log::warning($booking_created);
+
+            $booking = Booking::with('user')->find($booking_created->id);
+
+            Log::warning('$booking - test');
+            Log::warning($booking);
 
             $response = [
-                'booking' => $boking,
+                'booking' => $booking,
                 'stripe_checkout_session' => $session
             ];
 
-            Log::warning('$response');
-            Log::warning($response);
+            Log::warning('New Booking Created by controller');
+
+            // Log::warning('$response');
+            // Log::warning($response);
+
+            // event(new BookingCreated('test customer 01', 1233));
+
+           // Dispatch the event
+            event(new BookingCreated($booking));
 
             return $this->responseSuccess($response, 'New Booking Created Successfully !');
 

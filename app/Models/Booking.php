@@ -24,8 +24,14 @@ class Booking extends Model
         'payment_id'
     ];
 
-    protected $dispatchesEvents = [
-        'created' => \App\Events\BookingCreated::class,
-    ];
+    // protected $dispatchesEvents = [
+    //     'creating' => \App\Events\BookingCreated::class, 
+    //     'created' => \App\Events\BookingCreated::class,
+    // ];
+
+    public function user(): object
+    {
+        return $this->belongsTo(User::class)->select('*');
+    }
 
 }
