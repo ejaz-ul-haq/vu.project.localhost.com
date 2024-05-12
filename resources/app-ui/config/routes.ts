@@ -25,13 +25,14 @@ export default [
   //   // ],
   //   access: 'isAdministrator',
   //   // component: './SuperUsers/TableList',
-  //   layout: 'side',
+  //   layout: 'mix',
   //   // component: './admin-app/dashboard',
   // },
   {
      path: '/admin-app/profile',
      name: 'Profile',
      hideInMenu: true,
+     layout: 'mix',
      component: './admin-app/current-user/profile',
   },
   {
@@ -46,7 +47,7 @@ export default [
     //   '@/wrappers/auth',
     // ],
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/users/list-users',
   },
   {
@@ -54,7 +55,7 @@ export default [
     name: 'Add New User',
     hideInMenu: true,
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/users/create-user',
   },
   {
@@ -62,7 +63,7 @@ export default [
     hideInMenu: true,
     name: 'Edit User',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/users/update-user',
   },
   {
@@ -73,7 +74,7 @@ export default [
     //   '@/wrappers/auth',
     // ],
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/destinations/list-destination',
   },
   {
@@ -82,7 +83,7 @@ export default [
     hideInMenu: true,
     // icon: 'BankOutlined',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/destinations/create-destination',
     // component: './UnderConstructionPage',
     // access: 'isSuperAdmin',
@@ -96,7 +97,7 @@ export default [
     hideInMenu: true,
     name: 'Edit Destination',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/destinations/update-destination',
   },
   {
@@ -104,7 +105,7 @@ export default [
     hideInMenu: true,
     name: 'View Destination',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/destinations/read-destination',
   },
   {
@@ -112,7 +113,7 @@ export default [
     name: 'Trips',
     icon: 'CalendarOutlined',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/trips/list-trips',
   },
   {
@@ -120,7 +121,7 @@ export default [
     name: 'Add New Trip',
     hideInMenu: true,
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/trips/create-trip',
   },
   {
@@ -128,7 +129,7 @@ export default [
     hideInMenu: true,
     name: 'Edit Trip',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/trips/update-trip',
   },
   {
@@ -136,7 +137,7 @@ export default [
     name: 'Accommodations',
     icon: 'HomeOutlined',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/accommodations/list-accommodations',
   },
   {
@@ -144,7 +145,7 @@ export default [
     name: 'Add New Accommodation',
     hideInMenu: true,
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/accommodations/create-accommodation',
   },
   {
@@ -152,7 +153,7 @@ export default [
     hideInMenu: true,
     name: 'Edit Accommodation',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/accommodations/update-accommodation',
   },
   {
@@ -160,7 +161,7 @@ export default [
     name: 'Attractions',
     icon: 'PictureOutlined',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/attractions/list-attractions',
   },
   {
@@ -168,7 +169,7 @@ export default [
     name: 'Add New Attraction',
     hideInMenu: true,
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/attractions/create-attraction',
   },
   {
@@ -176,7 +177,7 @@ export default [
     hideInMenu: true,
     name: 'Edit Attraction',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/attractions/update-attraction',
   },
   {
@@ -184,7 +185,7 @@ export default [
     name: 'Notifications',
     icon: 'NotificationOutlined',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/notifications/list-notifications',
   },
   {
@@ -192,7 +193,7 @@ export default [
     name: 'Add New Notifications',
     hideInMenu: true,
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/notifications/create-notification',
   },
   {
@@ -200,7 +201,7 @@ export default [
     hideInMenu: true,
     name: 'Edit Notifications',
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     component: './admin-app/notifications/update-notification',
   },
   {
@@ -211,7 +212,7 @@ export default [
     //   '@/wrappers/auth',
     // ],
     access: 'isAdministrator',
-    layout: 'side',
+    layout: 'mix',
     // component: './admin-app/dashboard',
   },
 
@@ -273,6 +274,30 @@ export default [
 
   /**** End - App ****/
 
+   /**** Start - User App ****/
+   {
+    path: '/user-app/profile',
+    name: 'Profile',
+    hideInMenu: true,
+    layout: 'mix',
+    component: './user-app/current-user/profile',
+ },
+ {
+   path: '/user-app/',
+   redirect: '/user-app/bookings',
+ },
+ {
+   path: '/user-app/bookings',
+   name: 'Bookings',
+   icon: 'UsergroupAddOutlined',
+   // wrappers: [
+   //   '@/wrappers/auth',
+   // ],
+   access: 'isUser',
+   layout: 'mix',
+   component: './user-app/bookings/list-bookings',
+ },
+    /**** Start - User App ****/
 
   {
     path: '/admin-app',
@@ -303,7 +328,7 @@ export default [
   //   component: './site/ContactUsPage',
   // },
   {
-    path: '/authentication/',
+    path: '/authentication',
     name: 'Signup / Login',
     icon: 'LockOutlined',
     // wrappers: [
@@ -315,13 +340,13 @@ export default [
     // https://pro.ant.design/docs/advanced-menu/#change-the-layout-according-to-the-path
   },
   {
-    path: '/checkout/success/',
+    path: '/checkout/success',
     hideInMenu: true,
     layout: 'top',
     component: './site/checkout/success',
   },
   {
-    path: '/checkout/cancel/',
+    path: '/checkout/cancel',
     hideInMenu: true,
     layout: 'top',
     component: './site/checkout/cancel',

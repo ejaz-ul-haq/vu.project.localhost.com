@@ -108,7 +108,12 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu, children
             }
 
             if (key === 'profile') {
-                history.push('/admin-app/profile');
+                // console.log('initialState?.currentUser?.data?.role');
+                // console.log(initialState?.currentUser);
+                // console.log(initialState?.currentUser?.role);
+
+                history.push('/'+initialState?.currentUser?.role+'-app/profile');
+                // history.location.href =  '/'+logged_user_api_response?.data?.user?.role+'-app/';
             }
             // history.push(`/account/${key}`);
         },

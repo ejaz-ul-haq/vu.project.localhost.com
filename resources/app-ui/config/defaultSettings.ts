@@ -7,6 +7,7 @@ const Settings: ProLayoutProps & {
     pwa?: boolean;
     logo?: string;
 } = {
+    prefixCls:'vu-project',
     navTheme: 'light',
     // 拂晓蓝
     colorPrimary: '#ffc010',

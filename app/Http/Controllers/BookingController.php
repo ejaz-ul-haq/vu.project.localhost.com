@@ -27,7 +27,7 @@ class BookingController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['indexAll']]);
+        $this->middleware('auth:api', ['except' => ['indexAll', 'store']]);
     }
 
     

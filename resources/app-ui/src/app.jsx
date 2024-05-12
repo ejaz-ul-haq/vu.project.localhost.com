@@ -137,8 +137,9 @@ export const layout = ({initialState, setInitialState}) => {
         //   return social_icons;
         // },
         avatarProps: {
-          src: initialState?.currentUser?.image_url,
-          title: <AvatarName/>,
+          src: ( initialState?.currentUser?.image_url != null ) ? initialState?.currentUser?.image_url : 'https://static-00.iconduck.com/assets.00/profile-user-icon-512x512-nm62qfu0.png',
+          // src: initialState?.currentUser?.image_url,
+          // title: <AvatarName/>,
           render: (_, avatarChildren) => {
             return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
           },
@@ -158,11 +159,20 @@ export const layout = ({initialState, setInitialState}) => {
                 return ( (MenuDataItem.layout === 'top') ? MenuDataItem : false);
             });
         },
+      //   onPageChange: () => {
+      //     console.log('onPageChange - triggered');
+      //     const {location} = history;
+      //     // If not logged in, redirect to login test
+      //     if (!initialState?.currentUser && location.pathname !== loginPath) {
+      //         history.push(loginPath);
+      //         history.replace(loginPath);
+      //     }
+      // },
         footerRender: () => <SiteFooter/>,
         childrenRender: (children) => {
           return (
-            <>
-              <ConfigProvider 
+              <ConfigProvider
+                prefixCls='vu-project' 
                 locale={enUS}
                 theme={{
                   components: {
@@ -175,7 +185,6 @@ export const layout = ({initialState, setInitialState}) => {
               >
                 {children}
               </ConfigProvider>
-            </>
           );
         },
         ...initialState?.settings,
@@ -211,7 +220,8 @@ export const layout = ({initialState, setInitialState}) => {
         // },
         avatarProps: {
             // src: initialState?.currentUser?.meta?.ech_user_profile_image_url,
-          src: initialState?.currentUser?.image_url,
+          // src: initialState?.currentUser?.image_url,
+          src: ( initialState?.currentUser?.image_url != null ) ? initialState?.currentUser?.image_url : 'https://static-00.iconduck.com/assets.00/profile-user-icon-512x512-nm62qfu0.png',
             // title: <AvatarName/>,
             render: (_, avatarChildren) => {
                 return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
@@ -231,7 +241,7 @@ export const layout = ({initialState, setInitialState}) => {
            return MenuDataItems.map((MenuDataItem) => {
                  console.log('MenuDataItem');
                  console.log(MenuDataItem);
-               return ( (MenuDataItem.layout === 'side') ? MenuDataItem : false);
+               return ( (MenuDataItem.layout === 'mix') ? MenuDataItem : false);
            });
 
        },
@@ -256,11 +266,11 @@ export const layout = ({initialState, setInitialState}) => {
         ],
         childrenRender: (children) => {
             return (
-                <>
-                    <ConfigProvider locale={enUS}>
+                    <ConfigProvider 
+                      prefixCls='vu-project' 
+                      locale={enUS}>
                         {children}
                     </ConfigProvider>
-                </>
             );
         },
 
@@ -269,9 +279,7 @@ export const layout = ({initialState, setInitialState}) => {
          // splitMenus: true,
 
         ...initialState?.settings,
-       // layout: 'mix',
-
-
+       layout: 'mix',
      };
 
 

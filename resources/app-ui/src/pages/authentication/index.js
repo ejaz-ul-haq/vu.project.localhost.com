@@ -43,7 +43,8 @@ const useStyles = createStyles(({ token }) => {
             backgroundSize: '100% 100%',
         },
         main:{
-            padding: '0px',
+            padding: '0px !important',
+            margin: '10px'
         }
     };
 });
@@ -156,7 +157,7 @@ const Login = () => {
             history.push(urlParams.get('redirect') || '/'+logged_user_api_response?.data?.user?.role+'-app/', { initialState: initialState} );
             history.replace(urlParams.get('redirect') || '/'+logged_user_api_response?.data?.user?.role+'-app/', { initialState: initialState});
             
-            // history.location.href =  '/'+logged_user_api_response?.data?.user?.role+'-app/';
+            history.location.href =  '/'+logged_user_api_response?.data?.user?.role+'-app/';
 
             console.log('after - redirect - initialState');
             console.log(initialState);
@@ -189,7 +190,7 @@ const Login = () => {
             <div
                 style={{
                     flex: '1',
-                    padding: '32px 0',
+                    // padding: '32px 0',
                 }}
             >
                 <LoginForm

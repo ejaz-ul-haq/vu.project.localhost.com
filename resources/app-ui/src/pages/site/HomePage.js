@@ -342,7 +342,7 @@ const HomePage = () => {
 
                   style={{
                     width: '100%',
-                    height: '950px', // Set a fixed height for all cards
+                    height: '550px', // Set a fixed height for all cards
                   }}
                   actions={[
                     <Button

@@ -6,7 +6,7 @@ import {
   ProFormSwitch, ProFormText, ProFormTextArea,
   ProList,
 } from '@ant-design/pro-components';
-import {Avatar, Button, Card, Col, Drawer, List, message, Progress, Row, Skeleton, Tag, Image} from 'antd';
+import {Avatar, Button, Card, Col, Drawer, List, message, Progress, Row, Skeleton, Tag, Image, Tooltip} from 'antd';
 import {
   SettingOutlined,
   EditOutlined,
@@ -143,11 +143,11 @@ const onFinishHandlerForm = async (values) => {
             /**
              * User Created then show message and redirect to listing screen
              */
-            // if (api_response?.data?.stripe_checkout_session?.url ) {
-            //     message.success('Submitted successfully');
-            //     // history.push('/admin-app/accommodations/edit/' + api_response?.data?.id);
-            //     window.location.href=api_response?.data?.stripe_checkout_session?.url;
-            // }
+            if (api_response?.data?.stripe_checkout_session?.url ) {
+                message.success('Submitted successfully');
+                // history.push('/admin-app/accommodations/edit/' + api_response?.data?.id);
+                window.location.href=api_response?.data?.stripe_checkout_session?.url;
+            }
 
         }).catch(function (error) {
             console.log(error);
@@ -354,9 +354,10 @@ const TestHomePage = () => {
 
                   style={{
                     width: '100%',
-                    height: '950px', // Set a fixed height for all cards
+                    height: '550px', // Set a fixed height for all cards
                   }}
                   actions={[
+                    <Tooltip title="Thanks for using antd. Have a nice day!">
                     <Button
                       type="primary"
                       icon={<ShoppingCartOutlined />}
@@ -378,6 +379,7 @@ const TestHomePage = () => {
                     >
                       Book Now
                     </Button>
+                    </Tooltip>
                   ]}
                   cover={
                     <img
