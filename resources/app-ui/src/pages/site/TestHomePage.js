@@ -116,6 +116,7 @@ const onFinishHandlerForm = async (values) => {
             user_id: values?.user_id,
             trip_id: values?.trip_id,
             payment_id: 0,
+            checkout_session_id: 0,
             price: values?.price,
             trip_title: values?.trip_title
         };

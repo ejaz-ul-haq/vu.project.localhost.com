@@ -12,6 +12,8 @@ use App\Listeners\StripeEventListener;
 use App\Events\BookingCreated;
 use App\Listeners\SendBookingEmail;
 
+use Laravel\Cashier\Events\WebhookReceived;
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -20,6 +22,15 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        /**
+         * Stripe WebHook Listener
+         */
+        // WebhookReceived::class => [
+        //     StripeEventListener::class,
+        // ],
+        'Laravel\Cashier\Events\WebhookReceived' => [
+            'App\Listeners\StripeEventListener',
+        ],
         //  Registered::class => [
         //      SendEmailVerificationNotification::class,
         //      StripeEventListener::class

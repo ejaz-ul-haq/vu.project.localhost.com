@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\UploadHelper;
-use App\Http\Requests\BookingRequest;
+use App\Http\Requests\PaymentRequest;
 use App\Models\Booking;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -17,11 +16,11 @@ use Laravel\Cashier\Cashier;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 
-use App\Models\Payment;
-
 use App\Events\BookingCreated;
 
-class BookingController extends Controller
+use App\Models\Payment;
+
+class PaymentController extends Controller
 {
     /**
      * Response trait to handle return responses.
@@ -94,7 +93,7 @@ class BookingController extends Controller
         }
     }
 
-    public function store(BookingRequest $request): JsonResponse
+    public function store(PaymentRequest $request): JsonResponse
     {
         Log::warning('ejaz-test : store');
         Log::warning('$request');
@@ -107,32 +106,6 @@ class BookingController extends Controller
             Log::warning('$data');
             Log::warning($data);
 
-             /**
-            * Create Booking DB Record
-            */
-         $booking_created = Booking::create($data);
-         Log::warning('$booking_created');
-         Log::warning($booking_created);
-
-
-          /**
-           * Create Pending Payment
-           */
-          $payment_data  = [
-            'user_id' => $data['user_id'],
-            'booking_id' => $booking_created->id,
-            'status' => 'pending',
-          ];
-            $payment_created = Payment::create($payment_data);
-            Log::warning('$payment_created');
-            Log::warning($payment_created);
-
-            /**
-          * Set pending payment id to be updated booking
-          */
-          $data['payment_id'] =  $payment_created->id;
-
-         
 
             // // Set your Stripe API key
             Stripe::setApiKey('sk_test_51PA6fHDkQjZuj6p2QTwORu2WcgZTStrvVgE8dgIFDiV4XuYGPI8YexmbbLQIgSir2w8x2QzNVYcy0JQk8DYxjOM300HlCmnAJe');
@@ -151,10 +124,8 @@ class BookingController extends Controller
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                // 'success_url' => url('/checkout/success')->query(['sessionid' => '{CHECKOUT_SESSION_ID}']),
-                // 'cancel_url' => url('/checkout/cancel')->query(['sessionid' => '{CHECKOUT_SESSION_ID}']),
-                'success_url' => url('/checkout/success/'.$booking_created->user_id.'/'.$booking_created->id.'/'.$payment_created->id.'/{CHECKOUT_SESSION_ID}'),
-                'cancel_url' => url('/checkout/cancel/'.$booking_created->user_id.'/'.$booking_created->id.'/'.$payment_created->id.'/{CHECKOUT_SESSION_ID}'),
+                'success_url' => url('/checkout/success'),
+                'cancel_url' => url('/checkout/cancel'),
             ]);
 
 
@@ -211,32 +182,22 @@ class BookingController extends Controller
         //     Log::warning($session);
 
          /**
-          * Set Stripe Checkout Session ID to be updated
+          * Set Stripe Checkout Session ID
           */
           $data['checkout_session_id'] =  $session->id;
 
-         
-
-            /**
-             * Update Booking
-             */
-            $booking_updated = Booking::find($booking_created->id)->update($data);
-            Log::warning('$booking_updated');
-            Log::warning($booking_updated);
-        
-          
-            /**
-             * Set API Response
-             */
+          /**
+           * Create Booking DB Record
+           */
+         $booking_created = Booking::create($data);
+            Log::warning('$booking_created');
+            Log::warning($booking_created);
 
             $booking = Booking::with('user')->find($booking_created->id);
+
             Log::warning('$booking - test');
             Log::warning($booking);
 
-
-            /**
-             * Set API Response
-             */
             $response = [
                 'booking' => $booking,
                 'stripe_checkout_session' => $session
@@ -284,21 +245,23 @@ class BookingController extends Controller
         }
     }
 
-    public function update(BookingRequest $request, $id): JsonResponse
+    public function update(PaymentRequest $request, $id): JsonResponse
     {
         try {
 
             $data = $request->all();
-            $booking = Booking::find($id);
+            $payment = Payment::find($id);
             
             Log::warning('$data - before update');
             Log::warning($data);
 
             // If everything is OK, then update.
-            $booking->update($data);
+            $payment->update($data);
 
-            // Finally return the updated Booking.
-            return $this->responseSuccess(Booking::find($id), 'Booking Updated Successfully !');
+            $payment = Payment::with('user', 'booking')->find($id);
+
+            // Finally return the updated Payment.
+            return $this->responseSuccess($payment, 'Payment Updated Successfully !');
 
         } catch (\Exception $e) {
             return $this->responseError(null, $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

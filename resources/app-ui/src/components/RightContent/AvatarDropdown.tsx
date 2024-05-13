@@ -1,5 +1,5 @@
 // import { outLogin } from '@/services/ant-design-pro/api';
-import {LogoutOutlined, SettingOutlined, UserOutlined} from '@ant-design/icons';
+import {LogoutOutlined, SettingOutlined, UserOutlined, LockOutlined} from '@ant-design/icons';
 import {useEmotionCss} from '@ant-design/use-emotion-css';
 import {history, useModel} from '@umijs/max';
 import {message, Spin} from 'antd';
@@ -116,6 +116,10 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu, children
                 // history.location.href =  '/'+logged_user_api_response?.data?.user?.role+'-app/';
             }
             // history.push(`/account/${key}`);
+
+            if( key == 'signup_login' ){
+                history.push('/authentication');
+            }
         },
         [setInitialState],
     );
@@ -138,9 +142,9 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu, children
 
     const {currentUser} = initialState;
 
-    if (!currentUser || !currentUser.name) {
-        return loading;
-    }
+    // if (!currentUser || !currentUser.name) {
+    //     return loading;
+    // }
 
     const menuItems = [
         ...(menu
@@ -160,6 +164,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu, children
                 },
             ]
             : []),
+            ...( (currentUser) ?  [    
         {
             key: 'profile',
             icon: <UserOutlined/>,
@@ -170,6 +175,14 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu, children
             icon: <LogoutOutlined/>,
             label: 'Log Out',
         },
+    ] : [] ),
+        ...( (!currentUser || !currentUser.name) ?  [
+            { 
+                key: 'signup_login', 
+                icon: <LockOutlined/>, 
+                label: 'Signup / Login', 
+            }
+        ] : [] )
     ];
 
     return (

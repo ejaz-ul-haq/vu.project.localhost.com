@@ -9,6 +9,7 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\PaymentController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -91,6 +92,11 @@ Route::group([
      * Bookings Module
      */
     Route::resource('bookings', BookingController::class);
+
+     /**
+     * Payment Module
+     */
+    Route::resource('payments', PaymentController::class);
 
     /**
      * Notifications Module

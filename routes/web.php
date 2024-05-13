@@ -39,7 +39,8 @@ Route::get( '/{path?}', function(Request $request, $path = null){
 
 
 
-// Route::post(
-//     'stripe/webhook',
-//     '\App\Http\Controllers\WebhookController@handleWebhook'
-// );
+Route::post(
+    'stripe/webhook',
+    // '\App\Http\Controllers\WebhookController@handleWebhook'
+    '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
+);

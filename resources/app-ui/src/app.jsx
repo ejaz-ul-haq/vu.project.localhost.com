@@ -162,10 +162,18 @@ export const layout = ({initialState, setInitialState}) => {
       //   onPageChange: () => {
       //     console.log('onPageChange - triggered');
       //     const {location} = history;
+      //     console.log('location.pathname');
+      //     console.log(location.pathname);
       //     // If not logged in, redirect to login test
-      //     if (!initialState?.currentUser && location.pathname !== loginPath) {
-      //         history.push(loginPath);
-      //         history.replace(loginPath);
+      //     // if (!initialState?.currentUser && location.pathname !== loginPath) {
+      //     //     history.push(loginPath);
+      //     //     history.replace(loginPath);
+      //     // }
+
+      //     if( location.pathname == '/authentication' && !initialState?.currentUser ){
+      //       console.log('initialState?.currentUser');
+      //       console.log(initialState?.currentUser);
+      //       // history.push('/'+initialState?.currentUser?.role+'-app/profile');
       //     }
       // },
         footerRender: () => <SiteFooter/>,
@@ -248,6 +256,8 @@ export const layout = ({initialState, setInitialState}) => {
         onPageChange: () => {
             console.log('onPageChange - triggered');
             const {location} = history;
+            console.log('location.pathname');
+            console.log(location.pathname);
             // If not logged in, redirect to login test
             if (!initialState?.currentUser && location.pathname !== loginPath) {
                 history.push(loginPath);

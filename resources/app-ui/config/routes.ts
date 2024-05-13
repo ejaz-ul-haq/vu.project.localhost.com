@@ -340,13 +340,13 @@ export default [
     // https://pro.ant.design/docs/advanced-menu/#change-the-layout-according-to-the-path
   },
   {
-    path: '/checkout/success',
+    path: '/checkout/success/:user_id/:booking_id/:payment_id/:stripe_checkout_session_id',
     hideInMenu: true,
     layout: 'top',
     component: './site/checkout/success',
   },
   {
-    path: '/checkout/cancel',
+    path: '/checkout/cancel/:user_id/:booking_id/:payment_id/:stripe_checkout_session_id',
     hideInMenu: true,
     layout: 'top',
     component: './site/checkout/cancel',
