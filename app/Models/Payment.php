@@ -34,9 +34,25 @@ class Payment extends Model
         return $this->belongsTo(User::class)->select('*');
     }
 
-    public function booking(): object
+ 
+    // Define the relationship with the booking
+    public function booking()
     {
-        return $this->belongsTo(Booking::class)->select('*');
+        return $this->hasOne(Booking::class, 'payment_id', 'id');
+    }
+
+
+    // Define the relationship with the trip through the booking
+    public function trip()
+    {
+        return $this->hasOneThrough(
+            Trip::class,
+            Booking::class,
+            'id',  // Foreign key on bookings table referencing payments table
+            'id',  // Foreign key on trips table referencing bookings table
+            'booking_id',  // Local key on payments table
+            'trip_id'  // Local key on bookings table
+        );
     }
 
 }

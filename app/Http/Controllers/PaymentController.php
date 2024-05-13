@@ -29,7 +29,7 @@ class PaymentController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['indexAll', 'store']]);
+        $this->middleware('auth:api', ['except' => ['indexAll', 'store', 'update']]);
     }
 
     
@@ -45,13 +45,14 @@ class PaymentController extends Controller
             $orderBy = isset($request['order_by']) ? $request['order_by'] : 'id';
             $order   = isset($request['order']) ? $request['order'] : 'desc';
 
-            $data = Booking::orderBy($orderBy, $order)
-                                ->paginate($perPage);
+            $data = Payment::orderBy($orderBy, $order)
+            ->with('user', 'booking', 'trip')
+            ->paginate($perPage);
 
             Log::warning('$data');
             Log::warning($data);
 
-            return $this->responseSuccess($data, 'Booking List Fetch Successfully !');
+            return $this->responseSuccess($data, 'Payment List Fetch Successfully !');
         } catch (\Exception $e) {
             return $this->responseError(null, $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

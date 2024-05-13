@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Helpers\UploadHelper;
 
+use Illuminate\Support\Facades\Auth;
+
 class TripController extends Controller
 {
     /**
@@ -48,17 +50,75 @@ class TripController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        Log::warning('ejaz-test : index');
+        Log::warning('TripController - ejaz-test : index');
         Log::warning('$request');
         Log::warning($request);
 
+        $perPage = isset($request['per_page']) ? intval($request['per_page']) : 10;
+        $orderBy = isset($request['order_by']) ? $request['order_by'] : 'id';
+        $order   = isset($request['order']) ? $request['order'] : 'desc';
+
+        // Get the authenticated user
+        $user = Auth::user();
+        Log::warning('$user');
+        Log::warning($user);
+
+
         try {
-            $data = $this->tripRepository->getAll($request);
 
-            Log::warning('$data');
-            Log::warning($data);
+            $trips = [];
 
-            return $this->responseSuccess($data, 'Trip List Fetch Successfully !');
+            if( $user->role == 'user' ){
+
+                // // Retrieve trips for the user
+                $trips = Trip::orderBy($orderBy, $order)
+                ->whereHas('bookings', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+                // ->with(['bookings' => function ($query) use ($user) {
+                //     $query->where('user_id', $user->id);
+                //     // Assuming 'payment_id' is the foreign key linking to the payments table
+                //     $query->with('payment');
+                // }])
+                // ->with('payments')
+                ->with('payment')
+                // ->with('users')
+                // ->with('destination')
+                // ->with('accommodation')
+                // ->with('bookings')
+                ->paginate($perPage);
+
+
+                 // Retrieve trips for the user
+        // $query = Trip::whereHas('bookings', function ($query) use ($user) {
+        //     $query->where('user_id', $user->id);
+        // });
+
+        
+                
+
+                Log::warning('TripController - ejaz-test : index - $trips');
+                // Debugging: Check the generated SQL query
+                // Log::warning(($query->toSql()));
+
+                // $trips = $query->get();
+
+                Log::warning($trips);
+                // Debugging: Check the generated SQL query
+                // Log::warning($trips->toSql());
+
+            }
+
+
+            if( $user->role == 'admin' ){
+                $trips = $this->tripRepository->getAll($request);
+                Log::warning('$trips');
+                Log::warning($trips);
+            }
+
+            
+
+            return $this->responseSuccess($trips, 'Trip List Fetch Successfully !');
         } catch (\Exception $e) {
             return $this->responseError(null, $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 use App\Models\User;
+use App\Models\Trip;
+use App\Models\Payment;
 
 class Booking extends Model
 {
@@ -32,6 +34,16 @@ class Booking extends Model
     public function user(): object
     {
         return $this->belongsTo(User::class)->select('*');
+    }
+
+    public function trip(): object
+    {
+        return $this->belongsTo(Trip::class)->select('*');
+    }
+
+    public function payment(): object
+    {
+        return $this->belongsTo(Payment::class)->select('*');
     }
 
 }

@@ -32,7 +32,7 @@ export const waitTime = async (time = 100) => {
   await waitTimePromise(time);
 };
 
-const ListBookings = () => {
+const ListTrips = () => {
 
   const {initialState, loading, refresh, setInitialState} = useModel('@@initialState');
 
@@ -100,11 +100,10 @@ const ListBookings = () => {
       hideInSearch: true,
       sorter: true,
       defaultSortOrder: 'descend',
-      valueType: 'indexBorder',
     },
     {
       title: "Image",
-      dataIndex: ["trip", "image_url"],
+      dataIndex: "image_url",
       key: 'table-column-image',
       hideInSearch: true,
       render: (dom, entity) => {
@@ -118,8 +117,8 @@ const ListBookings = () => {
       },
     },
     {
-      title: "Trip",
-      dataIndex: ["trip", "title"],
+      title: "Title",
+      dataIndex: "title",
       key: 'table-column-title',
       copyable: true,
       hideInSearch: true,
@@ -138,7 +137,7 @@ const ListBookings = () => {
     },
     {
       title: "Price",
-      dataIndex: ["trip", "price"],
+      dataIndex: "price",
       key: 'table-column-price',
       // copyable: true,
       hideInSearch: true,
@@ -153,7 +152,7 @@ const ListBookings = () => {
     },
     {
       title: "Payment Status",
-      dataIndex: ["payment", "status"],
+      dataIndex: ["payment",  "status"],
       key: 'table-column-payment-status',
       // copyable: true,
       hideInSearch: true,
@@ -195,11 +194,11 @@ const ListBookings = () => {
       render: (text, record, _, action) => [
 
         <Button
-        key="view"
-        onClick={() => {
-          // history.push('/admin-app/destinations/edit/' + record.id);
-           console.log('.......');
-        }}
+          key="view"
+          onClick={() => {
+            // history.push('/admin-app/destinations/edit/' + record.id);
+             console.log('.......');
+          }}
         >
           <EyeOutlined />
         </Button>,
@@ -252,7 +251,7 @@ const ListBookings = () => {
              */
             await waitTime(2000);
 
-            return await request('/api/bookings', {
+            return await request('/api/trips', {
 
               params: {
                 page: params?.current,
@@ -362,4 +361,4 @@ const ListBookings = () => {
   );
 };
 
-export default ListBookings;
+export default ListTrips;

@@ -47,7 +47,8 @@ class BookingController extends Controller
             $order   = isset($request['order']) ? $request['order'] : 'desc';
 
             $data = Booking::orderBy($orderBy, $order)
-                                ->paginate($perPage);
+            ->with('user', 'trip', 'payment')
+            ->paginate($perPage);
 
             Log::warning('$data');
             Log::warning($data);

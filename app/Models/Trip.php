@@ -48,6 +48,41 @@ class Trip extends Model
         return $this->belongsTo(Accommodation::class)->select('*');
     }
 
+    // Define the relationship with bookings
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'trip_id');
+    }
+
+     // Define the relationship with payments
+     public function payments()
+     {
+         return $this->hasManyThrough(Payment::class, Booking::class, 'trip_id', 'user_id', 'id', 'user_id');
+     }
+
+     // Define the relationship with the trip through the booking
+    public function payment()
+    {
+        // return $this->hasOneThrough(
+        //     Payment::class,
+        //     Booking::class,
+        //     'id',  // Foreign key on bookings table referencing payments table
+        //     'id',  // Foreign key on trips table referencing bookings table
+        //     'booking_id',  // Local key on payments table
+        //     'payment_id'  // Local key on bookings table
+        // );
+        return $this->hasOneThrough(
+            Payment::class,
+            Booking::class,
+            'trip_id',  // Foreign key on bookings table referencing trips table
+            'booking_id',  // Foreign key on payments table referencing bookings table
+            'id',  // Local key on trips table
+            'payment_id'  // Local key on bookings table
+        );
+    }
+      
+
+
     // public function travelMates()
     // {
     //     // Assuming you have a 'User' model

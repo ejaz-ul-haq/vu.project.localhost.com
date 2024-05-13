@@ -297,6 +297,22 @@ export default [
    layout: 'mix',
    component: './user-app/bookings/list-bookings',
  },
+ {
+  path: '/user-app/payments',
+  name: 'Payments',
+  icon: 'PictureOutlined',
+  access: 'isUser',
+  layout: 'mix',
+  component: './user-app/payments/list-payments',
+},
+{
+  path: '/user-app/trips',
+  name: 'Trips',
+  icon: 'PictureOutlined',
+  access: 'isUser',
+  layout: 'mix',
+  component: './user-app/trips/list-trips',
+},
     /**** Start - User App ****/
 
   {

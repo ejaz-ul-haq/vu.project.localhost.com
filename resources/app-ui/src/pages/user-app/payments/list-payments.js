@@ -32,7 +32,7 @@ export const waitTime = async (time = 100) => {
   await waitTimePromise(time);
 };
 
-const ListBookings = () => {
+const ListPayments = () => {
 
   const {initialState, loading, refresh, setInitialState} = useModel('@@initialState');
 
@@ -100,28 +100,46 @@ const ListBookings = () => {
       hideInSearch: true,
       sorter: true,
       defaultSortOrder: 'descend',
-      valueType: 'indexBorder',
     },
+    // {
+    //   title: "Image",
+    //   dataIndex: "image_url",
+    //   key: 'table-column-image',
+    //   hideInSearch: true,
+    //   render: (dom, entity) => {
+    //     return (
+    //       <img
+    //         alt="example"
+    //         src={dom}
+    //         style={{ height: '80px', width: '150px' }}
+    //       />
+    //     );
+    //   },
+    // },
     {
-      title: "Image",
-      dataIndex: ["trip", "image_url"],
-      key: 'table-column-image',
+      title: "Booking ID",
+      dataIndex: "booking_id",
+      key: 'table-column-booking-id',
+      // copyable: true,
       hideInSearch: true,
       render: (dom, entity) => {
         return (
-          <img
-            alt="example"
-            src={dom}
-            style={{ height: '80px', width: '150px' }}
-          />
+          <a
+            onClick={() => {
+              setCurrentRow(entity);
+              setShowDetail(true);
+            }}
+          >
+            {dom}
+          </a>
         );
       },
     },
     {
-      title: "Trip",
-      dataIndex: ["trip", "title"],
-      key: 'table-column-title',
-      copyable: true,
+      title: "Trip ID",
+      dataIndex: ["booking", "trip_id"],
+      key: 'table-column-trip-id',
+      // copyable: true,
       hideInSearch: true,
       render: (dom, entity) => {
         return (
@@ -153,7 +171,7 @@ const ListBookings = () => {
     },
     {
       title: "Payment Status",
-      dataIndex: ["payment", "status"],
+      dataIndex: "status",
       key: 'table-column-payment-status',
       // copyable: true,
       hideInSearch: true,
@@ -214,17 +232,17 @@ const ListBookings = () => {
         actionRef={destinationsTableRef}
         rowKey="id"
         search={false}
-        // toolBarRender={() => [
-        //   <Button
-        //     type="primary"
-        //     key="primary"
-        //     onClick={() => {
-        //       history.push('/admin-app/destinations/new');
-        //     }}
-        //   >
-        //     <PlusOutlined/> <FormattedMessage id="pages.organizationTable.new" defaultMessage="New"/>
-        //   </Button>,
-        // ]}
+        toolBarRender={() => [
+          <Button
+            type="primary"
+            key="primary"
+            onClick={() => {
+              history.push('/admin-app/destinations/new');
+            }}
+          >
+            <PlusOutlined/> <FormattedMessage id="pages.organizationTable.new" defaultMessage="New"/>
+          </Button>,
+        ]}
         pagination={{
           defaultPageSize: 10,
           showSizeChanger: true,
@@ -252,7 +270,7 @@ const ListBookings = () => {
              */
             await waitTime(2000);
 
-            return await request('/api/bookings', {
+            return await request('/api/payments', {
 
               params: {
                 page: params?.current,
@@ -362,4 +380,4 @@ const ListBookings = () => {
   );
 };
 
-export default ListBookings;
+export default ListPayments;
