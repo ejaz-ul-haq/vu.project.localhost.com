@@ -1,0 +1,17 @@
+
+https://developers.google.com/maps/documentation/javascript/examples/event-click-latlng
+
+https://www.geeksforgeeks.org/make-a-web-based-weather-report-of-your-location-using-openweathermap-api/
+
+=========
+
+
+https://www.weatherapi.com/
+https://openweathermap.org/current
+
+https://medium.com/@edtimmer/from-geolocation-to-local-weather-in-react-57d606aa9614
+
+https://github.com/EdTimmer/apipractice
+
+
+

@@ -1,0 +1,59 @@
+
+Admin Panel:
+- Necessary:
+-- weatherapi Settings in admin panel.
+-- destination is missing local culture field, and map routes, weather information
+--- add assistance  and recommendations field to the trip will only editable by admin and show to the user
+-- Notifications 
+--- Trip will be started 
+--- Trip will be ended
+--- Booking confirmation
+
+- Not Necessary:
+-- Attraction images in destination add and edit screen
+
+=========================================================================================
+
+User Panel:
+
+- Necessary:
+-- Write Review for destination, attraction, accommodation
+-- show total ratings and reviews to all users on destination, attraction, accommodation
+-- show real time weather on destinations
+-- Trips Management
+--- User will be able to create, edit, delete own trip but trip status will be not-approved
+-- Destinations / Search
+--- User will be able to search destination and view details of destination like attractions etc
+
+===============================
+
+FrontEnd Site:
+
+- Necessary:
+-- We will create an landing page as front page
+-- The registration form will include travel preferences maye it will following
+Travel Companions Preferences:
+Traveling alone
+With friends
+With family
+With a partner
+Open to meeting new travel companions
+
+
+-/-- Trip Details Page
+-/--- trip related details like destination, accomodation, attractions, travel mates
+
+
+=============
+
+Booking External APIs
+
+https://qaxim.medium.com/travel-and-booking-apis-for-online-travel-and-tourism-service-providers-b2c7a7962a02
+https://developers.amadeus.com/
+
+=========== Requirements - not matched =====
+
+According Document
+- trip will be created by user not admin
+- trip pupose field is missing (e.g., vacation, business, adventure).
+
