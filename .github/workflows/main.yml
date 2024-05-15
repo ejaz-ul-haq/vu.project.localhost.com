@@ -22,4 +22,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
+          script: "ls"
           script: "cd vu.project.wpvisions.com && sh ./.scripts/deploy.sh"
