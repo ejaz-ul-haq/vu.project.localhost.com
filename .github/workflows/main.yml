@@ -1,25 +1,28 @@
+name: Auto-deploy-to-dreamhost-development
 
-name: 🚀 Deploy on push main
-
-on: 
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events but only for the main branch
   push:
-    branches:    
-      - main 
-    
+    branches: 
+      - main
+
 jobs:
-  web-deploy:
-    name: 🎉 Deploy
+  deploy_to_dreamhost_sftp:
     runs-on: ubuntu-latest
-
+    name: Deploy To Dreamhost sFTP
     steps:
-      - name: 🚚 Get latest code
+      - name: Checkout
         uses: actions/checkout@v2
-
-      - name: 📂 Deploy to server via ssh
-        uses: appleboy/ssh-action@v0.1.7
+        
+      - name: Deploy file
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script: "ls && cd vu.project.wpvisions.com && sh ./.scripts/deploy.sh"
+          server: ${{ secrets.SFTP_SERVER }}
+          port: 22
+          username: ${{ secrets.SFTP_USERNAME }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          local_path: './*'
+          remote_path: '/home/dh_ryva8c/vu.project.wpvisions.com'
+          sftp_only: false
+          delete_remote_files: true

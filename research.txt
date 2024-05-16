@@ -17,6 +17,14 @@ https://github.com/EdTimmer/apipractice
 
 #######################################################################
 
+composer install and clear cache via
+php artisan config:cache
+php artisan config:clear
+php artisan cache:clear
+
+php artisan up
+
+---------------------
 
 
 SSH
@@ -56,3 +64,31 @@ https://anlisha.com.np/blog/deploy-laravel-with-github-actions-on-shared-hosting
 
 https://medium.com/@ikbenezer/automate-your-laravel-app-deployment-with-github-actions-ab7b2f7417f2
 
+
+############################
+
+
+name: 🚀 Deploy on push main
+
+on: 
+  push:
+    branches:    
+      - main 
+    
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - name: 📂 Deploy to server via ssh
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: "ls && cd vu.project.wpvisions.com && sh ./.scripts/deploy.sh"

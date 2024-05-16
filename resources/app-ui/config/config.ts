@@ -8,7 +8,7 @@ import moment from 'moment';
 
 const {REACT_APP_ENV = 'dev'} = process.env;
 
-const build_type = 'local'; // local, staging, live
+const build_type = 'staging'; // local, staging, live
 let create_zip = 'no'; // yes, no
 
 const sites = [
@@ -16,7 +16,7 @@ const sites = [
     type: 'local', url: 'http://vu.project.localhost.com'
   },
   {
-    type: 'staging', url: 'http://vu.project.localhost.com'
+    type: 'staging', url: 'https://vu.project.wpvisions.com'
   },
   {
     type: 'live', url: 'https://vu.project.localhost.com'
