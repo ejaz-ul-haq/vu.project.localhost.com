@@ -1,31 +1,23 @@
 #!/bin/bash
-#set -e
+set -e
 
 echo "Deployment started ..."
-
-# Enter maintenance mode or return true
-# if already is in maintenance mode
-#(php artisan down) || true
 
 # Pull changes from GitHub
 git pull origin main
 
-# Install composer dependencies
-#composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+# Install composer dependencies if composer.json or composer.lock changed
+if [ -n "$(git diff --name-only HEAD@{1}..HEAD | grep 'composer.json\|composer.lock')" ]; then
+    composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+fi
 
 # Clear the old cache and optimize Laravel
-php artisan clear-compiled
+php artisan optimize:clear
 
 # Adjust permissions if necessary
 chmod -R 755 storage bootstrap/cache
 
 # Recreate cache
 php artisan optimize
-
-# Run database migrations
-php artisan migrate:refresh --seed --force
-
-# Exit maintenance mode
-#php artisan up
 
 echo "Deployment finished!"
