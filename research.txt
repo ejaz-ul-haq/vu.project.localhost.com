@@ -15,3 +15,44 @@ https://github.com/EdTimmer/apipractice
 
 
 
+#######################################################################
+
+
+
+SSH
+Host: iad1-shared-e1-11.dreamhost.com
+Username: dh_ryva8c
+password: vu_project_ftp_2024
+Port: 22
+
+----------
+ssh dh_ryva8c@iad1-shared-e1-11.dreamhost.com
+
+------------
+
+
+DB Credentials:
+DB name: vu_project_localhost_com
+Host: mysql.vu.project.wpvisions.com
+Username: vu_project_ejaz
+Password: vu_project_ejaz@2024
+
+------------
+
+Your database "vu_project_wpvisions_com" has been created!
+
+Your hostname "mysql.vu.project.wpvisions.com" will be set up within about 5-10 minutes.
+You MUST always use your hostname to connect to your database... "localhost" WILL NOT WORK.
+
+Connect to your new database from the command line with:
+mysql -u vu_project_ejaz -p -h mysql.vu.project.wpvisions.com vu_project_wpvisions_com
+You can also go to http://mysql.vu.project.wpvisions.com/ to manage your MySQL database from the web (once the hostname is set up of course).
+
+
+==========
+
+
+https://anlisha.com.np/blog/deploy-laravel-with-github-actions-on-shared-hosting/
+
+https://medium.com/@ikbenezer/automate-your-laravel-app-deployment-with-github-actions-ab7b2f7417f2
+
