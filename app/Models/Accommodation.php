@@ -19,7 +19,9 @@ class Accommodation extends Model
         'title',
         'description',
         'image_url',
-        'destination_id'
+        'destination_id',
+        'langtitude',
+        'longitute'
     ];
 
 

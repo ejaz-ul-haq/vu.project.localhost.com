@@ -15,6 +15,8 @@ import { waitTime } from '@/components/Helpers/RequestHelpers';
 
 import { getFile, getBase64 } from '@/components/Helpers/ImageConversion';
 
+import DraggableMarkerMap from '@/components/GoogleMaps/DraggableMarkerMap';
+
 /**
  * Form Submission handler and API Request Performer
  */
@@ -234,6 +236,12 @@ const CreateDestination = () => {
       </button>
   );
 
+  const handleMarkerPositionChange = newPosition => {
+    console.log('New marker position:', newPosition);
+    // Handle the new position as needed in your parent component
+  };
+
+
   /**
    * The Component Output
    */
@@ -354,6 +362,18 @@ const CreateDestination = () => {
                   />
                 </ProForm.Group>
               </Col>
+            </Row>
+            <Row
+              gutter={{
+                xs: 8,
+                sm: 16,
+                md: 24,
+                lg: 32,
+              }}
+            >
+               <Col span={24}>
+                <DraggableMarkerMap onPositionChange={handleMarkerPositionChange} />
+               </Col>
             </Row>
           </ProCard>
 

@@ -18,6 +18,8 @@ class CreateDestinationsTable extends Migration
             $table->string('title', 255);
             $table->text('description')->nullable();
             $table->string('image_url')->nullable();
+            $table->string('latitude', 255)->nullable()->comment('Google Map latitude');
+            $table->string('longitude', 255)->nullable()->comment('Google Map longitude');
             $table->timestamps();
         });
     }

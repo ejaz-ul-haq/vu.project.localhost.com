@@ -19,7 +19,8 @@ class CreateAccommodationsTable extends Migration
             $table->text('description')->nullable();
             $table->string('image_url')->nullable();
             $table->unsignedBigInteger('destination_id')->comment('Destination ID');
-
+            $table->string('latitude', 255)->nullable()->comment('Google Map latitude');
+            $table->string('longitude', 255)->nullable()->comment('Google Map longitude');
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
 
             $table->timestamps();

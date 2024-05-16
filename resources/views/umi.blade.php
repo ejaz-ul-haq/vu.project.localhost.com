@@ -26,6 +26,7 @@ class Helper {
     <title>{{config('store.title')}}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{Helper::myUmi('favicon.png')}}" type="image/x-icon">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=geometry,places"></script>
     <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.9.6/dist/data-set.min.js"></script>
     <script>
         window.routerBase = "/";

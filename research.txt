@@ -92,3 +92,23 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: "ls && cd vu.project.wpvisions.com && sh ./.scripts/deploy.sh"
+
+
+===============================================
+
+
+https://developers.google.com/maps/documentation/javascript/advanced-markers/draggable-markers
+
+https://medium.com/@danishkhalid1996/draggable-routes-with-google-maps-react-js-81b5d3b88f9b
+
+https://jsfiddle.net/gh/get/library/pure/googlemaps/js-samples/tree/master/dist/samples/advanced-markers-draggable/jsfiddle
+
+https://stackblitz.com/edit/draggable-marker-google-map-react-3feexq-xvepjw?file=Map.js
+
+https://www.youtube.com/watch?v=I1laO8TRiws
+
+---------------
+
+https://stackoverflow.com/a/38943069
+
+
