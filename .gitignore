@@ -3,5 +3,4 @@ package-lock.json
 /resources/app-ui/node_modules
 /resources/app-ui/src/.umi
 /resources/app-ui/src/.umi-production
-/public/umi-dist
 .idea
