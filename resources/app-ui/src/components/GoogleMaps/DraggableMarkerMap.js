@@ -4,10 +4,28 @@ import React, { useState, useRef, useEffect } from 'react';
 const API_KEY = 'AIzaSyC4pW0R1O6un6tUhogR0ZKeSRLQoOCvUxU';
 
 const DraggableMarkerMap = ({ initialCoords, onPositionChange }) => {
+
+  // Convert initialCoords to numbers
+  // const coords = {
+  //   lat: parseFloat(initialCoords.lat),
+  //   lng: parseFloat(initialCoords.lng)
+  // };
+
+  // const [initialCoords, setInitialCoords] = useState(coords);
   const [markerPosition, setMarkerPosition] = useState(initialCoords);
   const mapRef = useRef(null);
 
   useEffect(() => {
+    console.log('initialCoords - from - inner');
+    console.log(initialCoords);
+
+    if(initialCoords.length == 0 ){
+      console.log('initialCoords.length - case - 01');
+      return;
+    }else{
+      console.log('initialCoords.length - case - 02');
+    }
+
     const loadGoogleMapsScript = () => {
       const script = document.createElement('script');
       script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&callback=initMap&libraries=geometry,marker`;
@@ -28,18 +46,20 @@ const DraggableMarkerMap = ({ initialCoords, onPositionChange }) => {
     };
 
     if (!window.google) {
+      console.log('initialCoords - from - inner - case 01');
       loadGoogleMapsScript();
     } else {
+      console.log('initialCoords - from - inner - case 02');
       initMap();
     }
-  }, []);
+  }, [initialCoords]);
 
   const initMap = () => {
     if (!mapRef.current) return;
 
     const map = new window.google.maps.Map(mapRef.current, {
       center: initialCoords,
-      zoom: 12
+      zoom: 18
     });
 
     const marker = new window.google.maps.Marker({

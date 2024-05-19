@@ -17,6 +17,8 @@ import { getFile, getBase64 } from '@/components/Helpers/ImageConversion';
 
 import DraggableMarkerMap from '@/components/GoogleMaps/DraggableMarkerMap';
 
+// import MyMapComponentfrom from '@/components/GoogleMaps/MyMapComponent';
+
 /**
  * Form Submission handler and API Request Performer
  */
@@ -49,6 +51,8 @@ const onFinishHandlerForm = async (values) => {
           image: values?.image,
           accommodations: values?.accommodations.map((item) => item?.accommodation),
           attractions: values?.attractions.map((item) => item?.attraction),
+          latitude: values?.latitude,
+          longitude: values?.longitude,
       };
 
     return await request('/api/destinations', {
@@ -97,13 +101,15 @@ const CreateDestination = () => {
 
   const [allAttractions, setAllAttractions] = useState([]);
 
+  const [googleMapPosition, setGoogleMapPosition ] = useState({});
+
 
     /**
      * Start - Accommodations Data
      */
     useEffect(() => {
 
-        return request('/api/accommodations', {
+        request('/api/accommodations', {
 
             params: {
                 page: 1,
@@ -146,7 +152,7 @@ const CreateDestination = () => {
      */
     useEffect(() => {
 
-        return request('/api/attractions', {
+        request('/api/attractions', {
 
             params: {
                 page: 1,
@@ -188,9 +194,8 @@ const CreateDestination = () => {
    * Update the Profile Image input field individually whenever the related State is updated/effected
    */
   useEffect(() => {
-    form.setFieldValue(['bio_details', 'staff_member_profile_image'], staffMemberProfileImageUrl);
       setSkeletonStatus(false);
-  }, [staffMemberProfileImageUrl, form]);
+  }, [ form]);
 
 
 
@@ -236,11 +241,6 @@ const CreateDestination = () => {
       </button>
   );
 
-  const handleMarkerPositionChange = newPosition => {
-    console.log('New marker position:', newPosition);
-    // Handle the new position as needed in your parent component
-  };
-
 
   /**
    * The Component Output
@@ -277,6 +277,8 @@ const CreateDestination = () => {
             await waitTime(1000);
             // values.image = file;
               values.image = imageUrl;
+              values.latitude = googleMapPosition?.lat;
+              values.longitude = googleMapPosition?.lng;
             await onFinishHandlerForm(values);
           }}
           submitter={{
@@ -372,7 +374,15 @@ const CreateDestination = () => {
               }}
             >
                <Col span={24}>
-                <DraggableMarkerMap onPositionChange={handleMarkerPositionChange} />
+                {/* <MyMapComponentfrom /> */}
+                <DraggableMarkerMap 
+                  initialCoords={{lat :24.83136096571596, lng : 67.24415919837952}} 
+                  onPositionChange={ (newPosition) => {
+                    console.log('New marker position:', newPosition);
+                    setGoogleMapPosition(newPosition);
+                    // Handle the new position as needed in your parent component
+                  }} 
+                />
                </Col>
             </Row>
           </ProCard>

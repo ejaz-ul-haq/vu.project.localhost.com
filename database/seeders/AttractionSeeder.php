@@ -123,7 +123,7 @@ class AttractionSeeder extends Seeder
                 'updated_at'  => Carbon::now()
             ],
         ];
-       Accommodation::insert($data);
+        Attraction::insert($data);
 
 //        foreach ($data as $accommodation_data ){
 //            $accommodation = Accommodation::create($accommodation_data);

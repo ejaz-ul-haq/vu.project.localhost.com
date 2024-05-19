@@ -8,7 +8,7 @@ import moment from 'moment';
 
 const {REACT_APP_ENV = 'dev'} = process.env;
 
-const build_type = 'staging'; // local, staging, live
+const build_type = 'local'; // local, staging, live
 let create_zip = 'no'; // yes, no
 
 const sites = [

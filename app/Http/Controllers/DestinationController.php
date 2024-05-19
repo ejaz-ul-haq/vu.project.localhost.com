@@ -155,7 +155,7 @@ class DestinationController extends Controller
      */
     public function store(DestinationRequest $request): JsonResponse
     {
-        Log::warning('ejaz-test : store');
+        Log::warning('destination - ejaz-test : store');
         Log::warning('$request');
         Log::warning($request);
 
@@ -169,8 +169,12 @@ class DestinationController extends Controller
             $titleShort = Str::slug(substr($data['title'], 0, 100));
 //            $data['user_id'] = $this->user->id;
 
-            if ( ! empty($data['image'])) {
+            
+            if ( ! empty($data['image']) && preg_match('/^(?:[data]{4}:(text|image|application)\/[a-z]*)/', $data['image']) ) {
+                Log::warning('destination - ejaz-test : store');
                 $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/destinations' );
+            }else{
+                Log::warning('destination - ejaz-test : store');
             }
 
             $destination = Destination::create($data);
@@ -284,11 +288,13 @@ class DestinationController extends Controller
                 return null;
             }
 
-            if ( ! empty($data['image'])) {
+            if ( ! empty($data['image']) && preg_match('/^(?:[data]{4}:(text|image|application)\/[a-z]*)/', $data['image']) ) {
+                Log::warning('destination - ejaz-test : update - image decoding - case 01');
                 $titleShort    = Str::slug(substr($data['title'], 0, 100));
                 $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/destinations' );
             } else {
-                $data['image_url'] = $destination->image;
+                Log::warning('destination - ejaz-test : update - image decoding - case 02');
+                $data['image_url'] = $destination->image_url;
             }
 
             Log::warning('$data - before update');

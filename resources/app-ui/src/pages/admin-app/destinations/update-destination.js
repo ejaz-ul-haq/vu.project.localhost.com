@@ -16,6 +16,7 @@ import { waitTime } from '@/components/Helpers/RequestHelpers';
 
 import { getFile, getBase64 } from '@/components/Helpers/ImageConversion';
 
+import DraggableMarkerMap from '@/components/GoogleMaps/DraggableMarkerMap';
 
 /**
  * The Form Initial values
@@ -61,6 +62,8 @@ const onFinishHandlerForm = async (values) => {
         image: values?.image,
         accommodations: values?.accommodations.map((item) => item?.accommodation),
         attractions: values?.attractions.map((item) => item?.attraction),
+        latitude: values?.latitude,
+        longitude: values?.longitude,
       };
 
         return await request('/api/destinations/' + values?.destination_id, {
@@ -109,6 +112,9 @@ const UpdateDestination = () => {
     const [allAccommodations, setAllAccommodations] = useState([]);
 
     const [allAttractions, setAllAttractions] = useState([]);
+
+    const [googleMapPosition, setGoogleMapPosition ] = useState('');
+
 
     useEffect(() => {
         setDestinationId(params.id);
@@ -247,6 +253,9 @@ const UpdateDestination = () => {
      * The Component Output
      */
 
+    console.log('googleMapPosition - test ');
+    console.log(googleMapPosition);
+
         return (
             <PageContainer>
 
@@ -300,6 +309,11 @@ const UpdateDestination = () => {
                                */
                               setImageUrl(api_response?.data?.image_url);
 
+                              /**
+                               * Set Google Map Position
+                               */
+                              setGoogleMapPosition({ lat: api_response?.data?.latitude, lng: api_response?.data?.longitude });
+
                                 return {
                                     ...initialValues,
                                     title: api_response?.data?.title,
@@ -329,6 +343,8 @@ const UpdateDestination = () => {
                         // values.image = file;
                         values.image = imageUrl;
                         values.destination_id = destinationId;
+                        values.latitude = googleMapPosition?.lat;
+                        values.longitude = googleMapPosition?.lng;
                         await onFinishHandlerForm(values);
                     }}
                     submitter={{
@@ -414,6 +430,32 @@ const UpdateDestination = () => {
                                     />
                                 </ProForm.Group>
                             </Col>
+                        </Row>
+                        <Row
+                          gutter={{
+                            xs: 8,
+                            sm: 16,
+                            md: 24,
+                            lg: 32,
+                          }}
+                        >
+                           <Col span={24}>
+                            {/* <MyMapComponentfrom /> */}
+                            {/* {(googleMapPosition) &  */}
+                            <DraggableMarkerMap 
+                                initialCoords={{
+                                  lat: parseFloat(googleMapPosition.lat),
+                                  lng: parseFloat(googleMapPosition.lng)
+                                }} 
+                                onPositionChange={ (newPosition) => {
+                                  console.log('New marker position:', newPosition);
+                                  setGoogleMapPosition(newPosition);
+                                  // Handle the new position as needed in your parent component
+                                }} 
+                            />
+                            {/* } */}
+                            
+                           </Col>
                         </Row>
                     </ProCard>
 

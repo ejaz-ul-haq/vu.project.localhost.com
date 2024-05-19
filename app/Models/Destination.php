@@ -21,8 +21,8 @@ class Destination extends Model
         'title',
         'description',
         'image_url',
-        'langtitude',
-        'longitute'
+        'latitude',
+        'longitude'
     ];
 
 
