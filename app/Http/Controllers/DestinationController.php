@@ -272,7 +272,7 @@ class DestinationController extends Controller
      */
     public function update(DestinationRequest $request, $id): JsonResponse
     {
-        Log::warning('destination - controller : update');
+        Log::warning('destination - controller : update ');
         Log::warning('$id');
         Log::warning($id);
 
