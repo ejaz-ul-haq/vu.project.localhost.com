@@ -13,29 +13,45 @@ const waypoints = [
   { location: { lat: 44.62509, lng: 26.95591 }, stopover: false },
 ];
 
-const MultiMarkersRoutesMap = () => {
+const MultiMarkersRoutesMap = ({initialCoords}) => {
   const mapRef = useRef(null);
   const [directions, setDirections] = useState(null);
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&callback=initMap&libraries=geometry,marker`;
-    script.async = true;
-    script.defer = true;
-    window.initMap = initMap;
-    document.head.appendChild(script);
-
-    return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
+    
+    const loadGoogleMapsScript = () => {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&callback=initMap&libraries=geometry,marker`;
+        script.async = true;
+        script.defer = true;
+        window.initMap = initMap;
+        document.head.appendChild(script);
+  
+        script.onerror = () => {
+          console.error('Error loading Google Maps script');
+        };
+  
+        return () => {
+          if (script) {
+            document.head.removeChild(script);
+          }
+        };
+      };
+  
+      if (!window.google) {
+        console.log('initialCoords - from - inner - case 01');
+        loadGoogleMapsScript();
+      } else {
+        console.log('initialCoords - from - inner - case 02');
+        initMap();
       }
-    };
+
   }, []);
 
   const initMap = () => {
     const map = new window.google.maps.Map(mapRef.current, {
-      zoom: 6,
-      center: center,
+      zoom: 18,
+      center: initialCoords,
     });
 
     const directionsService = new window.google.maps.DirectionsService();

@@ -204,17 +204,17 @@ export default [
     layout: 'mix',
     component: './admin-app/notifications/update-notification',
   },
-  {
-    path: '/admin-app/weather-api-integration',
-    name: 'Weather API Integration',
-    icon: 'CloudOutlined',
-    // wrappers: [
-    //   '@/wrappers/auth',
-    // ],
-    access: 'isAdministrator',
-    layout: 'mix',
-    // component: './admin-app/dashboard',
-  },
+  // {
+  //   path: '/admin-app/weather-api-integration',
+  //   name: 'Weather API Integration',
+  //   icon: 'CloudOutlined',
+  //   // wrappers: [
+  //   //   '@/wrappers/auth',
+  //   // ],
+  //   access: 'isAdministrator',
+  //   layout: 'mix',
+  //   // component: './admin-app/dashboard',
+  // },
 
   // {
   //   path: '/admin-app',

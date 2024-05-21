@@ -18,6 +18,7 @@ import moment from 'moment';
 
 import { getFile, getBase64 } from '@/components/Helpers/ImageConversion';
 
+// import MultiMarkersRoutesMap from '@/components/GoogleMaps/MultiMarkersRoutesMap';
 
 /**
  * The Form Initial values
@@ -592,6 +593,9 @@ const UpdateTrip = () => {
                         </ProForm.Group>
                       </ProFormList>
                     </ProForm.Group>
+
+
+                        {/* <MultiMarkersRoutesMap initialCoords={{ lat: 41.850033, lng: -87.6500523 }} /> */}
 
                   </ProCard>
 
