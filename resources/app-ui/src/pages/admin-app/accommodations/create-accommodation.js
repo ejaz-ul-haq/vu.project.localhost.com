@@ -15,6 +15,8 @@ import { waitTime } from '@/components/Helpers/RequestHelpers';
 
 import { getFile, getBase64 } from '@/components/Helpers/ImageConversion';
 
+import DraggableMarkerMap from '@/components/GoogleMaps/DraggableMarkerMap';
+
 
 /**
  * Form Submission handler and API Request Performer
@@ -107,6 +109,8 @@ const CreateAccommodation = () => {
     const [imageUrl, setImageUrl] = useState(DEFAULT_PLACEHOLDER_IMAGE_URL);
 
     const [allDestinations, setAllDestinations] = useState([]);
+
+    const [googleMapPosition, setGoogleMapPosition ] = useState({});
 
 
   /**
@@ -236,6 +240,8 @@ const CreateAccommodation = () => {
                         await waitTime(1000);
                         // values.image = file;
                         values.image = imageUrl;
+                        values.latitude = googleMapPosition?.lat;
+                        values.longitude = googleMapPosition?.lng;
                         await onFinishHandlerForm(values);
                     }}
                     submitter={{
@@ -330,6 +336,26 @@ const CreateAccommodation = () => {
                                       colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}
                                     />
                                 </ProForm.Group>
+                            </Col>
+                        </Row>
+                        <Row
+                            gutter={{
+                                xs: 8,
+                                sm: 16,
+                                md: 24,
+                                lg: 32,
+                            }}
+                            >
+                            <Col span={24}>
+                                {/* <MyMapComponentfrom /> */}
+                                <DraggableMarkerMap 
+                                initialCoords={{lat :24.83136096571596, lng : 67.24415919837952}} 
+                                onPositionChange={ (newPosition) => {
+                                    console.log('New marker position:', newPosition);
+                                    setGoogleMapPosition(newPosition);
+                                    // Handle the new position as needed in your parent component
+                                }} 
+                                />
                             </Col>
                         </Row>
                     </ProCard>

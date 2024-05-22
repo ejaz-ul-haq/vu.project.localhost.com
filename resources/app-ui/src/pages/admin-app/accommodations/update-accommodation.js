@@ -16,6 +16,9 @@ import { waitTime } from '@/components/Helpers/RequestHelpers';
 
 import { getFile, getBase64 } from '@/components/Helpers/ImageConversion';
 
+import DraggableMarkerMap from '@/components/GoogleMaps/DraggableMarkerMap';
+import WeatherDetails from '@/components/Weather/WeatherDetails';
+
 
 /**
  * The Form Initial values
@@ -111,6 +114,8 @@ const UpdateAccommodation = () => {
 
     const [accommodationId, setAccommodationId] = useState(0);
     const [allDestinations, setAllDestinations] = useState([]);
+
+    const [googleMapPosition, setGoogleMapPosition ] = useState('');
 
     useEffect(() => {
         setAccommodationId(params.id);
@@ -253,17 +258,14 @@ const UpdateAccommodation = () => {
                             console.log(api_response);
 
                             /**
-                             * Start Code By M
-                             */
-
-                            /**
                              * Set Image State on Page Load
                              */
                             setImageUrl(api_response?.data?.image_url);
 
                             /**
-                             * End Code By M
-                             */
+                               * Set Google Map Position
+                               */
+                            setGoogleMapPosition({ lat: api_response?.data?.latitude, lng: api_response?.data?.longitude });
 
                             return {
                                 ...initialValues,
@@ -287,26 +289,11 @@ const UpdateAccommodation = () => {
 
                     await waitTime(1000);
 
-                    /**
-                     * Start Comment By M
-                     */
-
                     // values.image = file;
-
-                    /**
-                     * End Comment By M
-                     */
-
-                    /**
-                     * Start Code By M
-                     */
-
                     values.image = imageUrl;
-
-                    /**
-                     * End Code By M
-                     */
                     values.accommodation_id = accommodationId;
+                    values.latitude = googleMapPosition?.lat;
+                    values.longitude = googleMapPosition?.lng;
                     await onFinishHandlerForm(values);
                 }}
                 submitter={{
@@ -401,6 +388,34 @@ const UpdateAccommodation = () => {
                                     colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}
                                 />
                             </ProForm.Group>
+                        </Col>
+                    </Row>
+                    <Row
+                        gutter={{
+                           xs: 8,
+                           sm: 16,
+                           md: 24,
+                           lg: 32,
+                        }}
+                    >
+                        <Col span={24}>
+                        {/* <MyMapComponentfrom /> */}
+                        {/* {(googleMapPosition) &  */}
+                        <WeatherDetails latitude={googleMapPosition.lat} longitude={googleMapPosition.lng} />
+
+                        <DraggableMarkerMap 
+                            initialCoords={{
+                            lat: parseFloat(googleMapPosition.lat),
+                            lng: parseFloat(googleMapPosition.lng)
+                            }} 
+                            onPositionChange={ (newPosition) => {
+                            console.log('New marker position:', newPosition);
+                            setGoogleMapPosition(newPosition);
+                            // Handle the new position as needed in your parent component
+                            }} 
+                        />
+                        {/* } */}
+                            
                         </Col>
                     </Row>
                 </ProCard>
