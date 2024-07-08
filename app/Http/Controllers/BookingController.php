@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\UploadHelper;
 use App\Http\Requests\BookingRequest;
 use App\Models\Booking;
+use App\Models\Trip;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
@@ -225,6 +226,14 @@ class BookingController extends Controller
             Log::warning('$booking_updated');
             Log::warning($booking_updated);
         
+            /**
+             * Trip Users
+             */
+            // Attach three random users to the trip
+            Trip::find($data['trip_id'])->users()->attach([
+                $booking_created->user_id
+            ], ['created_at' => now(), 'updated_at' => now()]);
+
           
             /**
              * Set API Response

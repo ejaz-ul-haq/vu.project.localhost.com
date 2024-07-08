@@ -140,9 +140,19 @@ class TripController extends Controller
     public function indexAll(Request $request): JsonResponse
     {
         try {
-            $data = $this->tripRepository->getPaginatedData($request);
+            // $data = $this->tripRepository->getPaginatedData($request);
 
-            return $this->responseSuccess($data, 'Trip List Fetched Successfully !');
+            $perPage = isset($request['per_page']) ? intval($request['per_page']) : 10;
+            $orderBy = isset($request['order_by']) ? $request['order_by'] : 'id';
+            $order   = isset($request['order']) ? $request['order'] : 'desc';
+    
+            $data = Trip::orderBy($orderBy, $order)
+                        ->with('destination')
+                        ->with('accommodation')
+                        ->with('users')
+                       ->paginate($perPage);
+
+            return $this->responseSuccess($data, 'Trip List Fetched Successfully test !');
         } catch (\Exception $e) {
             return $this->responseError(null, $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

@@ -327,14 +327,14 @@ export default [
   //   name: 'Home',
   //   icon: 'home',
   //   layout: 'top',
-  //   component: './site/HomePage',
+  //   component: './site/TestHomePage',
   // },
   {
     path: '/',
     name: 'Test Home',
     icon: 'home',
     layout: 'top',
-    component: './site/TestHomePage',
+    component: './site/HomePageNew',
   },
   // {
   //   path: '/contact-us',

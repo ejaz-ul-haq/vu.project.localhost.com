@@ -622,7 +622,7 @@ const TestHomePage = () => {
               //         src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
               //     />
               // }}
-              onCollapse={(collapse) => console.log(collapse)}
+              // onCollapse={(collapse) => console.log(collapse)}
               gutter={12}
               extra={
                   <Button
