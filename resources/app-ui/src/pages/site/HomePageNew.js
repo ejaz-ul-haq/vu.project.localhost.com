@@ -16,6 +16,11 @@ import {
   MessageOutlined,
   StarOutlined,
   EyeOutlined,
+  AntDesignOutlined,
+  UserAddOutlined,
+  ArrowRightOutlined,
+  CalendarOutlined,
+  CarryOutOutlined,
   ShoppingCartOutlined, UserOutlined, EnvironmentOutlined, PhoneOutlined, MailOutlined, LockOutlined
 } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
@@ -23,19 +28,14 @@ import { waitTime } from '../../components/Helpers/TableHelpers';
 import {request, useModel } from '@umijs/max';
 import {history} from "@@/core/history";
 import {render} from "@testing-library/react";
+import moment from 'moment';
 
-import { createStyles } from 'antd-style';
+import {truncateText} from '../../components/Helpers/TextHelpers';
+
+import './styles/HomePage.scss';
 
 const { Meta } = Card;
 
-const useStyles = createStyles(({ token }) => {
-  return {
-    // ejaz_01_content: {
-    //   // display: 'none'
-    //   background: '#432876'
-    // }
-  };
-});
 
 
 const HomePageNew = () => {
@@ -52,220 +52,27 @@ const HomePageNew = () => {
       }}
     >
 
-    <Row  gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-    <Col xs={24} sm={24} md={12} lg={12} xl={12} >
+    <Row>
+    <Col xs={24} sm={24} md={24} lg={24} xl={24} className='page-banner-wrapper'>
       Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
       The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
       </Col>
-      <Col xs={24} sm={24} md={12} lg={12} xl={12} >
-        <Image src='https://hips.hearstapps.com/hmg-prod/images/large-group-of-happy-friends-in-mountains-area-royalty-free-image-1653422631.jpg' preview={false} />
-        {/* <Card
-        cover={<Image src='https://hips.hearstapps.com/hmg-prod/images/large-group-of-happy-friends-in-mountains-area-royalty-free-image-1653422631.jpg' preview={false} />}
-        >
-          <h1>Trending Destinations</h1>
-          <p>Most popular choices for travellers from Pakistan</p>
-        </Card> */}
-        {/* <ProCard
-          cardProps={{
-            
-            cover: (<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />)
-          }}
-          
-
-        >
-          <h1>Trending Destinations</h1>
-          <p>Most popular choices for travellers from Pakistan</p>
-        </ProCard> */}
-        
-      </Col>
+      
       
     </Row>
       
 
-
-      <ProForm
-          layout='vertical'
-          grid={true}
-          // initialValues={initialValues}
-          // form={form}
-          // onFinish={async (values) => {
-          //   console.log(values);
-          //   /**
-          //    * Add Organization ID into the form Values
-          //    */
-          //   // values.organization_id = initialState?.currentUser?.meta?.ech_organization_id;
-          //   await waitTime(1000);
-          //   await onFinishHandlerForm(values);
-          // }}
-        >
-
-          <ProCard
-            title="BIO Details"
-            bordered={true}
-            headerBordered={true}
-            collapsible={false}
-            size="default"
-            type="inner"
-            style={{
-              marginBlockEnd: 15,
-              minWidth: 800,
-              maxWidth: '100%',
-            }}
-            onCollapse={(collapse) => console.log(collapse)}
-          >
-            <Row
-              gutter={{
-                xs: 8,
-                sm: 16,
-                md: 24,
-                lg: 32,
-              }}
-            >
-              
-              <Col span={18}>
-                  
-                <ProForm.Group size={24}>
-                  <ProFormText
-                    name={['bio_details', 'first_name']}
-                    label="First Name"
-                    // tooltip="The legal name"
-                    placeholder="Type First Name"
-                    // rules={[{ required: true }]}
-                    fieldProps={{
-                      prefix: <UserOutlined/>,
-                      // size: 'large',
-
-                      onChange: (e) => {
-                        console.log('e.target.value');
-                        console.log(e.target.value);
-                      }
-                    }}
-                    colProps={{xs: 24, sm: 24, md: 8, lg: 8, xl: 8}}
-                  />
-                  <ProFormText
-                    name={['bio_details', 'middle_name']}
-                    label="Middle Name"
-                    // tooltip="The legal name"
-                    placeholder="Type Middle Name"
-                    // rules={[{ required: true }]}
-                    fieldProps={{
-                      prefix: <UserOutlined/>,
-                      // size: 'large',
-
-                      onChange: (e) => {
-                        console.log('e.target.value');
-                        console.log(e.target.value);
-                      }
-                    }}
-                    colProps={{xs: 24, sm: 24, md: 8, lg: 8, xl: 8}}
-                  />
-                  <ProFormText
-                    name={['bio_details', 'last_name']}
-                    label="Last Name"
-                    // tooltip="The legal name"
-                    placeholder="Type Last Name"
-                    // rules={[{ required: true }]}
-                    fieldProps={{
-                      prefix: <UserOutlined/>,
-                      // size: 'large',
-
-                      onChange: (e) => {
-                        console.log('e.target.value');
-                        console.log(e.target.value);
-                      }
-                    }}
-                    colProps={{xs: 24, sm: 24, md: 8, lg: 8, xl: 8}}
-                  />
-                  {/*<ProFormText*/}
-                  {/*  name={['bio_details', 'nick_name']}*/}
-                  {/*  label="Nick Name"*/}
-                  {/*  tooltip="The legal name"*/}
-                  {/*  placeholder="please enter your legal name"*/}
-                  {/*  // rules={[{ required: true }]}*/}
-                  {/*  fieldProps={{*/}
-                  {/*    prefix: <UserOutlined/>,*/}
-                  {/*    // size: 'large',*/}
-
-                  {/*    onChange: (e) => {*/}
-                  {/*      console.log('e.target.value');*/}
-                  {/*      console.log(e.target.value);*/}
-                  {/*    }*/}
-                  {/*  }}*/}
-                  {/*  colProps={{xs: 24, sm: 24, md: 8, lg: 8, xl: 8}}*/}
-                  {/*/>*/}
-                </ProForm.Group>
-                <ProForm.Group size={24}>
-                  <ProFormRadio.Group
-                    name={['bio_details', 'gender']}
-                    label="Gender"
-                    radioType="button"
-                    options={[
-                      {
-                        label: 'Male',
-                        value: 'male',
-                      },
-                      {
-                        label: 'Female',
-                        value: 'female',
-                      },
-                      {
-                        label: 'Others',
-                        value: 'others',
-                      },
-                    ]}
-                    colProps={{xs: 24, sm: 24, md: 8, lg: 8, xl: 8}}
-                  />
-
-                  <ProFormDatePicker
-                    label="Date of Birth"
-                    name={['bio_details', 'date_of_birth']}
-                    // placeholder="5453-763876-7686"
-                    // maxLength={20}
-                    // min={1}
-                    // max={10}
-                    // fieldProps={{ precision: 0 }}
-                    colProps={{xs: 24, sm: 24, md: 8, lg: 8, xl: 8}}
-                  />
-                  <ProFormSegmented
-                    label="Account Status"
-                    name={['bio_details', 'account_status']}
-                    request={async () => [
-                      {label: 'Pending', value: 'pending'},
-                      {label: 'Enabled', value: 'enabled'},
-                      {label: 'Disabled', value: 'disabled'},
-                    ]}
-                    // fieldProps={{ precision: 0 }}
-                    colProps={{xs: 24, sm: 24, md: 8, lg: 8, xl: 8}}
-                  />
-                </ProForm.Group>
-                <ProForm.Group size={24}>
-                  <ProFormTextArea
-                    name={['bio_details', 'biographical_info']}
-                    label="Biographical Info"
-                    placeholder="Share a little biographical information to fill out your profile. This may be shown publicly. "
-                    colProps={{xs: 24, sm: 24, md: 24, lg: 24, xl: 24}}
-                  />
-                </ProForm.Group>
-              </Col>
-            </Row>
-          </ProCard>
-      </ProForm>
-      
-      
+    <Card>      
       <Row className="sa-edrup-scholarship-search-filters">
           <Col xs={24} sm={24} md={24} lg={24} xl={24}>
             <div className="sa-edurp-search-fields">
               <Input size="large" placeholder="Keywords" prefix={<SearchOutlined />} onChange={(e) => {
                 setSearch(e.target.value);
               }} />
-              <Button type="button" className="sa-search-btn" onClick={() => {
-                setMappedData([]);
-                setPage(1);
-                setHasMore(false);
-              }}>Search</Button>
             </div>
           </Col>
         </Row>
+    </Card>
 
       <ProList    
           pagination={{
@@ -302,22 +109,41 @@ const HomePageNew = () => {
         metas={{
           content: {
             render: (text, item) => {
+                // return(
+                //     <div
+                //         className="vu-project-card"
+                //         style={{ border: "1px solid red" }}
+                //         onClick={() => {
+                //           window.open(item.link, "_self");
+                //         }}
+                //     >
+                //         <div className="vu-project-card-cover">
+                //           <Image src={item?.image_url} preview={false} />
+                //         </div>
+                //         <div className="vu-project-card-body">
+                //             jkhkjj
+                //         </div>
+                //     </div>
+                // );
               return (
                 <Card
                   style={{
                     width: '100%',
-                    height: '550px', // Set a fixed height for all cards
+                    height: '700px', // Set a fixed height for all cards
                   }}
                   actions={[
                     <Tooltip title="Thanks for using antd. Have a nice day!">
                     <Button
                       type="primary"
-                      icon={<ShoppingCartOutlined />}
+                    //   icon={<ArrowRightOutlined />}
                       key="preview"
                       size={"large"}
-                      onClick={ () => {}}
+                      onClick={ () => {
+                        history.push('/trips/'+item?.id);
+                      }}
                     >
-                        Book Now
+                        View Details
+                        <ArrowRightOutlined />
                     </Button>
                     </Tooltip>
                   ]}
@@ -339,12 +165,63 @@ const HomePageNew = () => {
                 >
                   <h1>{item?.title}</h1>
                   <Meta
-                    avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8"/>}
+                    // avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8"/>}
                     // title="Card title"
-                    description={item?.description}
+                    description={
+                        
+                        <>
+                        <p>{truncateText(item?.description, 20)}</p>
+                        <p><ShoppingCartOutlined /> Price: {item?.price}</p>
+                        <p><CarryOutOutlined /> Start Date: {moment(new Date(item?.start_date_time)).format('DD-MM-YYYY hh:mm:ss A')}</p>
+                        <p><CalendarOutlined /> End Date: {moment(new Date(item?.end_date_time)).format('DD-MM-YYYY hh:mm:ss A')}</p>
+                        {/* <p>created_at: {moment(new Date(item?.created_at)).format('DD-MM-YYYY hh:mm:ss A')}</p> */}
+                        {/* <p>updated_at: {moment(new Date(item?.updated_at)).format('DD-MM-YYYY hh:mm:ss A')}</p> */}
+
+                    
+                        <Avatar.Group
+      size="large"
+      max={{
+        count: 2,
+        style: {
+          color: '#f56a00',
+          backgroundColor: '#fde3cf',
+        },
+      }}
+    >
+      {
+                item?.users.map(function (user, index) {
+                  console.log('user');
+                  console.log(user);
+                  return (
+                    <Avatar
+                      key={user?.id}
+                      src={user?.image_url}
+                      size={'default'}
+                      data-user_id={user?.id}
+                    />);
+                })
+              }
+
+
+              {(item?.users?.length === 0) &&
+                /**
+                 * Not Found any Staff member yet now then will display an default icon
+                 */
+                <Avatar
+                  // style={{
+                  //   backgroundColor: '#1677ff',
+                  // }}
+                  size={'default'}
+                  icon={<UserAddOutlined/>}
+                />
+              }
+    </Avatar.Group>
+
+                        </>
+                    }
                   />
                 </Card>
-              )
+              );
             }
           }
 

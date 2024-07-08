@@ -336,6 +336,14 @@ export default [
     layout: 'top',
     component: './site/HomePageNew',
   },
+  {
+    path: '/trips/:id',
+    hideInMenu: true,
+    name: 'Trip Details',
+    // access: 'isAdministrator',
+    layout: 'top',
+    component: './site/SingleTrip',
+  },
   // {
   //   path: '/contact-us',
   //   name: 'ContactUs',
