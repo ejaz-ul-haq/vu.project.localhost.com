@@ -165,14 +165,14 @@ class UserController extends Controller
             Log::warning('user_created - response - test');
             Log::warning($response);
             
-            // $user_created = User::with('user')->find($user_created->id);
+            $user_created = User::find($response->id);
 
-            // Log::warning('$user_created - test');
-            // Log::warning($user_created);
+            Log::warning('$user_created - test');
+            Log::warning($user_created);
 
 
-            // // Dispatch the event
-            // event(new UserCreated($user_created));
+            // Dispatch the event
+            event(new UserCreated($user_created));
 
             return $this->responseSuccess($response, 'New User Created Successfully !');
 
