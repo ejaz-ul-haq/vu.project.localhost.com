@@ -65,6 +65,7 @@ const HomePageNew = () => {
   const { initialState, loading, refresh, setInitialState } =
     useModel("@@initialState");
   const [ghost, setGhost] = useState(false);
+  const [searchKeywords, setSearchKeywords] = useState('');
 
   return (
     <div>
@@ -103,10 +104,12 @@ const HomePageNew = () => {
               <div className="trip-search-field">
                 <Input
                   size="large"
-                  placeholder="Keywords"
+                  placeholder="Search by Keywords in Title or Description of Trips"
                   prefix={<SearchOutlined />}
                   onChange={(e) => {
-                    setSearch(e.target.value);
+                    console.log('test search input');
+                    console.log(e.target.value);
+                    setSearchKeywords(e.target.value);
                   }}
                 />
               </div>
@@ -127,6 +130,9 @@ const HomePageNew = () => {
         itemCardProps={{
           prefixCls: "trips-grid",
         }}
+        params={{
+          searchInput: searchKeywords
+        }}
         request={async (params, sorter, filter) => {
           /**
            * Delay the API request
@@ -139,6 +145,7 @@ const HomePageNew = () => {
               per_page: params?.pageSize,
               order_by: "id",
               order: "asc",
+              search: params?.searchInput
             },
           })
             .then(async (api_response) => {
@@ -175,7 +182,7 @@ const HomePageNew = () => {
                 <Card
                   style={{
                     width: "100%",
-                    height: "700px", // Set a fixed height for all cards
+                    height: "730px", // Set a fixed height for all cards
                   }}
                   actions={[
                     <Tooltip title="Thanks for using antd. Have a nice day!">
@@ -234,6 +241,8 @@ const HomePageNew = () => {
                         {/* <p>created_at: {moment(new Date(item?.created_at)).format('DD-MM-YYYY hh:mm:ss A')}</p> */}
                         {/* <p>updated_at: {moment(new Date(item?.updated_at)).format('DD-MM-YYYY hh:mm:ss A')}</p> */}
 
+                        <p><strong>Travel Mates</strong></p>
+                        
                         <Avatar.Group
                           size="large"
                           max={{

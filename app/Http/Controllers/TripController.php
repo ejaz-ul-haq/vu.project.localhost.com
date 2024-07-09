@@ -139,18 +139,47 @@ class TripController extends Controller
      */
     public function indexAll(Request $request): JsonResponse
     {
+        Log::warning('TripController - indexAll - query-user = admin ');
+
         try {
             // $data = $this->tripRepository->getPaginatedData($request);
 
             $perPage = isset($request['per_page']) ? intval($request['per_page']) : 10;
             $orderBy = isset($request['order_by']) ? $request['order_by'] : 'id';
             $order   = isset($request['order']) ? $request['order'] : 'desc';
+            $search   = ( isset($request['search']) && ! empty(isset($request['search'])) ) ? $request['search'] : '';
     
-            $data = Trip::orderBy($orderBy, $order)
-                        ->with('destination')
-                        ->with('accommodation')
-                        ->with('users')
-                       ->paginate($perPage);
+            if( ! empty($search) ){
+                    
+                Log::warning('TripController - indexAll - query-type = search ');
+
+                $data = Trip::orderBy($orderBy, $order)
+                    ->where('title', 'like', '%'.$search.'%')
+                    ->orWhere('description', 'like', '%'.$search.'%')
+                    // ->whereHas('bookings', function ($query) use ($user) {
+                    //     $query->where('user_id', $user->id);
+                    // })
+                    ->with('destination')
+                    ->with('accommodation')
+                    ->with('users')
+                    ->paginate($perPage);
+
+                    Log::warning('$data');
+                    Log::warning($data);
+                
+            }else{
+
+                Log::warning('TripController - indexAll - query-type = normal ');
+
+                $data = Trip::orderBy($orderBy, $order)
+                    ->with('destination')
+                    ->with('accommodation')
+                    ->with('users')
+                    ->paginate($perPage);
+
+            }
+
+           
 
             return $this->responseSuccess($data, 'Trip List Fetched Successfully test !');
         } catch (\Exception $e) {
