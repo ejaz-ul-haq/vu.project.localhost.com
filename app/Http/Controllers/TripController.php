@@ -353,11 +353,11 @@ class TripController extends Controller
                 return null;
             }
 
-            if ( ! empty($data['image'])) {
+            if ( ! empty($data['image']) && preg_match('/^(?:[data]{4}:(text|image|application)\/[a-z]*)/', $data['image']) ) {
                 $titleShort    = Str::slug(substr($data['title'], 0, 100));
                 $data['image_url'] = UploadHelper::upload( $data['image'], $titleShort, 'images/trips' );
             } else {
-                $data['image_url'] = $trip->image;
+                $data['image_url'] = $trip->image_url;
             }
 
             // If everything is OK, then update.

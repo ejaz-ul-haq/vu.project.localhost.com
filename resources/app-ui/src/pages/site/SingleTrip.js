@@ -64,7 +64,7 @@ const SingleTrip = () => {
 
     <div className="single-trip-section-banner-wrapper">
 
-        <h1>Trip Details</h1>
+        <h1 className="trip-section-heading">Trip Details</h1>
         
         <Row>
           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
@@ -89,7 +89,7 @@ const SingleTrip = () => {
 
     <div className="single-trip-destination-section-banner-wrapper">
 
-        <h1>Destination</h1>
+        <h1 className="trip-section-heading">Destination</h1>
         
         <Row>
           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
@@ -111,7 +111,7 @@ const SingleTrip = () => {
 
     <div className="single-trip-accommodation-section-banner-wrapper">
 
-        <h1>Accommodation</h1>
+        <h1 className="trip-section-heading">Accommodation</h1>
         
         <Row>
           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
@@ -134,10 +134,12 @@ const SingleTrip = () => {
 
     <div className="single-trip-travel-mates-section-banner-wrapper">
 
-        <h1>Travel Mates</h1>
+       
 
-        <Row>
-
+        <Row justify={"center"}>
+          <Col xs={24} sm={24} md={20} lg={20} xl={20}>
+          <h1 className="trip-section-heading">Travel Mates</h1>
+          <Row >
             {trip?.users.map(function (user, index) {
                 console.log("user");
                 console.log(user);
@@ -150,6 +152,7 @@ const SingleTrip = () => {
                             hoverable
                             style={{
                             width: 240,
+                            marginBlockEnd: 20,
                             }}
                             cover={<img alt="example" src={user?.image_url} />}
                         >
@@ -160,7 +163,8 @@ const SingleTrip = () => {
                     </Col>
                 );
             })}
-
+            </Row>
+          </Col>
         </Row>
     
     </div>
