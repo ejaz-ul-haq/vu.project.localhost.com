@@ -31,7 +31,7 @@ class TripController extends Controller
 
     public function __construct(TripRepository $tripRepository)
     {
-        $this->middleware('auth:api', ['except' => ['indexAll']]);
+        $this->middleware('auth:api', ['except' => ['indexAll', 'show']]);
         $this->tripRepository = $tripRepository;
     }
 
