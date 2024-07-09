@@ -185,7 +185,7 @@ const HomePageNew = () => {
                     height: "730px", // Set a fixed height for all cards
                   }}
                   actions={[
-                    <Tooltip title="Thanks for using antd. Have a nice day!">
+                    <Tooltip title="Thank you for visiting! Explore the details of this exciting trip.">
                       <Button
                         type="primary"
                         //   icon={<ArrowRightOutlined />}
