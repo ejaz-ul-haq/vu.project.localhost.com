@@ -9,6 +9,8 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+use Illuminate\Support\Facades\Log;
+
 class BookingCreatedNotification extends Mailable
 {
     use Queueable, SerializesModels;
@@ -21,6 +23,13 @@ class BookingCreatedNotification extends Mailable
     public function __construct( private $customer_name, private $trip_id )
     {
         //
+        Log::warning('BookingCreatedNotification - __construct');
+        
+        Log::warning('$customer_name');
+        Log::warning($customer_name);
+
+        Log::warning('$trip_id');
+        Log::warning($trip_id);
     }
 
     /**
@@ -30,6 +39,7 @@ class BookingCreatedNotification extends Mailable
      */
     public function envelope(): Envelope
     {
+        Log::warning('BookingCreatedNotification - envelope');
         return new Envelope(
             // from: new Address('vu.project@wpvisions.com', 'Vu Project Testing'),
             subject: 'Booking Created Notification',
@@ -43,6 +53,7 @@ class BookingCreatedNotification extends Mailable
      */
     public function content(): Content
     {
+        Log::warning('BookingCreatedNotification - content');
         return new Content(
             view: 'mail.booking-created',
             with: ['customer_name' => $this->customer_name, 'trip_id' => $this->trip_id],

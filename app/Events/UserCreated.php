@@ -16,21 +16,21 @@ class UserCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user_created;
+    public $user;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($user_created)
+    public function __construct($user)
     {
-        $this->user_created = $user_created;
+        $this->user = $user;
 
         Log::warning('UserCreated - __construct');
 
-        Log::warning('$user_created');
-        Log::warning($user_created);
+        Log::warning('$user');
+        Log::warning($user);
 
     }
 

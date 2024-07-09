@@ -21,6 +21,14 @@ class UserCreatedNotification extends Mailable
     public function __construct( private $user_name, private $user_id )
     {
         //
+
+        Log::warning('UserCreatedNotification - __construct');
+        
+        Log::warning('$user_name');
+        Log::warning($user_name);
+
+        Log::warning('$user_id');
+        Log::warning($user_id);
     }
 
     /**
@@ -30,6 +38,7 @@ class UserCreatedNotification extends Mailable
      */
     public function envelope(): Envelope
     {
+        Log::warning('UserCreatedNotification - envelope');
         return new Envelope(
             // from: new Address('vu.project@wpvisions.com', 'Vu Project Testing'),
             subject: 'User Created Notification',
@@ -43,6 +52,7 @@ class UserCreatedNotification extends Mailable
      */
     public function content(): Content
     {
+        Log::warning('UserCreatedNotification - content');
         return new Content(
             view: 'mail.user-created',
             with: ['user_name' => $this->user_name, 'user_id' => $this->user_id],

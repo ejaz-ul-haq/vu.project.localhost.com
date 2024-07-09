@@ -51,6 +51,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\BookingCreated' => [
             'App\Listeners\SendBookingEmail',
         ],
+        'App\Events\UserCreated' => [
+            'App\Listeners\SendUserCreatedEmail',
+        ],
     ];
 
     /**

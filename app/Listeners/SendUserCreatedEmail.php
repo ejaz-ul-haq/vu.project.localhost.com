@@ -40,10 +40,10 @@ class SendUserCreatedEmail implements ShouldQueue
         // Log::warning($event);
 
         // Access the user_created from the event
-        $user_created = $event->user_created;
+        $user = $event->user;
 
-        Log::warning('$user_created');
-        Log::warning($user_created);
+        Log::warning('$user');
+        Log::warning($user);
 
 
         //
@@ -54,7 +54,7 @@ class SendUserCreatedEmail implements ShouldQueue
         // $email = $reservation->user->email;
 
         // // Add this Code
-        Mail::to($user_created->email)->send(new UserCreatedNotification($user_created->name, $user_created->id));
+        Mail::to($user->email)->send(new UserCreatedNotification($user->name, $user->id));
 
     }
 }
