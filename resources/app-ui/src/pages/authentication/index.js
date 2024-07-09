@@ -6,6 +6,7 @@ import {
     TaobaoCircleOutlined,
     UserOutlined,
     WeiboCircleOutlined,
+    MailOutlined,
 } from '@ant-design/icons';
 import {
     LoginForm,
@@ -201,7 +202,7 @@ const Login = () => {
                         maxWidth: '75vw',
                     }}
                     logo={<img alt="logo" src={initialState?.settings?.logo} />}
-                    title="TravelMates - 02"
+                    title="Travel Mates Planner"
                     subTitle='Your ultimate travel companion management app.'
                     onFinish={async (values) => {
                         await handleSubmit(values);
@@ -234,9 +235,9 @@ const Login = () => {
                                 name="email"
                                 fieldProps={{
                                     size: 'large',
-                                    prefix: <UserOutlined />,
+                                    prefix: <MailOutlined />,
                                 }}
-                                placeholder='username: admin or user'
+                                placeholder='ejaz@example.com'
                                 rules={[
                                     {
                                         required: true,
@@ -252,7 +253,7 @@ const Login = () => {
                                     max: 10,
                                     min: 6,
                                 }}
-                                placeholder='password: ant.design'
+                                placeholder='Type password'
                                 rules={[
                                     {
                                         required: true,
@@ -272,12 +273,12 @@ const Login = () => {
                                 name="first_name"
                                 label="First Name:"
                                 // tooltip="The legal name of the super user"
-                                placeholder="please enter your first name"
+                                placeholder="Enter First name"
                                 // hidden={true}
                                 rules={[
                                   {
                                     required: true,
-                                    message: ("Please enter your first name!"),
+                                    message: ("Please enter first name"),
                                   }
                                 ]}
                               />
@@ -287,12 +288,12 @@ const Login = () => {
                                 name="last_name"
                                 label="Last Name:"
                                 // tooltip="The legal name of the super user"
-                                placeholder="please enter your last name"
+                                placeholder="Enter Last name"
                                 // hidden={true}
                                 rules={[
                                   {
                                     required: true,
-                                    message: ("Please enter your last name!"),
+                                    message: ("Please enter last name"),
                                   }
                                 ]}
                               />
@@ -301,10 +302,10 @@ const Login = () => {
                             <ProFormText
                                 fieldProps={{
                                     size: 'large',
-                                    prefix: <MobileOutlined />,
+                                    // prefix: <MobileOutlined />,
                                 }}
                                 name="name"
-                                placeholder='Name'
+                                placeholder='Enter Full Name'
                                 rules={[
                                     {
                                         required: true,
@@ -315,10 +316,10 @@ const Login = () => {
                             <ProFormText
                                 fieldProps={{
                                     size: 'large',
-                                    prefix: <MobileOutlined />,
+                                    prefix: <MailOutlined />,
                                 }}
                                 name="email"
-                                placeholder='Email'
+                                placeholder='Enter your Email'
                                 rules={[
                                     {
                                         required: true,
@@ -334,7 +335,7 @@ const Login = () => {
                                     min: 6,
                                 }}
                                 name="password"
-                                placeholder='Password'
+                                placeholder='Enter Password'
                                 rules={[
                                     {
                                         required: true,
@@ -351,7 +352,7 @@ const Login = () => {
                               max: 10,
                               min: 6,
                             }}
-                            placeholder='password: ant.design'
+                            placeholder='Enter Confirm Password'
                             rules={[
                               {
                                 required: true,

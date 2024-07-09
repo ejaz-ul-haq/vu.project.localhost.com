@@ -73,7 +73,7 @@ const HomePageNew = () => {
         <Row>
           <Col xs={24} sm={24} md={24} lg={24} xl={24}>
             <div className="page-banner-content">
-              <h1>Testing Heading</h1>
+              <h1>Travel Mates</h1>
               <p>
                 Contrary to popular belief, Lorem Ipsum is not simply random
                 text. It has roots in a piece of classical Latin literature from

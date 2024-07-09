@@ -142,13 +142,7 @@ class UserController extends Controller
     {
         try {
 
-            /* Start Comment By M */
-
             // $user = $this->userRepository->create($request->all());
-
-            /* End Comment By M */
-
-            /* Start Code By M */
 
             $data = $request->all();
 
@@ -176,13 +170,8 @@ class UserController extends Controller
 
             return $this->responseSuccess($response, 'New User Created Successfully !');
 
-            /* End Code By M */
-
-            /* Start Comment By M */
-
             // return $this->responseSuccess($user, 'New User Created Successfully !');
 
-            /* End Comment By M */
 
         } catch (\Exception $exception) {
             return $this->responseError(null, $exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

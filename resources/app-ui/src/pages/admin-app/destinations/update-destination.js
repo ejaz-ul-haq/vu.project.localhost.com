@@ -454,7 +454,6 @@ const UpdateDestination = () => {
                                         label="Title"
                                         placeholder="Type destination title"
                                         fieldProps={{
-                                            prefix: <UserOutlined/>,
                                             onChange: (e) => {
                                                 console.log('e.target.value');
                                                 console.log(e.target.value);

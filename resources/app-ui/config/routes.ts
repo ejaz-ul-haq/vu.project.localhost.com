@@ -111,7 +111,7 @@ export default [
   {
     path: '/admin-app/trips',
     name: 'Trips',
-    icon: 'CalendarOutlined',
+    icon: 'NodeIndexOutlined',
     access: 'isAdministrator',
     layout: 'mix',
     component: './admin-app/trips/list-trips',
@@ -289,7 +289,7 @@ export default [
  {
    path: '/user-app/bookings',
    name: 'Bookings',
-   icon: 'UsergroupAddOutlined',
+   icon: 'BookOutlined',
    // wrappers: [
    //   '@/wrappers/auth',
    // ],
@@ -300,7 +300,7 @@ export default [
  {
   path: '/user-app/payments',
   name: 'Payments',
-  icon: 'PictureOutlined',
+  icon: 'DollarOutlined',
   access: 'isUser',
   layout: 'mix',
   component: './user-app/payments/list-payments',
@@ -308,7 +308,7 @@ export default [
 {
   path: '/user-app/trips',
   name: 'Trips',
-  icon: 'PictureOutlined',
+  icon: 'NodeIndexOutlined',
   access: 'isUser',
   layout: 'mix',
   component: './user-app/trips/list-trips',
@@ -331,8 +331,8 @@ export default [
   // },
   {
     path: '/',
-    name: 'Test Home',
-    icon: 'home',
+    name: 'Trips',
+    icon: 'NodeIndexOutlined',
     layout: 'top',
     component: './site/HomePageNew',
   },
@@ -351,6 +351,30 @@ export default [
   //   layout: 'top',
   //   component: './site/ContactUsPage',
   // },
+  {
+    path: '/who-we-are',
+    name: 'Who We Are ?',
+    icon: 'SmileOutlined',
+    layout: 'top',
+  },
+  {
+    path: '/help-center',
+    name: 'Help Center',
+    icon: 'CustomerServiceOutlined',
+    layout: 'top',
+  },
+  {
+    path: '/contact-us',
+    name: 'Contact Us',
+    icon: 'PhoneOutlined',
+    layout: 'top',
+  },
+  {
+    path: '/about-university',
+    name: 'About University',
+    icon: 'home',
+    layout: 'top',
+  },
   {
     path: '/authentication',
     name: 'Signup / Login',

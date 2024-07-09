@@ -361,7 +361,6 @@ const UpdateAttraction = () => {
                                     label="Title"
                                     placeholder="Type attraction title"
                                     fieldProps={{
-                                        prefix: <UserOutlined/>,
                                         onChange: (e) => {
                                             console.log('e.target.value');
                                             console.log(e.target.value);
